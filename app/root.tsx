@@ -51,7 +51,6 @@ export default function App() {
         <Meta />
         <Links />
         <GoogleAnalytics gaTrackingId={gaTrackingId} />
-        {/* <GoogleAnalytics /> */}
       </head>
       <body>
         <main className="container">

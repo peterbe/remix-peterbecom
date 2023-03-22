@@ -10,7 +10,12 @@ type Props = {
 export function Blogpost({ post, comments, page }: Props) {
   return (
     <main>
-      <h1>{post.title}</h1>
+      <hgroup>
+        <h1>{post.title}</h1>
+        <h2>
+          Back to <Link to="/">Peterbe.com</Link>
+        </h2>
+      </hgroup>
 
       <div dangerouslySetInnerHTML={{ __html: post.body }} />
 

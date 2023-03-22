@@ -89,6 +89,8 @@ export interface Group {
 export interface HomepagePost {
   title: string;
   oid: string;
+  pub_date: string;
+  html: string;
   comments: number;
   categories: string[];
 }

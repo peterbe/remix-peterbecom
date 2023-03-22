@@ -1,3 +1,5 @@
+// This came from https://github.com/remix-run/examples/tree/main/google-analytics
+
 declare global {
   interface Window {
     gtag: (
