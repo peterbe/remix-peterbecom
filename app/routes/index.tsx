@@ -1,10 +1,11 @@
 import type { LoaderArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
-import { get } from "../lib/get-data";
 import { Homepage } from "~/components/homepage";
 import type { HomepagePost } from "~/types";
+
+import { get } from "../lib/get-data";
 
 interface ServerData {
   posts: HomepagePost[];

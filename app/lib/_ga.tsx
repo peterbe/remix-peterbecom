@@ -1,6 +1,7 @@
-import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { USE_GOOGLE_ANALYTICS, GOOGLE_ANALYTICS_DEBUG } from "./_constants";
+import { useEffect } from "react";
+
+import { GOOGLE_ANALYTICS_DEBUG, USE_GOOGLE_ANALYTICS } from "./_constants";
 
 declare global {
   interface Window {

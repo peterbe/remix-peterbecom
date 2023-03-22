@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { useLocation } from "@remix-run/react";
+import { useEffect } from "react";
 
 import * as gtag from "~/utils/gtags.client";
 

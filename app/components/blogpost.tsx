@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 
-import type { Post, Comments } from "~/types";
+import type { Comments, Post } from "~/types";
 
 type Props = {
   post: Post;

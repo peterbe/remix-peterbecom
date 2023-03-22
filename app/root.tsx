@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+// import styles from "@picocss/pico/scss/pico.scss";
+import pico from "@picocss/pico/css/pico.css";
 import type { MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -9,10 +11,8 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { json } from "@remix-run/node";
+import { useEffect, useState } from "react";
 
-// import styles from "@picocss/pico/scss/pico.scss";
-import pico from "@picocss/pico/css/pico.css";
 import styles from "~/styles/globals.css";
 
 import { GoogleAnalytics } from "./utils/googleanalytics";

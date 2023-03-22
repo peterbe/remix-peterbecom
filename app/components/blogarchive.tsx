@@ -1,5 +1,5 @@
-import { Fragment } from "react";
 import { Link } from "@remix-run/react";
+import { Fragment } from "react";
 
 import type { Group } from "~/types";
 

@@ -1,12 +1,13 @@
 import type { MetaFunction } from "@remix-run/node";
 import type { LoaderArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
-import type { Post, Comments } from "../../types";
-import { get } from "../../lib/get-data";
 import { Blogpost } from "~/components/blogpost";
+
+import { get } from "../../lib/get-data";
+import type { Comments, Post } from "../../types";
 
 interface ServerData {
   post: Post;
