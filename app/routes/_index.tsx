@@ -5,7 +5,7 @@ import { useLoaderData } from "@remix-run/react";
 import { Homepage } from "~/components/homepage";
 import type { HomepagePost } from "~/types";
 
-import { get } from "../lib/get-data";
+import { get } from "~/lib/get-data";
 
 interface ServerData {
   posts: HomepagePost[];
@@ -22,7 +22,7 @@ export const loader = async ({ params }: LoaderArgs) => {
     next_page: nextPage,
     previous_page: previousPage,
   } = response.body;
-  return json({ categories, posts, nextPage, previousPage });
+  return json({ categories, posts, nextPage, previousPage, page });
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
@@ -32,7 +32,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
 };
 
 export default function View() {
-  const { posts, categories, nextPage, previousPage } =
+  const { page, posts, categories, nextPage, previousPage } =
     useLoaderData<typeof loader>();
   return (
     <Homepage
@@ -40,6 +40,7 @@ export default function View() {
       categories={categories}
       nextPage={nextPage}
       previousPage={previousPage}
+      page={page}
     />
   );
 }

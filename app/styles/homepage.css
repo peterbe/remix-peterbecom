@@ -29,3 +29,16 @@ article footer p {
 .next-previous div i {
     color: var(--muted-color);
 }
+
+article.about-filters {
+  padding: 40px 20px;
+}
+
+article.about-filters .grid div {
+  text-align: center;
+  vertical-align: middle;
+}
+
+article.about-filters .grid div p {
+  margin-bottom: 0;
+}

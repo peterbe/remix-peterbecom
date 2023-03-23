@@ -25,10 +25,14 @@ export function BlogArchive({ groups }: Props) {
                   <dd key={post.oid}>
                     <Link to={`/plog/${post.oid}`}>{post.title}</Link>{" "}
                     {post.comments > 0 && <span>{count}</span>}{" "}
-                    {/* Using <b> here because of SCSS in Archive.module.scss
-                      I can't seen to use something like <span className="categories">
-                       */}
-                    <b>{post.categories.join(", ")}</b>
+                    {post.categories.map((name, i, arr) => (
+                      <Fragment key={name}>
+                        <Link to={categoryURL(name)} rel="nofollow">
+                          {name}
+                        </Link>
+                        {i < arr.length - 1 ? ", " : ""}
+                      </Fragment>
+                    ))}
                   </dd>
                 );
               })}
@@ -59,4 +63,8 @@ function formatDate(date: string) {
   ];
   const monthName = monthNames[parseInt(month) - 1];
   return `${monthName}, ${year}`;
+}
+
+function categoryURL(name: string) {
+  return `/oc-${name.replace(" ", "+")}`;
 }

@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import { BlogArchive } from "~/components/blogarchive";
 import type { Group } from "~/types";
 
-import { get } from "../../lib/get-data";
+import { get } from "~/lib/get-data";
 
 interface ServerData {
   groups: Group[];

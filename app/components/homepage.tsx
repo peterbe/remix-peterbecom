@@ -8,9 +8,16 @@ type Props = {
   categories: string[];
   nextPage: number | null;
   previousPage: number | null;
+  page: number;
 };
 
-export function Homepage({ posts, categories, nextPage, previousPage }: Props) {
+export function Homepage({
+  posts,
+  categories,
+  page,
+  nextPage,
+  previousPage,
+}: Props) {
   console.log({ previousPage, nextPage });
 
   return (
@@ -22,27 +29,66 @@ export function Homepage({ posts, categories, nextPage, previousPage }: Props) {
         <h2>Peter Bengtsson's Blog</h2>
       </hgroup>
 
+      <AboutFilters categories={categories} page={page} />
+
       {posts.map((post) => (
         <Post key={post.oid} post={post} />
       ))}
 
-      <div className="grid next-previous">
-        <div>
-          {previousPage ? (
-            <Link to={`/p${previousPage}`}>Previous page</Link>
-          ) : (
-            <i>Previous page</i>
-          )}
-        </div>
-        <div>
-          {nextPage ? (
-            <Link to={`/p${nextPage}`}>Next page</Link>
-          ) : (
-            <i>Next page</i>
-          )}
-        </div>
-      </div>
+      <Pagination
+        categories={categories}
+        nextPage={nextPage}
+        previousPage={previousPage}
+      />
     </div>
+  );
+}
+
+function AboutFilters({
+  page,
+  categories,
+}: {
+  page: number;
+  categories: string[];
+}) {
+  console.log({ page });
+
+  if (!categories.length && page === 1) return null;
+
+  if (categories.length || page > 0) {
+    return (
+      <article className="about-filters">
+        <div className="grid">
+          {categories.length > 0 && (
+            <div>
+              <p>
+                Filtered by{" "}
+                {categories.map((name, i, arr) => (
+                  <Fragment key={name}>
+                    <b>{name}</b>
+                    {i < arr.length - 1 ? ", " : ""}
+                  </Fragment>
+                ))}{" "}
+              </p>
+            </div>
+          )}
+          <div>
+            <p>{page > 1 && <span>Page {page}</span>}</p>
+          </div>
+          <div>
+            <Link to="/">Reset</Link>
+          </div>
+        </div>
+      </article>
+    );
+  }
+  return null;
+  if (page === 1) return null;
+
+  return (
+    <p>
+      <b>Page {page}</b>
+    </p>
   );
 }
 
@@ -72,7 +118,11 @@ function Post({ post }: { post: HomepagePost }) {
               {post.categories.map((category, i, arr) => {
                 return (
                   <Fragment key={category}>
-                    <Link to={`/oc-${encodeURIComponent(category)}`}>
+                    <Link
+                      to={categoryURL(category)}
+                      rel="nofollow"
+                      title={`Filter by the '${category}' category'`}
+                    >
                       {category}
                     </Link>
                     {i < arr.length - 1 ? ", " : ""}
@@ -93,5 +143,49 @@ function Post({ post }: { post: HomepagePost }) {
         </p>
       </footer>
     </article>
+  );
+}
+
+function categoryURL(name: string) {
+  return `/oc-${name.replace(" ", "+")}`;
+}
+
+function makeURL(page: number, categories: string[]) {
+  let url = "";
+  for (const category of categories) {
+    url += `/oc-${category.replace(/\s/g, "+")}`;
+  }
+  if (page && page !== 1) {
+    url += `/p${page}`;
+  }
+  return url || "/";
+}
+
+function Pagination({
+  categories,
+  nextPage,
+  previousPage,
+}: {
+  categories: string[];
+  nextPage: number | null;
+  previousPage: number | null;
+}) {
+  return (
+    <div className="grid next-previous">
+      <div>
+        {previousPage ? (
+          <Link to={makeURL(previousPage, categories)}>Previous page</Link>
+        ) : (
+          <i>Previous page</i>
+        )}
+      </div>
+      <div>
+        {nextPage ? (
+          <Link to={makeURL(nextPage, categories)}>Next page</Link>
+        ) : (
+          <i>Next page</i>
+        )}
+      </div>
+    </div>
   );
 }

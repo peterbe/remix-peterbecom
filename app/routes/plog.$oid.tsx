@@ -6,8 +6,8 @@ import invariant from "tiny-invariant";
 
 import { Blogpost } from "~/components/blogpost";
 
-import { get } from "../../lib/get-data";
-import type { Comments, Post } from "../../types";
+import { get } from "~/lib/get-data";
+import type { Comments, Post } from "~/types";
 
 interface ServerData {
   post: Post;
