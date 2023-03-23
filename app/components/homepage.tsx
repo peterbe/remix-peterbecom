@@ -6,11 +6,13 @@ import type { HomepagePost } from "~/types";
 type Props = {
   posts: HomepagePost[];
   categories: string[];
-  nextPage: number;
-  previousPage: number;
+  nextPage: number | null;
+  previousPage: number | null;
 };
 
 export function Homepage({ posts, categories, nextPage, previousPage }: Props) {
+  console.log({ previousPage, nextPage });
+
   return (
     <div>
       <hgroup>
@@ -24,16 +26,28 @@ export function Homepage({ posts, categories, nextPage, previousPage }: Props) {
         <Post key={post.oid} post={post} />
       ))}
 
-      <Link to="/plog">Blog Posts</Link>
+      <div className="grid next-previous">
+        <div>
+          {previousPage ? (
+            <Link to={`/p${previousPage}`}>Previous page</Link>
+          ) : (
+            <i>Previous page</i>
+          )}
+        </div>
+        <div>
+          {nextPage ? (
+            <Link to={`/p${nextPage}`}>Next page</Link>
+          ) : (
+            <i>Next page</i>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
 function Post({ post }: { post: HomepagePost }) {
-  console.log(post);
-  console.log(post.categories);
   const pubDate = new Date(post.pub_date);
-
   return (
     <article>
       <header>
@@ -49,7 +63,8 @@ function Post({ post }: { post: HomepagePost }) {
                 month: "short",
                 day: "numeric",
               })}
-            </b>{" "}
+            </b>
+            <br />
             <span>
               {`${post.comments} comment${post.comments === 1 ? "" : "s"}`}
             </span>{" "}
