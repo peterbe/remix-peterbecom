@@ -18,8 +18,6 @@ export function Homepage({
   nextPage,
   previousPage,
 }: Props) {
-  console.log({ previousPage, nextPage });
-
   return (
     <div>
       <hgroup>
@@ -51,8 +49,6 @@ function AboutFilters({
   page: number;
   categories: string[];
 }) {
-  console.log({ page });
-
   if (!categories.length && page === 1) return null;
 
   if (categories.length || page > 0) {
@@ -83,13 +79,6 @@ function AboutFilters({
     );
   }
   return null;
-  if (page === 1) return null;
-
-  return (
-    <p>
-      <b>Page {page}</b>
-    </p>
-  );
 }
 
 function Post({ post }: { post: HomepagePost }) {
