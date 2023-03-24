@@ -3,9 +3,8 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
 import { Homepage } from "~/components/homepage";
-import type { HomepagePost } from "~/types";
-
 import { get } from "~/lib/get-data";
+import type { HomepagePost } from "~/types";
 
 interface ServerData {
   posts: HomepagePost[];

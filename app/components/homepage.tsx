@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { HomepagePost } from "~/types";
+
 import { Nav } from "./nav";
 
 type Props = {

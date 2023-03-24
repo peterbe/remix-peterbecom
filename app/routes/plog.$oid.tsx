@@ -5,7 +5,6 @@ import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { Blogpost } from "~/components/blogpost";
-
 import { get } from "~/lib/get-data";
 import type { Comments, Post } from "~/types";
 

@@ -4,9 +4,8 @@ import { useLoaderData } from "@remix-run/react";
 import { useCatch } from "@remix-run/react";
 
 import { Homepage } from "~/components/homepage";
-import type { HomepagePost } from "~/types";
-
 import { get } from "~/lib/get-data";
+import type { HomepagePost } from "~/types";
 
 interface ServerData {
   posts: HomepagePost[];
@@ -31,8 +30,8 @@ export const loader = async ({ params }: LoaderArgs) => {
         throw new Response("Not Found (page not valid)", { status: 404 });
       }
       continue;
-    } else if (/oc-[\w\+]+/.test(part)) {
-      const matched = part.match(/oc-([\w\+]+)/);
+    } else if (/oc-[\w+]+/.test(part)) {
+      const matched = part.match(/oc-([\w+]+)/);
       if (matched) {
         const category = matched[1].replace(/\+/g, " ");
         categories.push(category);

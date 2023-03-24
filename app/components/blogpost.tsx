@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 
 import type { Comments, Post } from "~/types";
+
 import { Nav } from "./nav";
 
 type Props = {
