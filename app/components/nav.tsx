@@ -1,9 +1,10 @@
 import { useLocation } from "@remix-run/react";
 import { Link } from "@remix-run/react";
+import type { ReactNode } from "react";
 
 type Props = {
   title?: string;
-  subHead?: string;
+  subHead?: string | ReactNode;
 };
 
 const links = [

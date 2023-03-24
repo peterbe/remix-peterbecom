@@ -1,10 +1,27 @@
+import pico from "@picocss/pico/css/pico.css";
 import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
 import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
+import styles from "~/styles/globals.css";
+import highlight from "~/styles/highlight.css";
+import homepage from "~/styles/homepage.css";
+import post from "~/styles/post.css";
 import type { HomepagePost } from "~/types";
+
+export function links() {
+  return [
+    { rel: "stylesheet", href: pico },
+    { rel: "stylesheet", href: styles },
+    // These are extra and generally won't be needed on most overriding
+    // pages such as `about.tsx`.
+    { rel: "stylesheet", href: homepage, extra: "homepage" },
+    { rel: "stylesheet", href: post, extra: "post" },
+    { rel: "stylesheet", href: highlight, extra: "post" },
+  ];
+}
 
 interface ServerData {
   posts: HomepagePost[];

@@ -6,7 +6,17 @@ import invariant from "tiny-invariant";
 
 import { Blogpost } from "~/components/blogpost";
 import { get } from "~/lib/get-data";
+import blogpost from "~/styles/blogpost.css";
 import type { Comments, Post } from "~/types";
+
+import { links as rootLinks } from "./_index";
+
+export function links() {
+  return [
+    ...rootLinks().filter((x) => !x.extra || x.extra === "post"),
+    { rel: "stylesheet", href: blogpost },
+  ];
+}
 
 interface ServerData {
   post: Post;

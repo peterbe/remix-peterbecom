@@ -3,7 +3,17 @@ import { useLoaderData } from "@remix-run/react";
 
 import { BlogArchive } from "~/components/blogarchive";
 import { get } from "~/lib/get-data";
+import archive from "~/styles/blogarchive.css";
 import type { Group } from "~/types";
+
+import { links as rootLinks } from "./_index";
+
+export function links() {
+  return [
+    ...rootLinks().filter((x) => !x.extra),
+    { rel: "stylesheet", href: archive },
+  ];
+}
 
 interface ServerData {
   groups: Group[];

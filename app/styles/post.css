@@ -1,0 +1,13 @@
+pre {
+  padding: 10px;
+  border: 1px solid var(--code-color);
+}
+
+img.floatright {
+  float: right;
+  margin: 0 0 7px 7px;
+}
+img.floatleft {
+  float: left;
+  margin: 7px 7px 0 0;
+}
