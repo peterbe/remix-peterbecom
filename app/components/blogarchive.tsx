@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { Group } from "~/types";
+import { Nav } from "./nav";
 
 type Props = {
   groups: Group[];
@@ -9,8 +10,9 @@ type Props = {
 
 export function BlogArchive({ groups }: Props) {
   return (
-    <main>
-      <h1>Blog archive</h1>
+    <div>
+      <Nav title="Blog archive" />
+
       <dl>
         {groups.map(({ date, posts }) => {
           return (
@@ -40,8 +42,7 @@ export function BlogArchive({ groups }: Props) {
           );
         })}
       </dl>
-      <Link to="/">Home</Link>
-    </main>
+    </div>
   );
 }
 

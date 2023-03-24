@@ -10,7 +10,6 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { useEffect, useState } from "react";
 
 import styles from "~/styles/globals.css";
 import highlight from "~/styles/highlight.css";

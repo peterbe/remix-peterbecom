@@ -40,8 +40,6 @@
   padding: 5px 10px;
 }
 
-
-
 /* Desktop or bigger tables */
 article pre {
   padding: 10px;
@@ -61,3 +59,16 @@ pre {
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 3px;
 } */
+
+.nav-grid nav {
+  display: none;
+  justify-content: space-around;
+}
+
+@media (min-width: 576px) {
+  .nav-grid nav {
+    display: flex;
+  margin-top: 15px;
+    justify-content: flex-end;
+  }
+}

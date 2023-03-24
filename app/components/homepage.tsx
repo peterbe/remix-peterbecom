@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { HomepagePost } from "~/types";
+import { Nav } from "./nav";
 
 type Props = {
   posts: HomepagePost[];
@@ -20,13 +21,7 @@ export function Homepage({
 }: Props) {
   return (
     <div>
-      <hgroup>
-        <h1>
-          <Link to="/">Peterbe.com</Link>
-        </h1>
-        <h2>Peter Bengtsson's Blog</h2>
-      </hgroup>
-
+      <Nav title="Peterbe.com" />
       <AboutFilters categories={categories} page={page} />
 
       {posts.map((post) => (
