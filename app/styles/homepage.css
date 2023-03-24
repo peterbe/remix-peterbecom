@@ -24,10 +24,10 @@ article footer p {
 }
 
 .next-previous div {
-    text-align: center;
+  text-align: center;
 }
 .next-previous div i {
-    color: var(--muted-color);
+  color: var(--muted-color);
 }
 
 article.about-filters {

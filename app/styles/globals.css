@@ -68,7 +68,7 @@ pre {
 @media (min-width: 576px) {
   .nav-grid nav {
     display: flex;
-  margin-top: 15px;
+    margin-top: 15px;
     justify-content: flex-end;
   }
 }

@@ -54,7 +54,6 @@ export const loader = async ({ params }: LoaderArgs) => {
     next_page: nextPage,
     previous_page: previousPage,
   } = response.body;
-  console.log("RETURNING", { page });
 
   return json({ categories, posts, nextPage, previousPage, page });
 };
@@ -78,7 +77,6 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
 export default function View() {
   const { page, posts, categories, nextPage, previousPage } =
     useLoaderData<typeof loader>();
-  console.log("VIEW", { page });
 
   return (
     <Homepage
