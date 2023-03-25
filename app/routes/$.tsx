@@ -1,4 +1,4 @@
-import type { LoaderArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useCatch } from "@remix-run/react";
@@ -71,7 +71,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   return json({ categories, posts, nextPage, previousPage, page });
 };
 
-export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
+export const meta: V2_MetaFunction = ({ data, params }) => {
   let title = "Peterbe.com - Stuff in Peter's head";
   if (data) {
     const { page, categories } = data;
@@ -82,9 +82,11 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
       title = `(Page ${page}) ${title}`;
     }
   }
-  return {
-    title,
-  };
+  return [
+    {
+      title,
+    },
+  ];
 };
 
 export default function View() {

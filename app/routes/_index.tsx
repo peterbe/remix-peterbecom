@@ -1,5 +1,5 @@
 import pico from "@picocss/pico/css/pico.css";
-import type { LoaderArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -41,10 +41,12 @@ export const loader = async ({ params }: LoaderArgs) => {
   return json({ categories, posts, nextPage, previousPage, page });
 };
 
-export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
-  return {
-    title: "Peterbe.com - Stuff in Peter's head",
-  };
+export const meta: V2_MetaFunction = () => {
+  return [
+    {
+      title: "Peterbe.com - Stuff in Peter's head",
+    },
+  ];
 };
 
 export default function View() {

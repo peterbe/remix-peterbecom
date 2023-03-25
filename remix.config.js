@@ -8,5 +8,8 @@ module.exports = {
 
   future: {
     v2_routeConvention: true,
+
+    // https://remix.run/docs/en/1.14.3/route/meta#metav2
+    v2_meta: true,
   },
 };

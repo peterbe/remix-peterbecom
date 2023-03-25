@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import type { LoaderArgs } from "@remix-run/node";
+import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
@@ -36,7 +37,8 @@ export const loader = async ({ params }: LoaderArgs) => {
   return json({ post, comments, page });
 };
 
-export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
+// export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
+export const meta: V2_MetaFunction = ({ data, params }) => {
   // if (!data) {
   //   return {
   //     title: "Missing Shake",
@@ -59,20 +61,38 @@ export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
   const openGraphImage = data.post.open_graph_image
     ? absoluteURL(data.post.open_graph_image)
     : undefined;
-  return {
-    title: pageTitle,
-    "og:url": `https://www.peterbe.com/plog/${oid}`,
-    "og:type": "article",
-    "og:title": pageTitle,
-    "og:description": summary,
-    "twitter:creator": "@peterbe",
-    "twitter:card": "summary_large_image",
-    "twitter:title": pageTitle,
-    description: summary,
-    "twitter:description": summary,
-    "twitter:image": openGraphImage,
-    "og:image": openGraphImage,
-  };
+  // return {
+  //   title: pageTitle,
+  //   "og:url": `https://www.peterbe.com/plog/${oid}`,
+  //   "og:type": "article",
+  //   "og:title": pageTitle,
+  //   "og:description": summary,
+  //   "twitter:creator": "@peterbe",
+  //   "twitter:card": "summary_large_image",
+  //   "twitter:title": pageTitle,
+  //   description: summary,
+  //   "twitter:description": summary,
+  //   "twitter:image": openGraphImage,
+  //   "og:image": openGraphImage,
+  // };
+  const tags = [
+    { title: pageTitle },
+    {
+      name: "og:url",
+      content: `https://www.peterbe.com/plog/${oid}`,
+    },
+    // "og:type": "article",
+    // "og:title": pageTitle,
+    // "og:description": summary,
+    // "twitter:creator": "@peterbe",
+    // "twitter:card": "summary_large_image",
+    // "twitter:title": pageTitle,
+    // description: summary,
+    // "twitter:description": summary,
+    // "twitter:image": openGraphImage,
+    // "og:image": openGraphImage,
+  ];
+  return tags;
 };
 
 function absoluteURL(uri: string) {
