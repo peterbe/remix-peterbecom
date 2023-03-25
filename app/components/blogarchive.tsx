@@ -30,14 +30,16 @@ export function BlogArchive({ groups }: Props) {
                   <dd key={post.oid}>
                     <Link to={`/plog/${post.oid}`}>{post.title}</Link>{" "}
                     {post.comments > 0 && <span>{count}</span>}{" "}
-                    {post.categories.map((name, i, arr) => (
-                      <Fragment key={name}>
-                        <Link to={categoryURL(name)} rel="nofollow">
-                          {name}
-                        </Link>
-                        {i < arr.length - 1 ? ", " : ""}
-                      </Fragment>
-                    ))}
+                    <small>
+                      {post.categories.map((name, i, arr) => (
+                        <Fragment key={name}>
+                          <Link to={categoryURL(name)} rel="nofollow">
+                            {name}
+                          </Link>
+                          {i < arr.length - 1 ? ", " : ""}
+                        </Fragment>
+                      ))}
+                    </small>
                   </dd>
                 );
               })}
