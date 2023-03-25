@@ -45,7 +45,7 @@ export function Search() {
   const [qInput, setQInput] = useState(q || "");
   const debug = useQueryBoolean("debug");
 
-  const pageTitle = q && q.trim() ? `Searching for ${q}` : "Search";
+  const pageTitle = q && q.trim() ? `Searching for "${q}"` : "Search";
   let extraHead = null;
   const baseURL = "https://www.peterbe.com";
 
@@ -102,7 +102,7 @@ export function Search() {
 
   return (
     <div>
-      <Nav title={pageTitle} />
+      <Nav title={pageTitle} subHead={extraHead} />
 
       {error && (
         <div>
@@ -136,12 +136,6 @@ export function Search() {
       </form>
 
       {isLoading && <LoadingSpace />}
-      {data && data.results && !error && (
-        <SearchMetaDetails
-          found={data.results.count_documents}
-          seconds={data.results.search_time}
-        />
-      )}
 
       {data && data.results && (
         <div>
@@ -182,6 +176,13 @@ export function Search() {
             );
           })}
         </div>
+      )}
+
+      {data && data.results && !error && (
+        <SearchMetaDetails
+          found={data.results.count_documents}
+          seconds={data.results.search_time}
+        />
       )}
 
       {debug && data && data.results && data.results.search_terms && (

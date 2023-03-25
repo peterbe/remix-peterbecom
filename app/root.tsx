@@ -10,6 +10,8 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 
+import { Footer } from "~/components/footer";
+
 import { GoogleAnalytics } from "./utils/googleanalytics";
 import { ThemeToggler, useTheme } from "./utils/theme-toggler";
 
@@ -40,6 +42,9 @@ export default function App() {
           <Scripts />
           <LiveReload />
         </main>
+
+        <Footer />
+
         <ThemeToggler theme={theme} setTheme={setTheme} />
       </body>
     </html>

@@ -40,25 +40,6 @@
   padding: 5px 10px;
 }
 
-/* Desktop or bigger tables */
-/* article pre {
-  padding: 10px;
-  border: 1px solid var(--code-color);
-} */
-/* code,
-pre {
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 0.8em;
-
-} */
-
-/* custom code override */
-/* code {
-  padding: 0.2em 0.2em;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
-} */
-
 .nav-grid nav {
   display: none;
   justify-content: space-around;
@@ -70,4 +51,16 @@ pre {
     margin-top: 15px;
     justify-content: flex-end;
   }
+}
+
+footer.footer {
+  text-align: center;
+  border-top: 1px solid var(--muted-color);
+  padding: 40px 0;
+}
+footer.footer div.grid {
+  margin: 40px;
+}
+footer.footer p {
+  font-size: 0.7rem;
 }

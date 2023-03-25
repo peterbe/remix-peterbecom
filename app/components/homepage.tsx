@@ -81,7 +81,7 @@ function AboutFilters({
 function Post({ post }: { post: HomepagePost }) {
   const pubDate = new Date(post.pub_date);
   return (
-    <article>
+    <article className="homepage-post">
       <header>
         <hgroup>
           <h2>

@@ -7,7 +7,8 @@ type Props = {
   subHead?: string | ReactNode;
 };
 
-const links = [
+export const links = [
+  ["/", "Home"],
   ["/plog", "Archive"],
   ["/about", "About"],
   ["/contact", "Contact"],
@@ -31,23 +32,23 @@ export function Nav({
       <div>
         <nav>
           <ul>
-            {pathname !== "/" && (
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-            )}
-            {links.map(([to, text]) => {
-              return (
-                <li key={to}>
-                  <Link
-                    to={to}
-                    className={pathname === to ? "secondary" : undefined}
-                  >
-                    {text}
-                  </Link>
-                </li>
-              );
-            })}
+            {links
+              .filter(([to]) => {
+                if (to === "/" && pathname === "/") return false;
+                return true;
+              })
+              .map(([to, text]) => {
+                return (
+                  <li key={to}>
+                    <Link
+                      to={to}
+                      className={pathname === to ? "secondary" : undefined}
+                    >
+                      {text}
+                    </Link>
+                  </li>
+                );
+              })}
           </ul>
         </nav>
       </div>
