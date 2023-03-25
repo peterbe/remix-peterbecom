@@ -2,8 +2,8 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { Comments, Post } from "~/types";
-
 import { categoryURL } from "~/utils/utils";
+
 import { Nav } from "./nav";
 
 type Props = {

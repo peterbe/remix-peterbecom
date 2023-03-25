@@ -1,7 +1,7 @@
-import { Nav } from "./nav";
+import { useState } from "react";
 
 import { sideProjects } from "./about-sideprojects";
-import { useState } from "react";
+import { Nav } from "./nav";
 
 export function About() {
   const [qInput, setQInput] = useState("");

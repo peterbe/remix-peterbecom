@@ -2,9 +2,9 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { HomepagePost } from "~/types";
+import { categoryURL } from "~/utils/utils";
 
 import { Nav } from "./nav";
-import { categoryURL } from "~/utils/utils";
 
 type Props = {
   posts: HomepagePost[];

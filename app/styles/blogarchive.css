@@ -8,5 +8,5 @@ dl dd span {
 
 dd small {
   float: right;
-    color: var(--muted-color);
+  color: var(--muted-color);
 }

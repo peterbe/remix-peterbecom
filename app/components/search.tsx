@@ -38,11 +38,6 @@ interface SearchResult {
 interface ServerData {
   results: SearchResult;
 }
-interface ServerError {
-  [key: string]: {
-    message: string;
-  }[];
-}
 
 export function Search() {
   const [, setSearchParams] = useSearchParams();
@@ -50,16 +45,17 @@ export function Search() {
   const [qInput, setQInput] = useState(q || "");
   const debug = useQueryBoolean("debug");
 
-  const pageTitle = q ? `Searching for ${q}` : "Search";
+  const pageTitle = q && q.trim() ? `Searching for ${q}` : "Search";
   let extraHead = null;
   const baseURL = "https://www.peterbe.com";
 
-  const apiURL = q
-    ? `/api/v1/search?${new URLSearchParams({
-        q,
-        debug: JSON.stringify(debug),
-      }).toString()}`
-    : null;
+  const apiURL =
+    q && q.trim()
+      ? `/api/v1/search?${new URLSearchParams({
+          q: q.trim(),
+          debug: JSON.stringify(debug),
+        }).toString()}`
+      : null;
 
   const { data, error, isLoading } = useSWR<ServerData, Error>(
     apiURL,
@@ -109,8 +105,8 @@ export function Search() {
       <Nav title={pageTitle} />
 
       {error && (
-        <div className="ui negative message">
-          <div className="header">Search error</div>
+        <div>
+          <h4 style={{ color: "red", marginBottom: 5 }}>Search error</h4>
           <p>
             An error occurred with the server for that search:
             <br />

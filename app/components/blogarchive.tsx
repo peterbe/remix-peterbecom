@@ -2,9 +2,9 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { Group } from "~/types";
+import { categoryURL, formatDate } from "~/utils/utils";
 
 import { Nav } from "./nav";
-import { categoryURL, formatDate } from "~/utils/utils";
 
 type Props = {
   groups: Group[];
