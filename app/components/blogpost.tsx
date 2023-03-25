@@ -3,6 +3,7 @@ import { Fragment } from "react";
 
 import type { Comments, Post } from "~/types";
 
+import { categoryURL } from "~/utils/utils";
 import { Nav } from "./nav";
 
 type Props = {
@@ -55,10 +56,6 @@ export function Blogpost({ post, comments, page }: Props) {
       <div dangerouslySetInnerHTML={{ __html: post.body }} />
     </div>
   );
-}
-
-function categoryURL(name: string) {
-  return `/oc-${name.replace(" ", "+")}`;
 }
 
 function AboutPostURL({ url }: { url: string }) {

@@ -4,10 +4,13 @@ import { Fragment } from "react";
 import type { Group } from "~/types";
 
 import { Nav } from "./nav";
+import { categoryURL, formatDate } from "~/utils/utils";
 
 type Props = {
   groups: Group[];
 };
+
+const intl = new Intl.NumberFormat("en-us");
 
 export function BlogArchive({ groups }: Props) {
   return (
@@ -20,8 +23,7 @@ export function BlogArchive({ groups }: Props) {
             <Fragment key={date}>
               <dt>{formatDate(date)}</dt>
               {posts.map((post) => {
-                // Use Intl instead
-                const count = `${post.comments.toLocaleString()} comment${
+                const count = `${intl.format(post.comments)} comment${
                   post.comments === 1 ? "" : "s"
                 }`;
                 return (
@@ -45,28 +47,4 @@ export function BlogArchive({ groups }: Props) {
       </dl>
     </div>
   );
-}
-
-function formatDate(date: string) {
-  const [year, month] = date.split(".");
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const monthName = monthNames[parseInt(month) - 1];
-  return `${monthName}, ${year}`;
-}
-
-function categoryURL(name: string) {
-  return `/oc-${name.replace(" ", "+")}`;
 }

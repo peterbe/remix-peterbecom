@@ -8,17 +8,9 @@ import { get } from "~/lib/get-data";
 import type { HomepagePost } from "~/types";
 
 import { links as rootLinks } from "./_index";
-// import pico from "@picocss/pico/css/pico.css";
-// import styles from "~/styles/globals.css";
 
 export function links() {
-  return [
-    ...rootLinks(),
-    // { rel: "stylesheet", href: pico },
-    // { rel: "stylesheet", href: styles },
-    // { rel: "stylesheet", href: highlight },
-    // { rel: "stylesheet", href: homepage },
-  ];
+  return [...rootLinks()];
 }
 
 interface ServerData {

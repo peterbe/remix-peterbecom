@@ -24,10 +24,7 @@ export function Nav({
     <div className="grid nav-grid">
       <div>
         <hgroup>
-          <h1>
-            {/* <Link to="/">{title}</Link> */}
-            {title}
-          </h1>
+          <h1>{title}</h1>
           <h2>{subHead}</h2>
         </hgroup>
       </div>

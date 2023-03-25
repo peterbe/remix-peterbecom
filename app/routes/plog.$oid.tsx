@@ -1,6 +1,4 @@
-import type { MetaFunction } from "@remix-run/node";
-import type { LoaderArgs } from "@remix-run/node";
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
@@ -27,8 +25,6 @@ interface ServerData {
 export const loader = async ({ params }: LoaderArgs) => {
   invariant(params.oid, `params.oid is required`);
   const { oid } = params;
-  // console.log({ oid });
-  // const oid = params!.oid as string;
   const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}`;
 
   const response = await get<ServerData>(fetchURL);
@@ -37,14 +33,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   return json({ post, comments, page });
 };
 
-// export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
 export const meta: V2_MetaFunction = ({ data, params }) => {
-  // if (!data) {
-  //   return {
-  //     title: "Missing Shake",
-  //     description: `There is no shake with the ID of ${params.shakeId}. 😢`,
-  //   };
-  // }
   invariant(params.oid, `params.oid is required`);
   const { oid } = params;
 
@@ -61,38 +50,33 @@ export const meta: V2_MetaFunction = ({ data, params }) => {
   const openGraphImage = data.post.open_graph_image
     ? absoluteURL(data.post.open_graph_image)
     : undefined;
-  // return {
-  //   title: pageTitle,
-  //   "og:url": `https://www.peterbe.com/plog/${oid}`,
-  //   "og:type": "article",
-  //   "og:title": pageTitle,
-  //   "og:description": summary,
-  //   "twitter:creator": "@peterbe",
-  //   "twitter:card": "summary_large_image",
-  //   "twitter:title": pageTitle,
-  //   description: summary,
-  //   "twitter:description": summary,
-  //   "twitter:image": openGraphImage,
-  //   "og:image": openGraphImage,
-  // };
   const tags = [
     { title: pageTitle },
     {
-      name: "og:url",
+      property: "og:url",
       content: `https://www.peterbe.com/plog/${oid}`,
     },
-    // "og:type": "article",
-    // "og:title": pageTitle,
-    // "og:description": summary,
-    // "twitter:creator": "@peterbe",
-    // "twitter:card": "summary_large_image",
-    // "twitter:title": pageTitle,
-    // description: summary,
-    // "twitter:description": summary,
-    // "twitter:image": openGraphImage,
-    // "og:image": openGraphImage,
+    {
+      property: "og:type",
+      content: "article",
+    },
+    {
+      property: "og:title",
+      content: pageTitle,
+    },
+    { property: "og:description", content: summary },
+
+    // Twitter uses 'name', OpenGraph uses 'property'
+    { name: "twitter:creator", content: "@peterbe" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: pageTitle },
+    { name: "twitter:description", content: summary },
+
+    { name: "description", content: summary },
+    { name: "twitter:image", content: openGraphImage },
+    { property: "og:image", content: openGraphImage },
   ];
-  return tags;
+  return tags.filter((o) => Object.values(o).every((x) => x !== undefined));
 };
 
 function absoluteURL(uri: string) {

@@ -19,6 +19,26 @@ export function formatDateBasic(date: string) {
   return `${actualDate.getDate()} ${monthName} ${actualDate.getFullYear()}`;
 }
 
+export function formatDate(date: string) {
+  const [year, month] = date.split(".");
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const monthName = monthNames[parseInt(month) - 1];
+  return `${monthName}, ${year}`;
+}
+
 export function postURL(oid: string) {
   return `/plog/${oid}`;
 }

@@ -1,22 +1,3 @@
-/* .row .page-header {
-  padding-bottom: 5px;
-  margin: 25px 0 5px 0;
-} */
-/* .result {
-  margin-bottom: 35px;
-  mark {
-    background: #ffffdc;
-    color: inherit;
-  }
-  h3 {
-    margin-bottom: 2px;
-
-    small {
-      float: right;
-    }
-  }
-} */
-
 .search-result small,
 .search-summary {
   color: var(--muted-color);

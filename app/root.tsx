@@ -1,6 +1,4 @@
-// import type { MetaFunction } from "@remix-run/node";
-import type { V2_MetaFunction } from "@remix-run/node"; // or cloudflare/deno
-
+import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
   Links,
@@ -15,15 +13,9 @@ import {
 import { GoogleAnalytics } from "./utils/googleanalytics";
 import { ThemeToggler, useTheme } from "./utils/theme-toggler";
 
-// export const meta: MetaFunction = () => ({
-
 export const meta: V2_MetaFunction = () => {
   return [{ charset: "utf-8", viewport: "width=device-width,initial-scale=1" }];
 };
-//   charset: "utf-8",
-//   // title: "Peterbe.com",
-//   viewport: "width=device-width,initial-scale=1",
-// });
 
 export const loader = async () => {
   return json({ gaTrackingId: process.env.GA_TRACKING_ID });

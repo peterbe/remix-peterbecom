@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import type { HomepagePost } from "~/types";
 
 import { Nav } from "./nav";
+import { categoryURL } from "~/utils/utils";
 
 type Props = {
   posts: HomepagePost[];
@@ -129,10 +130,6 @@ function Post({ post }: { post: HomepagePost }) {
       </footer>
     </article>
   );
-}
-
-function categoryURL(name: string) {
-  return `/oc-${name.replace(" ", "+")}`;
 }
 
 function makeURL(page: number, categories: string[]) {

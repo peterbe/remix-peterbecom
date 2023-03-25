@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 
+import { useQueryBoolean, useQueryString } from "~/hooks/use-query-hook";
 import { formatDateBasic } from "~/utils/utils";
-import { useQueryString, useQueryBoolean } from "~/hooks/use-query-hook";
+
 import { Nav } from "./nav";
-// import styles from "../styles/Search.module.scss";
 
 interface Document {
   oid: string;
@@ -44,12 +44,8 @@ interface ServerError {
   }[];
 }
 
-interface Props {
-  xhrPreloadURL?: string;
-}
-
-export function Search({ xhrPreloadURL }: Props) {
-  const [searchParams, setSearchParams] = useSearchParams();
+export function Search() {
+  const [, setSearchParams] = useSearchParams();
   const q = useQueryString("q");
   const [qInput, setQInput] = useState(q || "");
   const debug = useQueryBoolean("debug");
@@ -161,7 +157,6 @@ export function Search({ xhrPreloadURL }: Props) {
             return (
               <div
                 key={`${result.oid}${result.comment_oid}`}
-                // className={styles.result}
                 className="search-result"
               >
                 <p>
@@ -177,11 +172,7 @@ export function Search({ xhrPreloadURL }: Props) {
                   &nbsp;
                   <small>{formatDateBasic(result.date)}</small>
                   <br />
-                  <Link
-                    to={url}
-                    className="search-result-url"
-                    // className={styles.result_a_url}
-                  >
+                  <Link to={url} className="search-result-url">
                     {baseURL}
                     {url}
                   </Link>
