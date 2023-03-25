@@ -1,6 +1,6 @@
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useCatch, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { Blogpost } from "~/components/blogpost";
@@ -28,6 +28,9 @@ export const loader = async ({ params }: LoaderArgs) => {
   const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}`;
 
   const response = await get<ServerData>(fetchURL);
+  if (response.statusCode === 404) {
+    throw new Response("Not Found (oid not found)", { status: 404 });
+  }
   const page = 1;
   const { post, comments } = response.body;
   return json({ post, comments, page });
@@ -36,6 +39,11 @@ export const loader = async ({ params }: LoaderArgs) => {
 export const meta: V2_MetaFunction = ({ data, params }) => {
   invariant(params.oid, `params.oid is required`);
   const { oid } = params;
+
+  if (!data) {
+    // In catch CatchBoundary
+    return [{ title: "Page not found" }];
+  }
 
   let pageTitle = "";
 
@@ -89,4 +97,19 @@ function absoluteURL(uri: string) {
 export default function View() {
   const { post, comments, page } = useLoaderData<typeof loader>();
   return <Blogpost post={post} comments={comments} page={page} />;
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  const pageNotFound = caught.status === 404;
+
+  return (
+    <div>
+      <h1>{pageNotFound ? "Page not found" : "Error"}</h1>
+      <p>Status: {caught.status}</p>
+      <pre>
+        <code>{JSON.stringify(caught.data, null, 2)}</code>
+      </pre>
+    </div>
+  );
 }

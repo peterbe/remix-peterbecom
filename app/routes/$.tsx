@@ -2,6 +2,7 @@ import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useCatch } from "@remix-run/react";
+import { redirect } from "@remix-run/node";
 
 import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
@@ -48,11 +49,18 @@ export const loader = async ({ params }: LoaderArgs) => {
   }
   const sp = new URLSearchParams({ page: `${page}` });
   categories.forEach((category) => sp.append("oc", category));
-  const response = await get<ServerData>(`/api/v1/plog/homepage?${sp}`);
-  if (response.statusCode === 404) {
-    throw new Response("Not Found", { status: 404 });
+  const response = await get<ServerData>(
+    `/api/v1/plog/homepage?${sp}`,
+    false,
+    false
+  );
+  if (response.statusCode === 404 || response.statusCode === 400) {
+    throw new Response("Not Found", { status: response.statusCode });
   }
-  // XXX What if you get a 301 or 302??
+
+  if (response.statusCode === 301 && response.headers.location) {
+    return redirect(response.headers.location);
+  }
 
   const {
     posts,
@@ -65,14 +73,15 @@ export const loader = async ({ params }: LoaderArgs) => {
 
 export const meta: V2_MetaFunction = ({ data, params }) => {
   let title = "Peterbe.com - Stuff in Peter's head";
-  if (data) {
-    const { page, categories } = data;
-    if (categories && categories.length > 0) {
-      title = `${categories.join(", ")} - Peterbe.com`;
-    }
-    if (page !== 1) {
-      title = `(Page ${page}) ${title}`;
-    }
+  if (!data) {
+    return [{ title: "Page not found" }];
+  }
+  const { page, categories } = data;
+  if (categories && categories.length > 0) {
+    title = `${categories.join(", ")} - Peterbe.com`;
+  }
+  if (page !== 1) {
+    title = `(Page ${page}) ${title}`;
   }
   return [
     {
