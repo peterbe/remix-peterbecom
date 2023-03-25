@@ -1,0 +1,11 @@
+.side-projects article {
+  padding-top: 40px;
+  padding-bottom: 30px;
+
+}
+.side-projects .screenshot {
+  text-align: right;
+}
+.side-projects h3 a {
+  color: var(--h3-color) !important;
+}
