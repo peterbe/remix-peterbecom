@@ -102,13 +102,21 @@ export function About() {
                 </div>
                 <div className="screenshot">
                   <a href={project.url} title={project.title}>
-                    <img
-                      src={project.image.url}
-                      alt={project.title}
-                      width={project.image.width}
-                      height={project.image.height}
-                      loading={i > 3 ? "lazy" : undefined}
-                    />
+                    <picture>
+                      {project.image.url.endsWith(".png") && (
+                        <source
+                          srcSet={project.image.url.replace(/\.png$/, ".webp")}
+                          type="image/webp"
+                        />
+                      )}
+                      <img
+                        src={project.image.url}
+                        alt={project.title}
+                        width={project.image.width}
+                        height={project.image.height}
+                        loading={i > 3 ? "lazy" : undefined}
+                      />
+                    </picture>
                   </a>
                 </div>
               </div>

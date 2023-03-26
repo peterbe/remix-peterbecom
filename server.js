@@ -4,9 +4,13 @@ const compression = require("compression");
 const morgan = require("morgan");
 const { createRequestHandler } = require("@remix-run/express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
+const { dynamicImages } = require("./dynamic-images.js");
 
 const BACKEND_BASE_URL = process.env.API_BASE || "http://127.0.0.1:8000";
-const BUILD_DIR = path.join(process.cwd(), "build");
+const BUILD_DIR = path.resolve("build");
+
+const asyncHandler = (fn) => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
 
 const app = express();
 
@@ -26,6 +30,8 @@ app.use(
 // Everything else (like favicon.ico) is cached for an hour. You may want to be
 // more aggressive with this caching.
 app.use(express.static("public", { maxAge: "1d" }));
+
+app.use(asyncHandler(dynamicImages));
 
 const backendProxy = createProxyMiddleware({
   target: BACKEND_BASE_URL,
