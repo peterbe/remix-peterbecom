@@ -33,8 +33,23 @@ export const loader = async ({ params }: LoaderArgs) => {
   }
   const page = 1;
   const { post, comments } = response.body;
-  return json({ post, comments, page });
+
+  const cacheSeconds =
+    post.pub_date && isNotPublished(post.pub_date) ? 0 : 60 * 60 * 12;
+  return json(
+    { post, comments, page },
+    { headers: cacheHeaders(cacheSeconds) }
+  );
 };
+
+function isNotPublished(date: string) {
+  const actualDate = new Date(date);
+  return actualDate > new Date();
+}
+
+function cacheHeaders(seconds: number) {
+  return { "cache-control": `public, max-age=${seconds}` };
+}
 
 export const meta: V2_MetaFunction = ({ data, params }) => {
   invariant(params.oid, `params.oid is required`);
@@ -97,6 +112,10 @@ function absoluteURL(uri: string) {
 export default function View() {
   const { post, comments, page } = useLoaderData<typeof loader>();
   return <Blogpost post={post} comments={comments} page={page} />;
+}
+
+export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
+  return { "cache-control": loaderHeaders.get("cache-control") || `max-age=0` };
 }
 
 export function CatchBoundary() {

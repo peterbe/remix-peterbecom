@@ -34,6 +34,13 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
+export function headers() {
+  const seconds = 60 * 60 * 12;
+  return {
+    "cache-control": `public, max-age=${seconds}`,
+  };
+}
+
 export default function View() {
   const { groups } = useLoaderData<typeof loader>();
   return <BlogArchive groups={groups} />;

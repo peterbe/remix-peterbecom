@@ -1,5 +1,5 @@
 import pico from "@picocss/pico/css/pico.css";
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction, Headers } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -29,7 +29,7 @@ interface ServerData {
   previous_page: number | null;
 }
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async () => {
   const categories: string[] = [];
   const response = await get<ServerData>("/api/v1/plog/homepage");
   const page = 1;
@@ -48,6 +48,13 @@ export const meta: V2_MetaFunction = () => {
     },
   ];
 };
+
+export function headers() {
+  const seconds = 60 * 60;
+  return {
+    "cache-control": `public, max-age=${seconds}`,
+  };
+}
 
 export default function View() {
   const { page, posts, categories, nextPage, previousPage } =

@@ -1,4 +1,4 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction, Headers } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useCatch } from "@remix-run/react";
@@ -89,6 +89,13 @@ export const meta: V2_MetaFunction = ({ data, params }) => {
     },
   ];
 };
+
+export function headers() {
+  const seconds = 60 * 60 * 6;
+  return {
+    "cache-control": `public, max-age=${seconds}`,
+  };
+}
 
 export default function View() {
   const { page, posts, categories, nextPage, previousPage } =
