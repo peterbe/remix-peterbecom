@@ -29,20 +29,42 @@ export function PostComments({ post, comments, page }: Props) {
             <div className="grid">
               <div>
                 {comments.previous_page ? (
-                  <Link to={getPaginationURL(post.oid, comments.previous_page)}>
+                  <Link
+                    to={getPaginationURL(post.oid, comments.previous_page)}
+                    role="button"
+                  >
                     Page {comments.previous_page}
                   </Link>
                 ) : (
-                  <span>Page 1</span>
+                  <a
+                    href={getPaginationURL(post.oid, 1)}
+                    onClick={(event) => event.preventDefault()}
+                    role="button"
+                    className="secondary outline"
+                    aria-disabled="true"
+                  >
+                    Page 1
+                  </a>
                 )}
               </div>
               <div>
                 {comments.next_page ? (
-                  <Link to={getPaginationURL(post.oid, comments.next_page)}>
+                  <Link
+                    to={getPaginationURL(post.oid, comments.next_page)}
+                    role="button"
+                  >
                     Page {comments.next_page}
                   </Link>
                 ) : (
-                  <span>Page {page}</span>
+                  <a
+                    href={getPaginationURL(post.oid, page)}
+                    onClick={(event) => event.preventDefault()}
+                    role="button"
+                    className="secondary outline"
+                    aria-disabled="true"
+                  >
+                    Page {page}
+                  </a>
                 )}
               </div>
             </div>

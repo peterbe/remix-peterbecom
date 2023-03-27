@@ -1,7 +1,6 @@
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useCatch, useLoaderData } from "@remix-run/react";
-import invariant from "tiny-invariant";
 
 import { Blogpost } from "~/components/blogpost";
 import { get } from "~/lib/get-data";
@@ -23,12 +22,24 @@ interface ServerData {
 }
 
 export const loader = async ({ params }: LoaderArgs) => {
-  invariant(params.oid, `params.oid is required`);
-  console.log("IN plog.$oid.tsx PARAMS:", params);
+  // invariant(params.oid, `params.oid is required`);
+  // console.log("IN plog.$oid.tsx PARAMS:", params);
+  const dynamicPage = params["*"];
+  if (!dynamicPage) {
+    // Not sure how this can ever happen
+    throw new Response("Invalid splat", { status: 404 });
+  }
+
+  if (dynamicPage.endsWith("/")) {
+    return redirect(`/plog/${dynamicPage.slice(0, -1)}`);
+  }
+
+  if (dynamicPage.endsWith("/p1")) {
+    return redirect(`/plog/${dynamicPage.replace(/\/p1$/, "")}`);
+  }
 
   let page = 1;
-  const dynamicPage = params["*"] || "";
-
+  let oid = "";
   for (const part of dynamicPage.split("/")) {
     if (!part) {
       // Because in JS,
@@ -42,11 +53,18 @@ export const loader = async ({ params }: LoaderArgs) => {
         throw new Response("Not Found (page not valid)", { status: 404 });
       }
       continue;
+    } else {
+      if (oid) {
+        throw new Response("Not Found (more than one oid)", { status: 404 });
+      }
+      oid = part;
     }
-    throw new Response(`Invalid splat part (${part})`, { status: 404 });
   }
 
-  const { oid } = params;
+  if (!oid) {
+    throw new Response("Not Found (oid empty)", { status: 404 });
+  }
+
   const sp = new URLSearchParams({ page: `${page}` });
   const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}?${sp}`;
 
@@ -74,8 +92,12 @@ function cacheHeaders(seconds: number) {
 }
 
 export const meta: V2_MetaFunction = ({ data, params }) => {
-  invariant(params.oid, `params.oid is required`);
-  const { oid } = params;
+  // invariant(params.oid, `params.oid is required`);
+  // console.log("PARAMS (meta)", params);
+  const oid = params["*"]?.split("/")[0];
+  if (!oid) throw new Error("No oid");
+
+  // const { oid } = params;
 
   if (!data) {
     // In catch CatchBoundary
