@@ -27,6 +27,7 @@ async function dynamicImages(req, res, next) {
     if (error.code !== "ENOENT") throw error;
   }
 
+  res.set("cache-control", `public,max-age=${60 * 5}`);
   res.status(404).type("text/plain").send("image not found");
 }
 

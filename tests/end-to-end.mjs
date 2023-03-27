@@ -62,7 +62,7 @@ test("filter home page by category (page 2)", async () => {
 test("filter home page by bad category", async () => {
   const response = await get("/oc-Neverheardof");
   assert.is(response.statusCode, 404);
-  assert.ok(!isCached(response));
+  assert.ok(isCached(response));
 });
 
 test("redirect to correct case of oc categoru", async () => {
@@ -102,6 +102,34 @@ test("404'ing should not be cached", async () => {
   const response = await get("/plog/thisdoesnotexist");
   assert.is(response.statusCode, 404);
   assert.ok(!isCached(response));
+});
+
+test("public image (PNG)", async () => {
+  const response = await get("/images/about/youshouldwatch.png");
+  assert.is(response.statusCode, 200);
+  assert.ok(isCached(response));
+  assert.is(response.headers["content-type"], "image/png");
+});
+
+test("dynamic image (WEBP)", async () => {
+  const response = await get("/images/about/youshouldwatch.webp");
+  assert.is(response.statusCode, 200);
+  assert.ok(isCached(response));
+  assert.is(response.headers["content-type"], "image/webp");
+});
+
+test("dynamic image not found (PNG)", async () => {
+  const response = await get("/images/about/never-heard-of.png");
+  assert.is(response.statusCode, 404);
+  assert.ok(isCached(response));
+  assert.is(response.headers["content-type"], "text/plain; charset=utf-8");
+});
+
+test("dynamic image not found (WEBP)", async () => {
+  const response = await get("/images/about/never-heard-of.webp");
+  assert.is(response.statusCode, 404);
+  assert.ok(isCached(response));
+  assert.is(response.headers["content-type"], "text/plain; charset=utf-8");
 });
 
 test.run();

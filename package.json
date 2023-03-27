@@ -10,7 +10,9 @@
     "typecheck": "tsc",
     "lint": "eslint app",
     "lintfix": "eslint app --fix && prettier --write app",
-    "test": "curl --fail -s http://localhost:3000 > /dev/null && uvu tests"
+    "test": "curl --fail -s http://localhost:3000 > /dev/null && uvu tests",
+    "prettier:write": "prettier --write app *.js",
+    "prettier:check": "prettier --check app *.js"
   },
   "dependencies": {
     "@picocss/pico": "1.5.7",
@@ -25,6 +27,7 @@
     "morgan": "^1.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "shrink-ray-current": "4.1.3",
     "swr": "2.1.1",
     "tiny-invariant": "1.3.1"
   },

@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const compression = require("compression");
 const morgan = require("morgan");
+const shrinkRay = require("shrink-ray-current");
 const { createRequestHandler } = require("@remix-run/express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const { dynamicImages } = require("./dynamic-images.js");
@@ -14,11 +15,13 @@ const asyncHandler = (fn) => (req, res, next) =>
 
 const app = express();
 
-app.use(compression());
+// app.use(compression());
 
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable("x-powered-by");
 
+// Move to belong the express.static(...) uses if you don't want to see
+// log lines for static assets.
 app.use(morgan("tiny"));
 
 // Remix fingerprints its assets so we can cache forever.
@@ -32,6 +35,8 @@ app.use(
 app.use(express.static("public", { maxAge: "1d" }));
 
 app.use(asyncHandler(dynamicImages));
+
+app.use(shrinkRay());
 
 const backendProxy = createProxyMiddleware({
   target: BACKEND_BASE_URL,

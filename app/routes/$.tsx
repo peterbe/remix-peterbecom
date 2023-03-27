@@ -55,7 +55,7 @@ export const loader = async ({ params }: LoaderArgs) => {
     false
   );
   if (response.statusCode === 404 || response.statusCode === 400) {
-    throw new Response("Not Found", { status: response.statusCode });
+    throw new Response("Not Found", { status: 404 });
   }
 
   if (response.statusCode === 301 && response.headers.location) {
