@@ -5,7 +5,6 @@ const sharp = require("sharp");
 const PUBLIC_DIR = path.resolve("public");
 
 async function dynamicImages(req, res, next) {
-  //   console.log({ "req.url": req.url });
   if (!req.url.startsWith("/images/")) return next();
   if (!(req.method === "GET" || req.method === "HEAD")) {
     return res.status(405).type("text/plain").send("Method Not Allowed");
