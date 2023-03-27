@@ -3,6 +3,7 @@ import { Fragment } from "react";
 
 import type { Comments, Post } from "~/types";
 import { categoryURL } from "~/utils/utils";
+import { PostComments } from "./comments";
 
 import { Nav } from "./nav";
 
@@ -54,6 +55,8 @@ export function Blogpost({ post, comments, page }: Props) {
       {post.url && <AboutPostURL url={post.url} />}
 
       <div dangerouslySetInnerHTML={{ __html: post.body }} />
+
+      <PostComments post={post} comments={comments} page={page} />
     </div>
   );
 }

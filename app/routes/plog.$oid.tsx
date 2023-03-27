@@ -24,14 +24,36 @@ interface ServerData {
 
 export const loader = async ({ params }: LoaderArgs) => {
   invariant(params.oid, `params.oid is required`);
+  console.log("IN plog.$oid.tsx PARAMS:", params);
+
+  let page = 1;
+  const dynamicPage = params["*"] || "";
+
+  for (const part of dynamicPage.split("/")) {
+    if (!part) {
+      // Because in JS,
+      // > "".split('/')
+      // [ '' ]
+      continue;
+    }
+    if (/^p\d+$/.test(part)) {
+      page = parseInt(part.replace("p", ""));
+      if (isNaN(page)) {
+        throw new Response("Not Found (page not valid)", { status: 404 });
+      }
+      continue;
+    }
+    throw new Response(`Invalid splat part (${part})`, { status: 404 });
+  }
+
   const { oid } = params;
-  const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}`;
+  const sp = new URLSearchParams({ page: `${page}` });
+  const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}?${sp}`;
 
   const response = await get<ServerData>(fetchURL);
   if (response.statusCode === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
   }
-  const page = 1;
   const { post, comments } = response.body;
 
   const cacheSeconds =

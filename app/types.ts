@@ -36,7 +36,7 @@ export interface Comment {
 }
 
 export interface Comments {
-  truncated: boolean;
+  truncated: boolean | number;
   count: number;
   next_page: number | null;
   previous_page: number | null;
