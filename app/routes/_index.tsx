@@ -1,5 +1,5 @@
 import pico from "@picocss/pico/css/pico.css";
-import type { LoaderArgs, V2_MetaFunction, Headers } from "@remix-run/node";
+import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 

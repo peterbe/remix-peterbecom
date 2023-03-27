@@ -1,8 +1,8 @@
-import type { LoaderArgs, V2_MetaFunction, Headers } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useCatch } from "@remix-run/react";
-import { redirect } from "@remix-run/node";
 
 import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
