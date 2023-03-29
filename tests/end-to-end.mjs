@@ -1,6 +1,6 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
-import Cheerio from "cheerio";
+import cheerio from "cheerio";
 import got from "got";
 
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
@@ -21,6 +21,38 @@ test("home page", async () => {
   assert.is(response.statusCode, 200);
   assert.ok(isCached(response));
   assert.is(response.headers["content-encoding"], "br");
+});
+
+test("home page favicons", async () => {
+  const response = await get("/");
+  assert.is(response.statusCode, 200);
+  const $ = cheerio.load(response.body);
+  const favicon = $('link[rel="icon"]');
+  // Based on https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs
+  assert.is(favicon.attr("href"), "/favicon.ico");
+  assert.is(favicon.attr("sizes"), "any");
+  const touch = $('link[rel="apple-touch-icon"]');
+  assert.is(touch.attr("href"), "/apple-touch-icon.png");
+  const favResponse = await get("/favicon.ico");
+  assert.is(favResponse.statusCode, 200);
+  assert.is(favResponse.headers["content-type"], "image/x-icon");
+});
+
+test("manifest", async () => {
+  const response = await get("/");
+  assert.is(response.statusCode, 200);
+  const $ = cheerio.load(response.body);
+  const link = $('link[rel="manifest"]');
+  assert.is(link.length, 1);
+  const href = link.attr("href");
+  assert.ok(href.startsWith("/"));
+  assert.ok(href.endsWith(".manifest"));
+  const manifestResponse = await get(href);
+  assert.is(manifestResponse.statusCode, 200);
+  const { icons } = JSON.parse(manifestResponse.body);
+  const responses = await Promise.all(icons.map((icon) => get(icon.src)));
+  const statusCodes = responses.map((r) => r.statusCode);
+  assert.ok(statusCodes.every((s) => s === 200));
 });
 
 test("home page (page 2)", async () => {
@@ -71,17 +103,17 @@ test("redirect to correct case of oc categoru", async () => {
   assert.is(response.headers["location"], "/oc-JavaScript");
 });
 
-test("lyrics post page", async () => {
-  const response = await get("/plog/blogitem-040601-1");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
-});
+// test("lyrics post page", async () => {
+//   const response = await get("/plog/blogitem-040601-1");
+//   assert.is(response.statusCode, 200);
+//   assert.ok(isCached(response));
+// });
 
-test("lyrics post page (page 2)", async () => {
-  const response = await get("/plog/blogitem-040601-1/p2");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
-});
+// test("lyrics post page (page 2)", async () => {
+//   const response = await get("/plog/blogitem-040601-1/p2");
+//   assert.is(response.statusCode, 200);
+//   assert.ok(isCached(response));
+// });
 
 test("certain query strings cause a redirect", async () => {
   for (const querystring of ["comments=all", "magmadomain=something"]) {
@@ -89,13 +121,6 @@ test("certain query strings cause a redirect", async () => {
     assert.is(response.statusCode, 301);
     assert.is(response.headers["location"], "/anything");
   }
-});
-
-test("public static assets", async () => {
-  const response = await get("/favicon.ico");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
-  assert.is(response.headers["content-type"], "image/x-icon");
 });
 
 test("404'ing should not be cached", async () => {

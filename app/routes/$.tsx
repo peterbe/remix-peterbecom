@@ -59,7 +59,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   }
 
   if (response.statusCode === 301 && response.headers.location) {
-    return redirect(response.headers.location);
+    return redirect(response.headers.location, 308);
   }
 
   const {

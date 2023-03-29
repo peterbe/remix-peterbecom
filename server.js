@@ -1,11 +1,11 @@
 const path = require("path");
 const express = require("express");
-const compression = require("compression");
 const morgan = require("morgan");
 const shrinkRay = require("shrink-ray-current");
 const { createRequestHandler } = require("@remix-run/express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const { dynamicImages } = require("./dynamic-images.js");
+const { dynamicImages } = require("./server/dynamic-images.js");
+const { legacyRedirects } = require("./server/legacy-redirects");
 
 const BACKEND_BASE_URL = process.env.API_BASE || "http://127.0.0.1:8000";
 const BUILD_DIR = path.resolve("build");
@@ -53,6 +53,8 @@ app.use("/avatar.png", backendProxy);
 app.use("/api/", backendProxy);
 app.use("/cache/", backendProxy);
 app.use("*/ping", backendProxy);
+
+app.use(legacyRedirects);
 
 app.all(
   "*",
