@@ -1,5 +1,8 @@
-import { useEffect, useState, useRef } from "react";
-import type { Post, AddOwnCommentProps } from "../../types";
+import { useEffect, useRef, useState } from "react";
+
+import type { AddOwnCommentProps, Post } from "~/types";
+import { Message } from "~/utils/message";
+
 import { DisplayComment } from "./comment";
 
 interface PrepareData {
@@ -220,34 +223,45 @@ export function CommentForm({
         ></DisplayComment>
       )}
 
+      {prepareError && (
+        <Message
+          onClose={() => setPrepareError(null)}
+          warning={true}
+          header="Unable to prepare for commenting at the moment"
+          body="Try reloading the page."
+        />
+      )}
+
       {submitError && (
-        <article className="message negative">
-          <i className="close icon" onClick={() => setSubmitError(null)}>
-            &times;
-          </i>
-          <p>
-            <b>Sorry. The comment couldn&apos;t be posted.</b>
-          </p>
-          <p>An error occurred trying to send this to the server.</p>
-          <p>
-            <code>{submitError.toString()}</code>
-          </p>
-        </article>
+        <Message
+          onClose={() => setSubmitError(null)}
+          header="Sorry. The comment couldn't be posted."
+          body={
+            <>
+              <p>An error occurred trying to send this to the server.</p>
+              <p>
+                <code>{submitError.toString()}</code>
+              </p>
+            </>
+          }
+          negative={true}
+        />
       )}
 
       {previewError && (
-        <div className="message negative">
-          <i className="close icon" onClick={() => setPreviewError(null)}>
-            &times;
-          </i>
-          <p>
-            <b>Sorry. The comment couldn&apos;t be previewed.</b>
-          </p>
-          <p>An error occurred trying to send this to the server.</p>
-          <p>
-            <code>{previewError.toString()}</code>
-          </p>
-        </div>
+        <Message
+          onClose={() => setPreviewError(null)}
+          negative={true}
+          header="Sorry. The comment couldn't be previewed."
+          body={
+            <>
+              <p>An error occurred trying to send this to the server.</p>
+              <p>
+                <code>{previewError.toString()}</code>
+              </p>
+            </>
+          }
+        />
       )}
 
       <form

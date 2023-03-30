@@ -3,8 +3,8 @@ import { Fragment } from "react";
 
 import type { Comments, Post } from "~/types";
 import { categoryURL } from "~/utils/utils";
-import { PostComments } from "./comments";
 
+import { PostComments } from "./comments";
 import { Nav } from "./nav";
 
 type Props = {

@@ -1,15 +1,16 @@
-import { useState, Fragment } from "react";
 import { Link } from "@remix-run/react";
-import type {
-  Comments,
-  Post,
-  OwnComment,
-  Comment,
-  AddOwnCommentProps,
-} from "~/types";
+import { Fragment, useEffect, useState } from "react";
 
 import { DisplayComment } from "~/components/comment";
 import { CommentForm } from "~/components/commentform";
+import type {
+  AddOwnCommentProps,
+  Comment,
+  Comments,
+  OwnComment,
+  Post,
+} from "~/types";
+import { Message } from "~/utils/message";
 
 type Props = {
   post: Post;
@@ -160,6 +161,7 @@ function ShowCommentTree({
   root?: boolean;
 }) {
   const [ownComments, setOwnComments] = useState<OwnComment[]>([]);
+  const [submitted, setSubmitted] = useState<string | boolean | null>(null);
 
   function addOwnComment({
     oid,
@@ -200,6 +202,18 @@ function ShowCommentTree({
     });
   }
 
+  useEffect(() => {
+    let mounted = true;
+    setTimeout(() => {
+      if (mounted) {
+        setSubmitted(null);
+      }
+    }, 5 * 1000);
+    return () => {
+      mounted = false;
+    };
+  }, [submitted]);
+
   return (
     <>
       {comments.map((comment) => {
@@ -213,6 +227,15 @@ function ShowCommentTree({
               parent={parent}
               allowReply={true}
             >
+              {submitted === comment.oid && (
+                <Message
+                  onClose={() => setSubmitted(null)}
+                  header="Reply comment submitted"
+                  positive={true}
+                >
+                  It will be manually reviewed shortly.
+                </Message>
+              )}
               {parent && parent === comment.oid && !disallowComments && (
                 <>
                   <CommentForm
@@ -221,6 +244,9 @@ function ShowCommentTree({
                     addOwnComment={addOwnComment}
                     setParent={setParent}
                     depth={comment.depth + 1}
+                    onSubmitted={() => {
+                      setSubmitted(comment.oid);
+                    }}
                   />
                 </>
               )}
@@ -253,6 +279,16 @@ function ShowCommentTree({
         );
       })}
 
+      {submitted === true && (
+        <Message
+          onClose={() => setSubmitted(null)}
+          header="Comment submitted"
+          positive={true}
+        >
+          It will be manually reviewed shortly.
+        </Message>
+      )}
+
       {ownComments
         .filter((c) => c.parent === null && c.postOid === post.oid)
         .map((ownComment) => {
@@ -274,6 +310,9 @@ function ShowCommentTree({
             addOwnComment={addOwnComment}
             setParent={setParent}
             depth={0}
+            onSubmitted={() => {
+              setSubmitted(true);
+            }}
           />
         </div>
       )}

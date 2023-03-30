@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
-import { formatDateBasic } from "~/utils/utils";
 import type { Comment } from "~/types";
+import { formatDateBasic } from "~/utils/utils";
 
 export function DisplayComment({
   comment,
