@@ -240,17 +240,17 @@ function DebugResult({ document }: { document: Document }) {
   return (
     <small style={{ fontWeight: "normal" }}>
       <span
-        className="ui tag tiny label"
+        className="tag tiny"
         title="Score straight from Elasticsearch's mouth"
       >
         Score {document.score.toFixed(6)}
       </span>{" "}
-      <span className="ui tag tiny label" title="Popularity of document">
+      <span className="tag tiny" title="Popularity of document">
         Popularity {(document.popularity || 0.0).toFixed(6)} (
         {document.popularity_ranking})
       </span>{" "}
       <b
-        className="ui tag tiny label"
+        className="tag tiny"
         title="Change thanks to popularity"
         style={color ? { color } : undefined}
       >
@@ -268,11 +268,11 @@ function SearchTermDebugging({
   boosts: SearchTermBoosts;
 }) {
   return (
-    <>
+    <div>
       <p>
-        <small>Search Term Debugging</small>
+        <b>Search Term Debugging</b>
       </p>
-      <table className="ui celled table">
+      <table role="grid">
         <thead>
           <tr>
             <th>Search Term</th>
@@ -296,7 +296,7 @@ function SearchTermDebugging({
           })}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
 

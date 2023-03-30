@@ -103,17 +103,17 @@ test("redirect to correct case of oc categoru", async () => {
   assert.is(response.headers["location"], "/oc-JavaScript");
 });
 
-// test("lyrics post page", async () => {
-//   const response = await get("/plog/blogitem-040601-1");
-//   assert.is(response.statusCode, 200);
-//   assert.ok(isCached(response));
-// });
+test("lyrics post page", async () => {
+  const response = await get("/plog/blogitem-040601-1");
+  assert.is(response.statusCode, 200);
+  assert.ok(isCached(response));
+});
 
-// test("lyrics post page (page 2)", async () => {
-//   const response = await get("/plog/blogitem-040601-1/p2");
-//   assert.is(response.statusCode, 200);
-//   assert.ok(isCached(response));
-// });
+test("lyrics post page (page 2)", async () => {
+  const response = await get("/plog/blogitem-040601-1/p2");
+  assert.is(response.statusCode, 200);
+  assert.ok(isCached(response));
+});
 
 test("certain query strings cause a redirect", async () => {
   for (const querystring of ["comments=all", "magmadomain=something"]) {
