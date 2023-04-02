@@ -99,7 +99,11 @@ function Heading({
         <div className="grid">
           <div>
             {prevPage ? (
-              <Link to={getPaginationURL(oid, prevPage)} role="button">
+              <Link
+                to={getPaginationURL(oid, prevPage)}
+                role="button"
+                className="mini"
+              >
                 Page {prevPage}
               </Link>
             ) : (
@@ -107,7 +111,7 @@ function Heading({
                 href={getPaginationURL(oid, 1)}
                 onClick={(event) => event.preventDefault()}
                 role="button"
-                className="secondary outline"
+                className="secondary outline mini"
                 aria-disabled="true"
               >
                 Page 1
@@ -116,7 +120,11 @@ function Heading({
           </div>
           <div>
             {nextPage ? (
-              <Link to={getPaginationURL(oid, nextPage)} role="button">
+              <Link
+                to={getPaginationURL(oid, nextPage)}
+                role="button"
+                className="mini"
+              >
                 Page {nextPage}
               </Link>
             ) : (
@@ -124,7 +132,7 @@ function Heading({
                 href={getPaginationURL(oid, page)}
                 onClick={(event) => event.preventDefault()}
                 role="button"
-                className="secondary outline"
+                className="secondary outline mini"
                 aria-disabled="true"
               >
                 Page {page}

@@ -1,3 +1,4 @@
+import { useLocation } from "@remix-run/react";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 
@@ -26,6 +27,10 @@ export function ThemeToggler({
   theme: string | null;
   setTheme: Dispatch<SetStateAction<string | null>>;
 }) {
+  const { pathname } = useLocation();
+  if (pathname.startsWith("/plog/blogitem-040601-1")) {
+    return null;
+  }
   return (
     <a
       className="theme-toggler"

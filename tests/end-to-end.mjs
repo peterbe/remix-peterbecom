@@ -115,6 +115,18 @@ test("lyrics post page (page 2)", async () => {
   assert.ok(isCached(response));
 });
 
+test("lyrics post page (trailing slash)", async () => {
+  const response = await get("/plog/blogitem-040601-1/");
+  assert.is(response.statusCode, 302);
+  assert.is(response.headers["location"], "/plog/blogitem-040601-1");
+});
+
+test("lyrics post page (/p1)", async () => {
+  const response = await get("/plog/blogitem-040601-1/p1");
+  assert.is(response.statusCode, 302);
+  assert.is(response.headers["location"], "/plog/blogitem-040601-1");
+});
+
 test("certain query strings cause a redirect", async () => {
   for (const querystring of ["comments=all", "magmadomain=something"]) {
     const response = await get(`/anything?${querystring}`);

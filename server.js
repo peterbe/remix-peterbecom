@@ -20,15 +20,15 @@ const app = express();
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable("x-powered-by");
 
-// Move to belong the express.static(...) uses if you don't want to see
-// log lines for static assets.
-app.use(morgan("tiny"));
-
 // Remix fingerprints its assets so we can cache forever.
 app.use(
   "/build",
   express.static("public/build", { immutable: true, maxAge: "1y" })
 );
+
+// Move to belong the express.static(...) uses if you don't want to see
+// log lines for static assets.
+app.use(morgan("tiny"));
 
 // Everything else (like favicon.ico) is cached for an hour. You may want to be
 // more aggressive with this caching.

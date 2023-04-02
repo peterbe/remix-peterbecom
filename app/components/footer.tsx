@@ -6,6 +6,10 @@ const THIS_YEAR = new Date().getFullYear();
 
 export function Footer() {
   const { pathname } = useLocation();
+  if (pathname.startsWith("/plog/blogitem-040601-1")) {
+    return <LyricspostFooter />;
+  }
+
   return (
     <footer className="container footer">
       <div className="grid">
@@ -28,6 +32,16 @@ export function Footer() {
         <a href="https://thatsgroce.web.app" title="That's Groce!">
           That&apos;s Groce!
         </a>
+      </p>
+    </footer>
+  );
+}
+
+function LyricspostFooter() {
+  return (
+    <footer className="container footer">
+      <p>
+        &copy; <Link to="/">peterbe.com</Link> 2003 - {THIS_YEAR}
       </p>
     </footer>
   );

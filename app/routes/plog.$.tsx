@@ -3,6 +3,7 @@ import { json, redirect } from "@remix-run/node";
 import { useCatch, useLoaderData } from "@remix-run/react";
 
 import { Blogpost } from "~/components/blogpost";
+import { Lyricspost } from "~/components/lyricspost";
 import { get } from "~/lib/get-data";
 import blogpost from "~/styles/blogpost.css";
 import type { Comments, Post } from "~/types";
@@ -23,7 +24,6 @@ interface ServerData {
 
 export const loader = async ({ params }: LoaderArgs) => {
   // invariant(params.oid, `params.oid is required`);
-  // console.log("IN plog.$oid.tsx PARAMS:", params);
   const dynamicPage = params["*"];
   if (!dynamicPage) {
     // Not sure how this can ever happen
@@ -155,6 +155,10 @@ function absoluteURL(uri: string) {
 
 export default function View() {
   const { post, comments, page } = useLoaderData<typeof loader>();
+  if (post.oid === "blogitem-040601-1") {
+    return <Lyricspost post={post} comments={comments} page={page} />;
+  }
+
   return <Blogpost post={post} comments={comments} page={page} />;
 }
 

@@ -6,6 +6,7 @@ import { categoryURL } from "~/utils/utils";
 
 import { PostComments } from "./comments";
 import { Nav } from "./nav";
+import { ScrollToTop } from "./scroll-to-top";
 
 type Props = {
   post: Post;
@@ -14,6 +15,7 @@ type Props = {
 };
 export function Blogpost({ post, comments, page }: Props) {
   const pubDate = new Date(post.pub_date);
+
   return (
     <div>
       <Nav
@@ -57,6 +59,8 @@ export function Blogpost({ post, comments, page }: Props) {
       <div dangerouslySetInnerHTML={{ __html: post.body }} />
 
       <PostComments post={post} comments={comments} page={page} />
+
+      {comments.count >= 10 && <ScrollToTop />}
     </div>
   );
 }

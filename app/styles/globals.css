@@ -36,9 +36,11 @@ main.container {
   padding-top: 20px;
 }
 
-button.mini {
+button.mini,
+a.mini[role="button"] {
   padding: 5px 10px;
   font-size: 0.85rem;
+  margin: 3px;
   width: auto;
   display: inline;
 }
