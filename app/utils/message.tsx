@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { Children } from "react";
 
 type Props = {
   header: string | ReactNode;
