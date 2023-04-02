@@ -1,0 +1,61 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: cached-node_modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.github/workflows/test.yml') }}
+
+      - name: Install
+        if: steps.cached-node_modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Pretty
+        run: npm run prettier:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build (and lint)
+        run: npm run build
+
+      - name: Start server
+        env:
+          API_BASE: https://www.peterbe.com
+        run: npm run start > /tmp/stdout.log 2> /tmp/stderr.log &
+
+      - name: Check that the server started
+        run: curl --retry-connrefused --retry 5 -I http://localhost:3000/
+
+      - name: End-to-end test the server
+        env:
+          BASE_URL: http://localhost:3000
+        run: npm run test
+
+      - name: Debug any server outputs
+        if: failure()
+        run: |
+          echo "____STDOUT____"
+          cat /tmp/stdout.log
+          echo "____STDERR____"
+          cat /tmp/stderr.log
