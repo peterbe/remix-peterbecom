@@ -2,6 +2,7 @@ import pico from "@picocss/pico/css/pico.css";
 import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useRouteError } from "@remix-run/react";
 
 import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
@@ -31,8 +32,14 @@ interface ServerData {
 
 export const loader = async () => {
   const categories: string[] = [];
-  const response = await get<ServerData>("/api/v1/plog/homepage");
+  const url = "/api/v1/plog/homepage";
+  const response = await get<ServerData>(url);
   const page = 1;
+  if (response.statusCode >= 500) {
+    throw new Error(`${response.statusCode} on ${url}`);
+  } else if (response.statusCode >= 400) {
+    throw new Response("Not Found", { status: response.statusCode });
+  }
   const {
     posts,
     next_page: nextPage,
@@ -67,5 +74,29 @@ export default function View() {
       previousPage={previousPage}
       page={page}
     />
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  console.log(
+    "Error in routes/_index.tsx",
+    typeof error,
+    error instanceof Error,
+    error
+  );
+
+  let errorMessage = "Unknown error";
+  if (error instanceof Error) {
+    errorMessage = error.message;
+  }
+
+  return (
+    <div>
+      <h1>Application error</h1>
+      <p>Something went wrong.</p>
+      <pre>{errorMessage}</pre>
+    </div>
   );
 }

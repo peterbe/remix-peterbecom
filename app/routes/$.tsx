@@ -1,8 +1,7 @@
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useCatch } from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
@@ -49,11 +48,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   }
   const sp = new URLSearchParams({ page: `${page}` });
   categories.forEach((category) => sp.append("oc", category));
-  const response = await get<ServerData>(
-    `/api/v1/plog/homepage?${sp}`,
-    false,
-    false
-  );
+  const response = await get<ServerData>(`/api/v1/plog/homepage?${sp}`);
   if (response.statusCode === 404 || response.statusCode === 400) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -112,17 +107,31 @@ export default function View() {
   );
 }
 
-export function CatchBoundary() {
-  const caught = useCatch();
-  const pageNotFound = caught.status === 404;
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>Page not found</h1>
+        <p>Status: {error.status}</p>
+        <pre>
+          <code>{error.data.message}</code>
+        </pre>
+      </div>
+    );
+  }
+
+  let errorMessage = "Unknown error";
+  if (error instanceof Error) {
+    errorMessage = error.message;
+  }
 
   return (
     <div>
-      <h1>{pageNotFound ? "Page not found" : "Error"}</h1>
-      <p>Status: {caught.status}</p>
-      <pre>
-        <code>{JSON.stringify(caught.data, null, 2)}</code>
-      </pre>
+      <h1>Application error</h1>
+      <p>Something went wrong.</p>
+      <pre>{errorMessage}</pre>
     </div>
   );
 }
