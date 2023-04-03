@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 import { Footer } from "~/components/footer";
 
@@ -46,6 +47,35 @@ export default function App() {
         <Footer />
 
         <ThemeToggler theme={theme} setTheme={setTheme} />
+      </body>
+    </html>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  console.log("In root.tsx error", error, {
+    isRouteErrorResponse: isRouteErrorResponse(error),
+  });
+
+  let pageNotFound = false;
+  if (isRouteErrorResponse(error)) {
+    pageNotFound = error.status >= 400 && error.status < 500;
+  }
+
+  let errorMessage = "Unknown error";
+  if (error instanceof Error) {
+    errorMessage = error.message;
+  }
+
+  return (
+    <html>
+      <body style={{ margin: 40, fontFamily: "sans-serif" }}>
+        <h1>{pageNotFound ? "Page not found" : "Error"}</h1>
+
+        <p>Something went wrong.</p>
+        <pre>{errorMessage}</pre>
       </body>
     </html>
   );

@@ -25,13 +25,14 @@ const timeoutConfiguration = {
 
 export async function get<T>(
   uri: string,
-  throwHttpErrors = false,
-  followRedirect = true
+  { throwHttpErrors = false, followRedirect = true } = {}
 ) {
   if (!uri.startsWith("/")) {
     throw new Error(`uri parameter should start with / (not: ${uri})`);
   }
   console.time(`Fetch:${uri}`);
+  console.log({ followRedirect });
+
   const response = await got<T>(API_BASE + uri, {
     responseType: "json",
     throwHttpErrors,

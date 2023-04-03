@@ -1,6 +1,6 @@
 import View from "./plog.blogitem-040601-1";
 export {
-  CatchBoundary,
+  ErrorBoundary,
   headers,
   links,
   loader,
