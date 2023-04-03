@@ -1,5 +1,6 @@
-import { test } from "uvu";
-import * as assert from "uvu/assert";
+// import { test } from "uvu";
+// import * as assert from "uvu/assert";
+import test from "ava";
 import cheerio from "cheerio";
 import got from "got";
 
@@ -16,157 +17,157 @@ function isCached(res) {
   return maxAge > 0 && /public/.test(cc);
 }
 
-test("home page", async () => {
+test("home page", async (t) => {
   const response = await get("/");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
-  assert.is(response.headers["content-encoding"], "br");
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
+  t.is(response.headers["content-encoding"], "br");
 });
 
-test("home page favicons", async () => {
+test("home page favicons", async (t) => {
   const response = await get("/");
-  assert.is(response.statusCode, 200);
+  t.is(response.statusCode, 200);
   const $ = cheerio.load(response.body);
   const favicon = $('link[rel="icon"]');
   // Based on https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs
-  assert.is(favicon.attr("href"), "/favicon.ico");
-  assert.is(favicon.attr("sizes"), "any");
+  t.is(favicon.attr("href"), "/favicon.ico");
+  t.is(favicon.attr("sizes"), "any");
   const touch = $('link[rel="apple-touch-icon"]');
-  assert.is(touch.attr("href"), "/apple-touch-icon.png");
+  t.is(touch.attr("href"), "/apple-touch-icon.png");
   const favResponse = await get("/favicon.ico");
-  assert.is(favResponse.statusCode, 200);
-  assert.is(favResponse.headers["content-type"], "image/x-icon");
+  t.is(favResponse.statusCode, 200);
+  t.is(favResponse.headers["content-type"], "image/x-icon");
 });
 
-test("manifest", async () => {
+test("manifest", async (t) => {
   const response = await get("/");
-  assert.is(response.statusCode, 200);
+  t.is(response.statusCode, 200);
   const $ = cheerio.load(response.body);
   const link = $('link[rel="manifest"]');
-  assert.is(link.length, 1);
+  t.is(link.length, 1);
   const href = link.attr("href");
-  assert.ok(href.startsWith("/"));
-  assert.ok(href.endsWith(".manifest"));
+  t.true(href.startsWith("/"));
+  t.true(href.endsWith(".manifest"));
   const manifestResponse = await get(href);
-  assert.is(manifestResponse.statusCode, 200);
+  t.is(manifestResponse.statusCode, 200);
   const { icons } = JSON.parse(manifestResponse.body);
   const responses = await Promise.all(icons.map((icon) => get(icon.src)));
   const statusCodes = responses.map((r) => r.statusCode);
-  assert.ok(statusCodes.every((s) => s === 200));
+  t.true(statusCodes.every((s) => s === 200));
 });
 
-test("home page (page 2)", async () => {
+test("home page (page 2)", async (t) => {
   const response = await get("/p2");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
 });
 
-test("plog archive page", async () => {
+test("plog archive page", async (t) => {
   const response = await get("/plog");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
 });
 
-test("about page", async () => {
+test("about page", async (t) => {
   const response = await get("/about");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
 });
 
-test("contact page", async () => {
+test("contact page", async (t) => {
   const response = await get("/contact");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
 });
 
-test("filter home page by category", async () => {
+test("filter home page by category", async (t) => {
   const response = await get("/oc-JavaScript");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
 });
 
-test("filter home page by category (page 2)", async () => {
+test("filter home page by category (page 2)", async (t) => {
   const response = await get("/oc-JavaScript/p2");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
 });
 
-test("filter home page by bad category", async () => {
+test("filter home page by bad category", async (t) => {
   const response = await get("/oc-Neverheardof");
-  assert.is(response.statusCode, 404);
-  assert.ok(isCached(response));
+  t.is(response.statusCode, 404);
+  t.true(isCached(response));
 });
 
-test("redirect to correct case of oc categoru", async () => {
+test("redirect to correct case of oc categoru", async (t) => {
   const response = await get("/oc-jAVAsCRIPT");
-  assert.is(response.statusCode, 308);
-  assert.is(response.headers["location"], "/oc-JavaScript");
+  t.is(response.statusCode, 308);
+  t.is(response.headers["location"], "/oc-JavaScript");
 });
 
-test("lyrics post page", async () => {
+test("lyrics post page", async (t) => {
   const response = await get("/plog/blogitem-040601-1");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
 });
 
-test("lyrics post page (page 2)", async () => {
+test("lyrics post page (page 2)", async (t) => {
   const response = await get("/plog/blogitem-040601-1/p2");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
 });
 
-test("lyrics post page (trailing slash)", async () => {
+test("lyrics post page (trailing slash)", async (t) => {
   const response = await get("/plog/blogitem-040601-1/");
-  assert.is(response.statusCode, 302);
-  assert.is(response.headers["location"], "/plog/blogitem-040601-1");
+  t.is(response.statusCode, 302);
+  t.is(response.headers["location"], "/plog/blogitem-040601-1");
 });
 
-test("lyrics post page (/p1)", async () => {
+test("lyrics post page (/p1)", async (t) => {
   const response = await get("/plog/blogitem-040601-1/p1");
-  assert.is(response.statusCode, 302);
-  assert.is(response.headers["location"], "/plog/blogitem-040601-1");
+  t.is(response.statusCode, 302);
+  t.is(response.headers["location"], "/plog/blogitem-040601-1");
 });
 
-test("certain query strings cause a redirect", async () => {
+test("certain query strings cause a redirect", async (t) => {
   for (const querystring of ["comments=all", "magmadomain=something"]) {
     const response = await get(`/anything?${querystring}`);
-    assert.is(response.statusCode, 301);
-    assert.is(response.headers["location"], "/anything");
+    t.is(response.statusCode, 301);
+    t.is(response.headers["location"], "/anything");
   }
 });
 
-test("404'ing should not be cached", async () => {
+test("404'ing should not be cached", async (t) => {
   const response = await get("/plog/thisdoesnotexist");
-  assert.is(response.statusCode, 404);
-  assert.ok(!isCached(response));
+  t.is(response.statusCode, 404);
+  t.true(!isCached(response));
 });
 
-test("public image (PNG)", async () => {
+test("public image (PNG)", async (t) => {
   const response = await get("/images/about/youshouldwatch.png");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
-  assert.is(response.headers["content-type"], "image/png");
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
+  t.is(response.headers["content-type"], "image/png");
 });
 
-test("dynamic image (WEBP)", async () => {
+test("dynamic image (WEBP)", async (t) => {
   const response = await get("/images/about/youshouldwatch.webp");
-  assert.is(response.statusCode, 200);
-  assert.ok(isCached(response));
-  assert.is(response.headers["content-type"], "image/webp");
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
+  t.is(response.headers["content-type"], "image/webp");
 });
 
-test("dynamic image not found (PNG)", async () => {
+test("dynamic image not found (PNG)", async (t) => {
   const response = await get("/images/about/never-heard-of.png");
-  assert.is(response.statusCode, 404);
-  assert.ok(isCached(response));
-  assert.is(response.headers["content-type"], "text/plain; charset=utf-8");
+  t.is(response.statusCode, 404);
+  t.true(isCached(response));
+  t.is(response.headers["content-type"], "text/plain; charset=utf-8");
 });
 
-test("dynamic image not found (WEBP)", async () => {
+test("dynamic image not found (WEBP)", async (t) => {
   const response = await get("/images/about/never-heard-of.webp");
-  assert.is(response.statusCode, 404);
-  assert.ok(isCached(response));
-  assert.is(response.headers["content-type"], "text/plain; charset=utf-8");
+  t.is(response.statusCode, 404);
+  t.true(isCached(response));
+  t.is(response.headers["content-type"], "text/plain; charset=utf-8");
 });
 
-test.run();
+// test.run();

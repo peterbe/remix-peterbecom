@@ -10,8 +10,8 @@
     "typecheck": "tsc",
     "lint": "eslint app",
     "lintfix": "eslint app --fix && prettier --write app",
-    "test": "curl --fail -s http://localhost:3000 > /dev/null && uvu tests",
-    "test:watch": "watchlist app tests server -- uvu tests",
+    "test": "curl --fail -s http://localhost:3000 > /dev/null && ava",
+    "test:watch": "ava --watch",
     "prettier:write": "prettier --write app *.js",
     "prettier:check": "prettier --check app *.js"
   },
@@ -39,6 +39,7 @@
     "@types/react": "18.0.32",
     "@types/react-dom": "18.0.8",
     "@types/throttle-debounce": "5.0.0",
+    "ava": "5.2.0",
     "cheerio": "1.0.0-rc.12",
     "dotenv": "16.0.3",
     "eslint": "8.37.0",
@@ -47,9 +48,7 @@
     "npm-run-all": "4.1.5",
     "prettier": "2.8.7",
     "sharp": "0.32.0",
-    "typescript": "4.8.4",
-    "uvu": "0.5.6",
-    "watchlist": "0.3.1"
+    "typescript": "4.8.4"
   },
   "engines": {
     "node": ">=14"
