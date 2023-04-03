@@ -1,5 +1,3 @@
-// import { test } from "uvu";
-// import * as assert from "uvu/assert";
 import test from "ava";
 import cheerio from "cheerio";
 import got from "got";
