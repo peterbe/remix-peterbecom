@@ -166,18 +166,3 @@ export default function View() {
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return { "cache-control": loaderHeaders.get("cache-control") || `max-age=0` };
 }
-
-// export function CatchBoundary() {
-//   const caught = useCatch();
-//   const pageNotFound = caught.status === 404;
-
-//   return (
-//     <div>
-//       <h1>{pageNotFound ? "Page not found" : "Error"}</h1>
-//       <p>Status: {caught.status}</p>
-//       <pre>
-//         <code>{JSON.stringify(caught.data, null, 2)}</code>
-//       </pre>
-//     </div>
-//   );
-// }
