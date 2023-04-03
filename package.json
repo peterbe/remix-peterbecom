@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@remix-run/dev": "1.14.3",
-    "@remix-run/eslint-config": "1.14.3",
+    "@remix-run/eslint-config": "1.15.0",
     "@types/react": "18.0.32",
     "@types/react-dom": "18.0.8",
     "@types/throttle-debounce": "5.0.0",
