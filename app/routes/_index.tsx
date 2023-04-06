@@ -2,7 +2,7 @@ import pico from "@picocss/pico/css/pico.css";
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useRouteError, isRouteErrorResponse } from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 import { Homepage } from "~/components/homepage";
 // import { get } from "~/lib/get-data";
