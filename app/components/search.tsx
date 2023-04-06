@@ -40,9 +40,11 @@ interface ServerData {
 }
 
 export function Search() {
-  const [, setSearchParams] = useSearchParams();
-  const q = useQueryString("q");
-  const [qInput, setQInput] = useState(q || "");
+  // const [, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  // const q = useQueryString("q");
+  const q = searchParams.get("q");
+  // const [qInput, setQInput] = useState(q || "");
   const debug = useQueryBoolean("debug");
 
   const pageTitle = q && q.trim() ? `Searching for "${q}"` : "Search";
@@ -68,7 +70,7 @@ export function Search() {
     },
     {
       revalidateOnFocus: false,
-      keepPreviousData: true,
+      // keepPreviousData: true,
     }
   );
 
@@ -79,9 +81,9 @@ export function Search() {
       extraHead = "1 thing found";
     } else if (found > 1) {
       if (shown < found) {
-        extraHead = `${found} things found (${shown} shown)`;
+        extraHead = `${found.toLocaleString()} things found (${shown} shown)`;
       } else {
-        extraHead = `${found} things found`;
+        extraHead = `${found.toLocaleString()} things found`;
       }
     } else {
       extraHead = "Nothing found";
@@ -93,7 +95,7 @@ export function Search() {
   useEffect(() => {
     if (q) {
       if (data) {
-        document.title = `Found ${data.results.count_documents} for "${q}"`;
+        document.title = `Found ${data.results.count_documents.toLocaleString()} for "${q}"`;
       } else {
         document.title = `Searching for "${q}"`;
       }
@@ -103,6 +105,12 @@ export function Search() {
   return (
     <div>
       <Nav title={pageTitle} subHead={extraHead} />
+
+      {!q && (
+        <p>
+          Type in a search in the search box and hit <kbd>Enter</kbd>
+        </p>
+      )}
 
       {error && (
         <div>
@@ -115,7 +123,7 @@ export function Search() {
         </div>
       )}
 
-      <form
+      {/* <form
         onSubmit={(event) => {
           event.preventDefault();
           if (qInput.trim()) {
@@ -133,7 +141,7 @@ export function Search() {
           onChange={(event) => setQInput(event.target.value)}
         />
         <button type="submit">Search</button>
-      </form>
+      </form> */}
 
       {isLoading && <LoadingSpace />}
 
