@@ -8,7 +8,7 @@ import lyricspost from "~/styles/lyricspost.css";
 import type { Comments, Post } from "~/types";
 
 import { links as rootLinks } from "./_index";
-export { ErrorBoundary } from "./plog.$";
+export { ErrorBoundary } from "./_index";
 
 export function links() {
   return [
@@ -75,7 +75,7 @@ function cacheHeaders(seconds: number) {
 
 export const meta: V2_MetaFunction = ({ data, params }) => {
   let pageTitle = "Find song by lyrics";
-  let page = data.page || 1;
+  let page = data?.page || 1;
 
   // The contents of the `<title>` has to be a string
   const title = `${pageTitle} ${

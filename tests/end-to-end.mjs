@@ -60,10 +60,21 @@ test("home page (page 2)", async (t) => {
   t.true(isCached(response));
 });
 
+test("home page (page 999)", async (t) => {
+  const response = await get("/p999");
+  t.is(response.statusCode, 404);
+});
+
 test("plog archive page", async (t) => {
   const response = await get("/plog");
   t.is(response.statusCode, 200);
   t.true(isCached(response));
+});
+
+test("plog archive page redirect trailing slash", async (t) => {
+  const response = await get("/plog/", false);
+  t.is(response.statusCode, 302);
+  t.is(response.headers["location"], "/plog");
 });
 
 test("about page", async (t) => {
@@ -172,5 +183,3 @@ test("dynamic image not found (WEBP)", async (t) => {
   t.true(isCached(response));
   t.is(response.headers["content-type"], "text/plain; charset=utf-8");
 });
-
-// test.run();
