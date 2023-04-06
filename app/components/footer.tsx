@@ -2,6 +2,8 @@ import { Link, useLocation } from "@remix-run/react";
 
 import { links } from "~/components/nav";
 
+import { SearchForm } from "./searchform";
+
 const THIS_YEAR = new Date().getFullYear();
 
 export function Footer() {
@@ -12,8 +14,8 @@ export function Footer() {
 
   return (
     <footer className="container footer">
-      <div className="grid">
-        {links.map(([to, text]) => {
+      {/* <div className="grid">
+        {[...links, ["/search", "Search"]].map(([to, text]) => {
           return (
             <div key={to}>
               <Link
@@ -25,7 +27,24 @@ export function Footer() {
             </div>
           );
         })}
-      </div>
+      </div> */}
+      <nav>
+        <ul>
+          {[...links, ["/search", "Search"]].map(([to, text]) => {
+            return (
+              <li key={to}>
+                <Link
+                  to={to}
+                  className={pathname === to ? "secondary" : undefined}
+                >
+                  {text}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+      <SearchForm />
       <p>&copy; peterbe.com 2003 - {THIS_YEAR}</p>
       <p>
         Check out my side project:{" "}

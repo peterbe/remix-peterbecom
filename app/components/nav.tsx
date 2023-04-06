@@ -2,6 +2,7 @@ import { useLocation } from "@remix-run/react";
 import { Link } from "@remix-run/react";
 import type { ReactNode } from "react";
 
+import { SearchForm } from "./searchform";
 type Props = {
   title?: string;
   subHead?: string | ReactNode;
@@ -12,7 +13,7 @@ export const links = [
   ["/plog", "Archive"],
   ["/about", "About"],
   ["/contact", "Contact"],
-  ["/search", "Search"],
+  // ["/search", "Search"],
 ];
 
 export function Nav({
@@ -49,6 +50,10 @@ export function Nav({
                     </li>
                   );
                 })}
+
+              <li>
+                <SearchForm />
+              </li>
             </ul>
           </nav>
         </div>

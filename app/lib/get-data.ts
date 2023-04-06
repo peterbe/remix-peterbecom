@@ -30,7 +30,7 @@ export async function get<T>(
   if (!uri.startsWith("/")) {
     throw new Error(`uri parameter should start with / (not: ${uri})`);
   }
-  console.time(`Fetch:${uri}`);
+  const t0 = new Date();
   const response = await got<T>(API_BASE + uri, {
     responseType: "json",
     throwHttpErrors,
@@ -38,7 +38,8 @@ export async function get<T>(
     retry: retryConfiguration,
     timeout: timeoutConfiguration,
   });
-  console.timeEnd(`Fetch:${uri}`);
+  const t1 = new Date();
+  console.log(`Fetch ${uri} took ${t1.getTime() - t0.getTime()} ms`);
 
   if (response.retryCount) {
     console.warn(`Fetch had to retry on ${uri} ${response.retryCount} times`);
