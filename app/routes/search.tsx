@@ -12,7 +12,7 @@ export function links() {
   ];
 }
 
-export const meta: V2_MetaFunction = ({ params }) => {
+export const meta: V2_MetaFunction = () => {
   return [
     {
       title: "Searching on Peterbe.com",

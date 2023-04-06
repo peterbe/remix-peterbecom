@@ -1,5 +1,5 @@
-import type { V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
 import { BlogArchive } from "~/components/blogarchive";
@@ -20,8 +20,12 @@ interface ServerData {
   groups: Group[];
 }
 
-export const loader = async () => {
-  const response = await get<ServerData>("/api/v1/plog/", true);
+export const loader = async ({ request }: LoaderArgs) => {
+  const { pathname } = new URL(request.url);
+  if (pathname.endsWith("/")) {
+    return redirect(pathname.slice(0, -1));
+  }
+  const response = await get<ServerData>("/api/v1/plog/");
   const { groups } = response.body;
   return json({ groups });
 };

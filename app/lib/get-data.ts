@@ -31,8 +31,6 @@ export async function get<T>(
     throw new Error(`uri parameter should start with / (not: ${uri})`);
   }
   console.time(`Fetch:${uri}`);
-  console.log({ followRedirect });
-
   const response = await got<T>(API_BASE + uri, {
     responseType: "json",
     throwHttpErrors,

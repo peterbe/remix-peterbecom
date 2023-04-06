@@ -2,7 +2,7 @@ import pico from "@picocss/pico/css/pico.css";
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useRouteError } from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 import { Homepage } from "~/components/homepage";
 // import { get } from "~/lib/get-data";
@@ -115,6 +115,17 @@ export default function View() {
 export function ErrorBoundary() {
   const error = useRouteError();
 
+  if (isRouteErrorResponse(error)) {
+    if (error.status >= 400 && error.status < 500) {
+      return (
+        <div>
+          <h1>Page not found</h1>
+          <p>Uhhh... I have no idea.</p>
+          <pre>{error.status}</pre>
+        </div>
+      );
+    }
+  }
   console.log(
     "Error in routes/_index.tsx",
     typeof error,
