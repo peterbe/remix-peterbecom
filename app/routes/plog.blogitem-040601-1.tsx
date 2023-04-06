@@ -74,35 +74,8 @@ function cacheHeaders(seconds: number) {
 }
 
 export const meta: V2_MetaFunction = ({ data, params }) => {
-  //   // invariant(params.oid, `params.oid is required`);
-  //   // console.log("PARAMS (meta)", params);
-  //   const oid = params["*"]?.split("/")[0];
-  //   if (!oid) throw new Error("No oid");
-
-  //   // const { oid } = params;
-
-  //   if (!data) {
-  //     // In catch CatchBoundary
-  //     return [{ title: "Page not found" }];
-  //   }
-
-  //   let pageTitle = "";
-
-  //   pageTitle = data.post.title;
-
-  //   if (data.page > 1) {
-  //     pageTitle += ` (page ${data.page})`;
-  //   }
-  //   pageTitle += " - Peterbe.com";
-
-  //   const summary = data.post.summary || undefined;
-  //   const openGraphImage = data.post.open_graph_image
-  //     ? absoluteURL(data.post.open_graph_image)
-  //     : undefined;
-
   let pageTitle = "Find song by lyrics";
-
-  let page = 1;
+  let page = data.page || 1;
 
   // The contents of the `<title>` has to be a string
   const title = `${pageTitle} ${

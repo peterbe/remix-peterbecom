@@ -114,6 +114,11 @@ test("lyrics post page (page 2)", async (t) => {
   t.true(isCached(response));
 });
 
+test("lyrics post page (page 999)", async (t) => {
+  const response = await get("/plog/blogitem-040601-1/p999");
+  t.is(response.statusCode, 404);
+});
+
 test("lyrics post page (trailing slash)", async (t) => {
   const response = await get("/plog/blogitem-040601-1/");
   t.is(response.statusCode, 302);

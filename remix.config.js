@@ -14,5 +14,8 @@ module.exports = {
 
     // https://remix.run/docs/en/1.15.0/pages/v2#catchboundary-and-errorboundary
     v2_errorBoundary: true,
+
+    // https://remix.run/docs/en/1.15.0/pages/v2#formmethod
+    v2_normalizeFormMethod: true,
   },
 };
