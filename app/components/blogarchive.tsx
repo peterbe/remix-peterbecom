@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { Group } from "~/types";
-import { categoryURL, formatDate } from "~/utils/utils";
+import { categoryURL, formatDate, postURL } from "~/utils/utils";
 
 import { Nav } from "./nav";
 
@@ -28,7 +28,7 @@ export function BlogArchive({ groups }: Props) {
                 }`;
                 return (
                   <dd key={post.oid}>
-                    <Link to={`/plog/${post.oid}`}>{post.title}</Link>{" "}
+                    <Link to={postURL(post.oid)}>{post.title}</Link>{" "}
                     {post.comments > 0 && <span>{count}</span>}{" "}
                     <small>
                       {post.categories.map((name, i, arr) => (

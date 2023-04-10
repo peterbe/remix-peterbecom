@@ -1,42 +1,17 @@
 export function formatDateBasic(date: string) {
-  // Replace this with an actual date library
-  const actualDate = new Date(date);
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const monthName = monthNames[actualDate.getMonth()];
-  return `${actualDate.getDate()} ${monthName} ${actualDate.getFullYear()}`;
+  return new Date(date).toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
 
 export function formatDate(date: string) {
-  const [year, month] = date.split(".");
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const monthName = monthNames[parseInt(month) - 1];
-  return `${monthName}, ${year}`;
+  return new Date(date).toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "long",
+    // day: "numeric",
+  });
 }
 
 export function postURL(oid: string) {
