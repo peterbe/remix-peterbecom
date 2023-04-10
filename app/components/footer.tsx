@@ -14,23 +14,9 @@ export function Footer() {
 
   return (
     <footer className="container footer">
-      {/* <div className="grid">
-        {[...links, ["/search", "Search"]].map(([to, text]) => {
-          return (
-            <div key={to}>
-              <Link
-                to={to}
-                className={pathname === to ? "secondary" : undefined}
-              >
-                {text}
-              </Link>
-            </div>
-          );
-        })}
-      </div> */}
       <nav>
         <ul>
-          {[...links, ["/search", "Search"]].map(([to, text]) => {
+          {links.map(([to, text]) => {
             return (
               <li key={to}>
                 <Link

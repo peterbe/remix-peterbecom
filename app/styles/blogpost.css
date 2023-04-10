@@ -1,3 +1,6 @@
 .post-url {
   background-color: var(--secondary-inverse);
 }
+.scroll-to-top {
+  text-align: right;
+}

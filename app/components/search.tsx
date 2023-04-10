@@ -2,7 +2,7 @@ import { Link, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-import { useQueryBoolean, useQueryString } from "~/hooks/use-query-hook";
+import { useQueryBoolean } from "~/hooks/use-query-hook";
 import { formatDateBasic } from "~/utils/utils";
 
 import { Nav } from "./nav";
@@ -40,11 +40,8 @@ interface ServerData {
 }
 
 export function Search() {
-  // const [, setSearchParams] = useSearchParams();
   const [searchParams] = useSearchParams();
-  // const q = useQueryString("q");
   const q = searchParams.get("q");
-  // const [qInput, setQInput] = useState(q || "");
   const debug = useQueryBoolean("debug");
 
   const pageTitle = q && q.trim() ? `Searching for "${q}"` : "Search";

@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { Comments, Post } from "~/types";
-import { categoryURL } from "~/utils/utils";
+import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
 
 import { PostComments } from "./comments";
 import { Nav } from "./nav";
@@ -60,6 +60,8 @@ export function Blogpost({ post, comments, page }: Props) {
 
       <PostComments post={post} comments={comments} page={page} />
 
+      <RelatedPosts post={post} />
+
       {comments.count >= 10 && <ScrollToTop />}
     </div>
   );
@@ -73,5 +75,90 @@ function AboutPostURL({ url }: { url: string }) {
         {url}
       </a>
     </p>
+  );
+}
+
+function RelatedPosts({ post }: { post: Post }) {
+  const previousPost = post.previous_post;
+  const nextPost = post.next_post;
+  const relatedByCategory = post.related_by_category || [];
+  const relatedByKeyword = post.related_by_keyword || [];
+
+  return (
+    <>
+      <h2 className="ui dividing header">Related posts</h2>
+
+      <dl className="related-posts">
+        {previousPost && (
+          <>
+            <dt>Previous:</dt>
+            <dd>
+              <Link to={postURL(previousPost.oid)}>{previousPost.title}</Link>{" "}
+              <small>{formatDateBasic(previousPost.pub_date)}</small>{" "}
+              <SubCategories categories={previousPost.categories || []} />
+            </dd>
+          </>
+        )}
+
+        {nextPost && (
+          <>
+            <dt>Next:</dt>
+            <dd>
+              <Link to={postURL(nextPost.oid)}>{nextPost.title}</Link>{" "}
+              <small>{formatDateBasic(nextPost.pub_date)}</small>{" "}
+              <SubCategories categories={nextPost.categories || []} />
+            </dd>
+          </>
+        )}
+      </dl>
+
+      {relatedByCategory.length > 0 && (
+        <>
+          <dl className="related-posts">
+            <dt>Related by category:</dt>
+            {relatedByCategory.map((related) => (
+              <dd key={related.oid}>
+                <Link to={postURL(related.oid)}>{related.title}</Link>{" "}
+                <small>{formatDateBasic(related.pub_date)}</small>{" "}
+                <SubCategories categories={related.categories || []} />
+              </dd>
+            ))}
+          </dl>
+        </>
+      )}
+
+      {relatedByKeyword.length > 0 && (
+        <>
+          <dl className="related-posts">
+            <dt>Related by keyword:</dt>
+            {relatedByKeyword.map((related) => (
+              <dd key={related.oid}>
+                <Link to={postURL(related.oid)}>{related.title}</Link>{" "}
+                <small>{formatDateBasic(related.pub_date)}</small>{" "}
+                <SubCategories categories={related.categories || []} />
+              </dd>
+            ))}
+          </dl>
+        </>
+      )}
+    </>
+  );
+}
+
+function SubCategories({ categories }: { categories: string[] }) {
+  return (
+    <>
+      {categories.map((category, i) => (
+        <Fragment key={category}>
+          <Link
+            to={categoryURL(category)}
+            title={`Filter by the '${category}' category`}
+          >
+            <small>{category}</small>
+          </Link>
+          {i < categories.length - 1 && <small>, </small>}
+        </Fragment>
+      ))}
+    </>
   );
 }

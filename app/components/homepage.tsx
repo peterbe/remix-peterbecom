@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { HomepagePost } from "~/types";
-import { categoryURL } from "~/utils/utils";
+import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
 
 import { Nav } from "./nav";
 
@@ -79,23 +79,15 @@ function AboutFilters({
 }
 
 function Post({ post }: { post: HomepagePost }) {
-  const pubDate = new Date(post.pub_date);
   return (
     <article className="homepage-post">
       <header>
         <hgroup>
           <h2>
-            <Link to={`/plog/${post.oid}`}>{post.title}</Link>
+            <Link to={postURL(post.oid)}>{post.title}</Link>
           </h2>
           <h3>
-            <b>
-              {pubDate.toLocaleDateString("en-us", {
-                weekday: "long",
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </b>
+            <b>{formatDateBasic(post.pub_date)}</b>
             <br />
             <span>
               {`${post.comments} comment${post.comments === 1 ? "" : "s"}`}
