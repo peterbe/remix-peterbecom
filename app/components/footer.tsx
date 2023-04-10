@@ -16,7 +16,7 @@ export function Footer() {
     <footer className="container footer">
       <nav>
         <ul>
-          {[...links, ["/search", "Search"]].map(([to, text]) => {
+          {links.map(([to, text]) => {
             return (
               <li key={to}>
                 <Link
