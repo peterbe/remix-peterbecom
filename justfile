@@ -19,5 +19,8 @@ tsc:
 lint: pretty tsc
     npm run lint
 
+lintfix:
+    npm run lintfix
+
 test:
     npm run test
