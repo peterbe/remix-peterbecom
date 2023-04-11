@@ -25,7 +25,11 @@ export const loader = async ({ request }: LoaderArgs) => {
   if (pathname.endsWith("/")) {
     return redirect(pathname.slice(0, -1));
   }
-  const response = await get<ServerData>("/api/v1/plog/");
+  const fetchURL = "/api/v1/plog/";
+  const response = await get<ServerData>(fetchURL);
+  if (response.statusCode >= 500) {
+    throw new Error(`${response.statusCode} from ${fetchURL}`);
+  }
   const { groups } = response.body;
   return json({ groups });
 };

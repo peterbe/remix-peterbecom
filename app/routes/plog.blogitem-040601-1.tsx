@@ -60,6 +60,9 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   if (response.statusCode === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
   }
+  if (response.statusCode >= 500) {
+    throw new Error(`${response.statusCode} from ${fetchURL}`);
+  }
   const { post, comments } = response.body;
 
   const cacheSeconds = 60 * 60 * 12;

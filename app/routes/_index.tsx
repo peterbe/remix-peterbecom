@@ -1,8 +1,9 @@
 import pico from "@picocss/pico/css/pico.css";
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useHref, useLoaderData, useLocation } from "@remix-run/react";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import Rollbar from "rollbar";
 
 import { Homepage } from "~/components/homepage";
 // import { get } from "~/lib/get-data";
@@ -68,12 +69,15 @@ export const loader = async ({ params }: LoaderArgs) => {
   categories.forEach((category) => sp.append("oc", category));
   const url = `/api/v1/plog/homepage?${sp}`;
   const response = await get<ServerData>(url, { followRedirect: false });
+
   if (response.statusCode === 404 || response.statusCode === 400) {
     throw new Response("Not Found", { status: 404 });
   }
-
   if (response.statusCode === 301 && response.headers.location) {
     return redirect(response.headers.location, 308);
+  }
+  if (response.statusCode >= 500) {
+    throw new Error(`${response.statusCode} from ${url}`);
   }
   const {
     posts,
@@ -114,6 +118,7 @@ export default function View() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  const location = useLocation();
 
   if (isRouteErrorResponse(error)) {
     if (error.status >= 400 && error.status < 500) {
@@ -132,6 +137,19 @@ export function ErrorBoundary() {
     error instanceof Error,
     error
   );
+
+  if (typeof process === "object" && process.env.ROLLBAR_ACCESS_TOKEN) {
+    const rollbar = new Rollbar({
+      accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+    });
+
+    rollbar.error(error instanceof Error ? error : new Error("Unknown error"), {
+      context: {
+        pathname: location.pathname,
+        search: location.search,
+      },
+    });
+  }
 
   let errorMessage = "Unknown error";
   if (error instanceof Error) {
