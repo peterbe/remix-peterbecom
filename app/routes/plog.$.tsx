@@ -73,6 +73,9 @@ export const loader = async ({ params }: LoaderArgs) => {
   if (response.statusCode === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
   }
+  if (response.statusCode >= 500) {
+    throw new Error(`${response.statusCode} from ${fetchURL}`);
+  }
   const { post, comments } = response.body;
 
   const cacheSeconds =
@@ -102,7 +105,7 @@ export const meta: V2_MetaFunction = ({ data, params }) => {
 
   if (!data) {
     // In catch CatchBoundary
-    return [{ title: "Page not found" }];
+    return [{ title: "No data" }];
   }
 
   let pageTitle = "";

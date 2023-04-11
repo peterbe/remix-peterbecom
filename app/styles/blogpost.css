@@ -1,5 +1,7 @@
 .post-url {
-  background-color: var(--secondary-inverse);
+  background-color: var(--code-background-color);
+  border-radius: 3px;
+  padding: 5px;
 }
 .scroll-to-top {
   text-align: right;
