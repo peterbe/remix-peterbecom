@@ -4,10 +4,10 @@ import { Fragment } from "react";
 import type { Comments, Post } from "~/types";
 import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
 
+import { CarbonAd } from "./carbonad";
 import { PostComments } from "./comments";
 import { Nav } from "./nav";
 import { ScrollToTop } from "./scroll-to-top";
-import { CarbonAd } from "./carbonad";
 
 type Props = {
   post: Post;

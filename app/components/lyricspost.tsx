@@ -1,9 +1,9 @@
 import type { Comments, Post } from "~/types";
 
+import { CarbonAd } from "./carbonad";
 import { PostComments } from "./comments";
 import { ScrollToTop } from "./scroll-to-top";
 import SongSearchAutocomplete from "./songsearch-autocomplete";
-import { CarbonAd } from "./carbonad";
 
 type Props = {
   post: Post;
