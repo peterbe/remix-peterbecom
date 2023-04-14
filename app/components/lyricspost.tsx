@@ -3,6 +3,7 @@ import type { Comments, Post } from "~/types";
 import { PostComments } from "./comments";
 import { ScrollToTop } from "./scroll-to-top";
 import SongSearchAutocomplete from "./songsearch-autocomplete";
+import { CarbonAd } from "./carbonad";
 
 type Props = {
   post: Post;
@@ -18,6 +19,8 @@ export function Lyricspost({ post, comments, page }: Props) {
       </hgroup>
 
       <SongSearchAutocomplete />
+
+      <CarbonAd />
 
       <PostComments post={post} comments={comments} page={page} />
 

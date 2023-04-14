@@ -7,6 +7,7 @@ import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
 import { PostComments } from "./comments";
 import { Nav } from "./nav";
 import { ScrollToTop } from "./scroll-to-top";
+import { CarbonAd } from "./carbonad";
 
 type Props = {
   post: Post;
@@ -55,6 +56,8 @@ export function Blogpost({ post, comments, page }: Props) {
       />
 
       {post.url && <AboutPostURL url={post.url} />}
+
+      <CarbonAd />
 
       <div dangerouslySetInnerHTML={{ __html: post.body }} />
 
