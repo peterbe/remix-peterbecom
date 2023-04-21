@@ -2,8 +2,6 @@ import { Link, useLocation } from "@remix-run/react";
 
 import { links } from "~/components/nav";
 
-import { SearchForm } from "./searchform";
-
 const THIS_YEAR = new Date().getFullYear();
 
 export function Footer() {
@@ -30,7 +28,6 @@ export function Footer() {
           })}
         </ul>
       </nav>
-      <SearchForm />
       <p>&copy; peterbe.com 2003 - {THIS_YEAR}</p>
       <p>
         Check out my side project:{" "}

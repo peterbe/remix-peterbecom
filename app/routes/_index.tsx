@@ -1,7 +1,7 @@
 import pico from "@picocss/pico/css/pico.css";
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useHref, useLoaderData, useLocation } from "@remix-run/react";
+import { useLoaderData, useLocation } from "@remix-run/react";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import Rollbar from "rollbar";
 
