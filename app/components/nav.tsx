@@ -1,8 +1,11 @@
-import { useLocation } from "@remix-run/react";
+import { useLocation, useNavigate } from "@remix-run/react";
 import { Link } from "@remix-run/react";
 import type { ReactNode } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 
-import { SearchForm } from "./searchform";
+import { ModalSearch } from "./modal-search";
+
 type Props = {
   title?: string;
   subHead?: string | ReactNode;
@@ -13,7 +16,7 @@ export const links = [
   ["/plog", "Archive"],
   ["/about", "About"],
   ["/contact", "Contact"],
-  // ["/search", "Search"],
+  ["/search", "Search"],
 ];
 
 export function Nav({
@@ -21,6 +24,24 @@ export function Nav({
   subHead = "Peter Bengtsson's blog",
 }: Props) {
   const { pathname } = useLocation();
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
+        return;
+      }
+      if (e.key === "/") {
+        setOpen(true);
+        e.preventDefault();
+        return;
+      }
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [navigate]);
 
   return (
     <div id="nav">
@@ -44,20 +65,36 @@ export function Nav({
                       <Link
                         to={to}
                         className={pathname === to ? "secondary" : undefined}
+                        title={
+                          to === "/search" ? `Shortcut key: '/'` : undefined
+                        }
+                        onClick={(event) => {
+                          if (to === "/search") {
+                            event.preventDefault();
+                            setOpen(true);
+                          }
+                        }}
                       >
                         {text}
                       </Link>
                     </li>
                   );
                 })}
-
-              <li>
-                <SearchForm />
-              </li>
             </ul>
           </nav>
         </div>
       </div>
+
+      {open && (
+        <ModalSearch
+          onClose={(url?: string) => {
+            if (url) {
+              navigate(url);
+            }
+            setOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }

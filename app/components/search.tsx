@@ -6,6 +6,7 @@ import { useQueryBoolean } from "~/hooks/use-query-hook";
 import { formatDateBasic } from "~/utils/utils";
 
 import { Nav } from "./nav";
+import { SearchForm } from "./searchform";
 
 interface Document {
   oid: string;
@@ -103,6 +104,8 @@ export function Search() {
     <div>
       <Nav title={pageTitle} subHead={extraHead} />
 
+      <SearchForm />
+
       {!q && (
         <p>
           Type in a search in the search box and hit <kbd>Enter</kbd>
@@ -119,26 +122,6 @@ export function Search() {
           </p>
         </div>
       )}
-
-      {/* <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (qInput.trim()) {
-            setSearchParams({ q: qInput.trim() });
-          } else {
-            setSearchParams({});
-          }
-        }}
-      >
-        <input
-          type="search"
-          name="q"
-          placeholder="Search..."
-          value={qInput}
-          onChange={(event) => setQInput(event.target.value)}
-        />
-        <button type="submit">Search</button>
-      </form> */}
 
       {isLoading && <LoadingSpace />}
 

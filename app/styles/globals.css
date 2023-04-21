@@ -299,3 +299,27 @@ span.not-approved {
   }
 }
 /* /carbon-ads-outer.css */
+
+/* modal-search */
+dialog {
+  align-items: start;
+  min-width: 390px;
+}
+@media (max-width: 575px) {
+  dialog article {
+    /* max-width: 510px; */
+    width: 100%;
+  }
+}
+@media (min-width: 576px) {
+  dialog article {
+    /* max-width: 510px; */
+    width: 510px;
+  }
+}
+@media (min-width: 768px) {
+  dialog article {
+    width: 700px;
+  }
+}
+/* /modal-search */
