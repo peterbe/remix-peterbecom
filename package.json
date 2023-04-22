@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@digitak/esrun": "3.2.24",
-    "@picocss/pico": "1.5.9",
+    "@picocss/pico": "1.5.10",
     "@remix-run/express": "1.15.0",
     "@remix-run/node": "1.15.0",
     "@remix-run/react": "1.15.0",
