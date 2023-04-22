@@ -1,7 +1,9 @@
 import test from "ava";
 import cheerio from "cheerio";
 import got from "got";
+import dotenv from "dotenv";
 
+dotenv.config();
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 
 async function get(uri, followRedirect = false, throwHttpErrors = false) {
@@ -182,4 +184,20 @@ test("dynamic image not found (WEBP)", async (t) => {
   t.is(response.statusCode, 404);
   t.true(isCached(response));
   t.is(response.headers["content-type"], "text/plain; charset=utf-8");
+});
+
+test("pages have the GA analytics tag", async (t) => {
+  for (const url of [
+    "/",
+    "/about",
+    "/contact",
+    "/plog",
+    "/plog/blogitem-040601-1",
+    "/plog/blogitem-20030629-2128",
+  ]) {
+    const response = await get(url);
+    t.is(response.statusCode, 200);
+    const id = process.env.GA_TRACKING_ID;
+    t.true(response.body.includes(id));
+  }
 });

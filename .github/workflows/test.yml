@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+env:
+  GA_TRACKING_ID: G-1234ABC
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
