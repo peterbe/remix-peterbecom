@@ -4,18 +4,19 @@
   "scripts": {
     "build": "remix build",
     "dev": "npm-run-all build --parallel \"dev:*\"",
-    "dev:node": "cross-env NODE_ENV=development nodemon --require dotenv/config ./server.js --watch ./server.js",
+    "dev:node": "cross-env NODE_ENV=development esrun --watch ./server.ts ",
     "dev:remix": "remix watch",
-    "start": "cross-env NODE_ENV=production node ./server.js",
+    "start": "cross-env NODE_ENV=production esrun ./server.ts",
     "typecheck": "tsc",
     "lint": "eslint app",
-    "lintfix": "eslint app --fix && prettier --write app",
+    "lintfix": "eslint app --fix && npm run prettier:write",
     "test": "curl --fail -s http://localhost:3000 > /dev/null && ava",
     "test:watch": "ava --watch",
-    "prettier:write": "prettier --write app *.js",
-    "prettier:check": "prettier --check app *.js"
+    "prettier:write": "prettier --write app *.ts",
+    "prettier:check": "prettier --check app *.ts"
   },
   "dependencies": {
+    "@digitak/esrun": "3.2.24",
     "@picocss/pico": "1.5.9",
     "@remix-run/express": "1.15.0",
     "@remix-run/node": "1.15.0",
@@ -23,6 +24,7 @@
     "compression": "1.7.4",
     "cross-env": "7.0.3",
     "express": "4.18.2",
+    "express-async-handler": "1.2.0",
     "http-proxy-middleware": "2.0.6",
     "isbot": "3.6.8",
     "morgan": "1.10.0",
@@ -38,6 +40,7 @@
   "devDependencies": {
     "@remix-run/dev": "1.15.0",
     "@remix-run/eslint-config": "1.15.0",
+    "@types/morgan": "1.9.4",
     "@types/react": "18.0.34",
     "@types/react-dom": "18.0.11",
     "@types/throttle-debounce": "5.0.0",

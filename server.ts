@@ -1,17 +1,19 @@
-const path = require("path");
-const express = require("express");
-const morgan = require("morgan");
-const shrinkRay = require("shrink-ray-current");
-const { createRequestHandler } = require("@remix-run/express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
-const { dynamicImages } = require("./server/dynamic-images.js");
-const { legacyRedirects } = require("./server/legacy-redirects");
+import shrinkRay from "shrink-ray-current";
+import { createProxyMiddleware } from "http-proxy-middleware";
+import { dynamicImages } from "./server/dynamic-images.js";
+import { legacyRedirects } from "./server/legacy-redirects";
+
+import asyncHandler from "express-async-handler";
+import path from "path";
+import express from "express";
+import morgan from "morgan";
+import { createRequestHandler } from "@remix-run/express";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const BACKEND_BASE_URL = process.env.API_BASE || "http://127.0.0.1:8000";
 const BUILD_DIR = path.resolve("build");
-
-const asyncHandler = (fn) => (req, res, next) =>
-  Promise.resolve(fn(req, res, next)).catch(next);
 
 const app = express();
 
