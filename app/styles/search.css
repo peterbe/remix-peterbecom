@@ -1,10 +1,7 @@
 .search-result {
   margin-bottom: 40px;
 }
-.search-result small,
-.search-summary {
-  color: var(--muted-color);
-}
+
 .search-result-url {
   color: green;
 }

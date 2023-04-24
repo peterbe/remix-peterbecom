@@ -6,11 +6,27 @@
   --background-color: #0b0e10;
 }
 
+[data-theme="light"],
+:root:not([data-theme="dark"]) {
+  --primary: hsl(195, 82%, 31%);
+}
+
+a {
+  /* For a11y */
+  text-decoration: underline;
+}
+
+hgroup > *:last-child,
+.headings > *:last-child {
+  /* For a11y */
+  --color: unset;
+}
+
 [data-theme="dark"] {
   --background-color: #0b0e10;
 }
 [data-theme="dark"] {
-  --primary: #7cb342;
+  /* --primary: #7cb342; */
   /* --primary-hover: #8bc34a;
   --primary-focus: rgba(124, 179, 66, 0.25);
   --primary-inverse: #FFF; */
