@@ -6,6 +6,10 @@ module.exports = {
   // serverBuildPath: "build/index.js",
   // publicPath: "/build/",
 
+  // I think this is needed because of the way server.ts compiles
+  // to cjs and not esm.
+  serverModuleFormat: "cjs",
+
   future: {
     v2_routeConvention: true,
 
