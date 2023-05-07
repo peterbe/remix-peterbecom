@@ -4,7 +4,6 @@ export function CarbonAd() {
   useEffect(() => {
     const script = document.querySelector("div.carbonads_outer");
     if (!script) {
-      console.log("no script");
       return;
     }
 
@@ -19,7 +18,7 @@ export function CarbonAd() {
     };
   }, []);
 
-  if (process.env.NODE_ENV === "development" || 1) {
+  if (process.env.NODE_ENV === "development") {
     return null;
   }
 
