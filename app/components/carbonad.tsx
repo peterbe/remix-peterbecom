@@ -1,4 +1,24 @@
+import { useEffect } from "react";
+
 export function CarbonAd() {
+  useEffect(() => {
+    const script = document.querySelector("div.carbonads_outer");
+    if (!script) {
+      console.log("no script");
+      return;
+    }
+
+    const s = document.createElement("script");
+    s.async = true;
+    s.id = "_carbonads_js";
+    s.src =
+      "https://cdn.carbonads.com/carbon.js?serve=CKYI52Q7&amp;placement=peterbecom";
+    script.appendChild(s);
+    return () => {
+      script.removeChild(s);
+    };
+  }, []);
+
   if (process.env.NODE_ENV === "development") {
     return null;
   }
@@ -6,12 +26,6 @@ export function CarbonAd() {
   return (
     // The outer wrapper is to be able to set a min-height so
     // as to avoid a CLS when the ad loads in.
-    <div className="carbonads_outer">
-      <script
-        async
-        src="https://cdn.carbonads.com/carbon.js?serve=CKYI52Q7&amp;placement=peterbecom"
-        id="_carbonads_js"
-      ></script>
-    </div>
+    <div className="carbonads_outer"></div>
   );
 }
