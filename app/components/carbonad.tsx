@@ -23,9 +23,7 @@ export function CarbonAd() {
     return null;
   }
 
-  return (
-    // The outer wrapper is to be able to set a min-height so
-    // as to avoid a CLS when the ad loads in.
-    <div className="carbonads_outer"></div>
-  );
+  // The outer wrapper is to be able to set a min-height so
+  // as to avoid a CLS when the ad loads in.
+  return <div className="carbonads_outer"></div>;
 }
