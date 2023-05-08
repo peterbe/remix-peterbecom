@@ -29,6 +29,7 @@ export function Blogpost({ post, comments, page }: Props) {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
+                timeZone: "UTC", // So that it doesn't matter where in the world you are, it's always UTC
               })}
             </b>
             <br />
