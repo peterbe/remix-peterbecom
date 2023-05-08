@@ -3,6 +3,9 @@ export function formatDateBasic(date: string) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    // This is important. This way, when it "rounds" the date,
+    // it does it in a conistent way.
+    timeZone: "UTC",
   });
 }
 
@@ -10,7 +13,7 @@ export function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-us", {
     year: "numeric",
     month: "long",
-    // day: "numeric",
+    timeZone: "UTC",
   });
 }
 
