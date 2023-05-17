@@ -24,3 +24,10 @@ export function postURL(oid: string) {
 export function categoryURL(name: string) {
   return `/oc-${name.replace(" ", "+")}`;
 }
+
+export function absoluteURL(uri: string) {
+  if (!uri.includes("://")) {
+    return `https://www.peterbe.com${uri}`;
+  }
+  return uri;
+}

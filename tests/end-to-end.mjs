@@ -201,3 +201,23 @@ test("pages have the GA analytics tag", async (t) => {
     t.true(response.body.includes(id));
   }
 });
+
+test("canonical link on home page", async (t) => {
+  for (const url of [
+    "/",
+    "/p2",
+    "/oc-Web+development",
+    "/about",
+    "/contact",
+    "/search",
+    "/plog",
+    "/plog/blogitem-040601-1",
+    "/plog/blogitem-20030629-2128",
+  ]) {
+    const response = await get(url);
+    t.is(response.statusCode, 200);
+    const $ = cheerio.load(response.body);
+    const href = $('link[rel="canonical"]').attr("href");
+    t.is(href, "https://www.peterbe.com" + url);
+  }
+});
