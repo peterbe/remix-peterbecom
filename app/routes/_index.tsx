@@ -6,13 +6,13 @@ import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import Rollbar from "rollbar";
 
 import { Homepage } from "~/components/homepage";
-// import { get } from "~/lib/get-data";
 import { get } from "~/lib/get-data";
 import styles from "~/styles/globals.css";
 import highlight from "~/styles/highlight.css";
 import homepage from "~/styles/homepage.css";
 import post from "~/styles/post.css";
 import type { HomepagePost } from "~/types";
+import { absoluteURL } from "~/utils/utils";
 
 export function links() {
   return [
@@ -34,10 +34,6 @@ interface ServerData {
 
 export const loader = async ({ params }: LoaderArgs) => {
   const dynamicPage = params["*"] || "";
-  // if (!dynamicPage) {
-  //   // Not sure how this can ever happen
-  //   throw new Response("Invalid splat", { status: 404 });
-  // }
 
   let page = 1;
   const categories: string[] = [];
@@ -87,10 +83,15 @@ export const loader = async ({ params }: LoaderArgs) => {
   return json({ categories, posts, nextPage, previousPage, page });
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction = ({ location }) => {
   return [
     {
       title: "Peterbe.com - Stuff in Peter's head",
+    },
+    {
+      tagName: "link",
+      rel: "canonical",
+      href: absoluteURL(location.pathname),
     },
   ];
 };

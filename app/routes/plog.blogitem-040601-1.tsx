@@ -6,6 +6,7 @@ import { Lyricspost } from "~/components/lyricspost";
 import { get } from "~/lib/get-data";
 import lyricspost from "~/styles/lyricspost.css";
 import type { Comments, Post } from "~/types";
+import { absoluteURL } from "~/utils/utils";
 
 import { links as rootLinks } from "./_index";
 export { ErrorBoundary } from "./_index";
@@ -76,7 +77,7 @@ function cacheHeaders(seconds: number) {
   return { "cache-control": `public, max-age=${seconds}` };
 }
 
-export const meta: V2_MetaFunction = ({ data, params }) => {
+export const meta: V2_MetaFunction = ({ data, location }) => {
   let pageTitle = "Find song by lyrics";
   let page = data?.page || 1;
 
@@ -84,33 +85,14 @@ export const meta: V2_MetaFunction = ({ data, params }) => {
   const title = `${pageTitle} ${
     page > 1 ? ` (Page ${page})` : " Looking for songs by the lyrics"
   }`;
-  const tags = [
+  return [
     { title: title },
-    // {
-    //   property: "og:url",
-    //   content: `https://www.peterbe.com/plog/${oid}`,
-    // },
-    // {
-    //   property: "og:type",
-    //   content: "article",
-    // },
-    // {
-    //   property: "og:title",
-    //   content: pageTitle,
-    // },
-    // { property: "og:description", content: summary },
-
-    // // Twitter uses 'name', OpenGraph uses 'property'
-    // { name: "twitter:creator", content: "@peterbe" },
-    // { name: "twitter:card", content: "summary_large_image" },
-    // { name: "twitter:title", content: pageTitle },
-    // { name: "twitter:description", content: summary },
-
-    // { name: "description", content: summary },
-    // { name: "twitter:image", content: openGraphImage },
-    // { property: "og:image", content: openGraphImage },
+    {
+      tagName: "link",
+      rel: "canonical",
+      href: absoluteURL(location.pathname),
+    },
   ];
-  return tags.filter((o) => Object.values(o).every((x) => x !== undefined));
 };
 
 export default function View() {

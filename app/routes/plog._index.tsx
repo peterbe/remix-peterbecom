@@ -6,6 +6,7 @@ import { BlogArchive } from "~/components/blogarchive";
 import { get } from "~/lib/get-data";
 import archive from "~/styles/blogarchive.css";
 import type { Group } from "~/types";
+import { absoluteURL } from "~/utils/utils";
 
 import { links as rootLinks } from "./_index";
 
@@ -34,10 +35,15 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json({ groups });
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction = ({ location }) => {
   return [
     {
       title: "Blog archive - Peterbe.com",
+    },
+    {
+      tagName: "link",
+      rel: "canonical",
+      href: absoluteURL(location.pathname),
     },
   ];
 };

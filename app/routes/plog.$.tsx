@@ -7,6 +7,7 @@ import { Lyricspost } from "~/components/lyricspost";
 import { get } from "~/lib/get-data";
 import blogpost from "~/styles/blogpost.css";
 import type { Comments, Post } from "~/types";
+import { absoluteURL } from "~/utils/utils";
 
 import { links as rootLinks } from "./_index";
 export { ErrorBoundary } from "./_index";
@@ -95,7 +96,7 @@ function cacheHeaders(seconds: number) {
   return { "cache-control": `public, max-age=${seconds}` };
 }
 
-export const meta: V2_MetaFunction = ({ data, params }) => {
+export const meta: V2_MetaFunction = ({ data, params, location }) => {
   // invariant(params.oid, `params.oid is required`);
   // console.log("PARAMS (meta)", params);
   const oid = params["*"]?.split("/")[0];
@@ -146,16 +147,14 @@ export const meta: V2_MetaFunction = ({ data, params }) => {
     { name: "description", content: summary },
     { name: "twitter:image", content: openGraphImage },
     { property: "og:image", content: openGraphImage },
+    {
+      tagName: "link",
+      rel: "canonical",
+      href: absoluteURL(location.pathname),
+    },
   ];
   return tags.filter((o) => Object.values(o).every((x) => x !== undefined));
 };
-
-function absoluteURL(uri: string) {
-  if (!uri.includes("://")) {
-    return `https://www.peterbe.com${uri}`;
-  }
-  return uri;
-}
 
 export default function View() {
   const { post, comments, page } = useLoaderData<typeof loader>();
