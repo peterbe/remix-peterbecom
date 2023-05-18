@@ -41,6 +41,7 @@ hgroup > *:last-child,
     --background-color: #0d1418;
     --card-sectionning-background-color: #11191f;
     --muted-color: hsl(205deg 7.32% 63.16%);
+    --code-color: hsl(203deg 7.74% 57.32%);
   }
 }
 
