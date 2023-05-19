@@ -109,14 +109,6 @@ a.mini[role="button"] {
 
 /* /message.css */
 
-.theme-toggler {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  font-size: 14px;
-  padding: 5px 10px;
-}
-
 .nav-grid nav {
   /* display: none; */
   justify-content: space-around;
@@ -144,7 +136,7 @@ footer.footer p {
   font-size: 0.85rem;
 }
 
-/* mav.css */
+/* nav.css */
 #nav {
   margin-bottom: 50px;
 }
@@ -173,7 +165,7 @@ footer.footer p {
   }
 }
 
-/* /mav.css */
+/* /nav.css */
 
 /* comments.css */
 #comments {
