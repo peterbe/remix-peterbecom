@@ -36,13 +36,39 @@ export function PostComments({ post, comments, page }: Props) {
 
   return (
     <div id="comments">
-      <Heading
-        page={page}
-        totalPages={totalPages}
-        oid={post.oid}
-        nextPage={comments.next_page}
-        prevPage={comments.previous_page}
-      />
+      <div style={{ marginBottom: 30 }}>
+        <Heading
+          page={page}
+          totalPages={totalPages}
+          oid={post.oid}
+          nextPage={comments.next_page}
+          prevPage={comments.previous_page}
+        />
+
+        {!disallowComments && comments.count > 5 && (
+          <a
+            href="#commentsform"
+            role="button"
+            className="mini"
+            style={{ marginLeft: 0 }}
+            onClick={(event) => {
+              const dest =
+                document.querySelector<HTMLDivElement>("#commentsform");
+              if (dest) {
+                event.preventDefault();
+                dest.scrollIntoView({ behavior: "smooth" });
+                setTimeout(() => {
+                  const textarea =
+                    dest.querySelector<HTMLTextAreaElement>("textarea");
+                  if (textarea) textarea.focus();
+                }, 1000);
+              }
+            }}
+          >
+            Post your own comment
+          </a>
+        )}
+      </div>
 
       {hideComments && comments.count && (
         <p>
@@ -83,12 +109,12 @@ function Heading({
   nextPage: number | null;
   prevPage: number | null;
 }) {
-  if (totalPages === 1) return <h2>Comments</h2>;
+  if (totalPages === 1) return <h2 style={{ marginBottom: 5 }}>Comments</h2>;
 
   return (
     <div className="grid">
       <div>
-        <hgroup>
+        <hgroup style={{ marginBottom: 5 }}>
           <h2>Comments</h2>
           <h3>
             Page {page} <span>of {totalPages}</span>
