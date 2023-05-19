@@ -71,6 +71,14 @@ test("plog archive page", async (t) => {
   const response = await get("/plog");
   t.is(response.statusCode, 200);
   t.true(isCached(response));
+  const $ = cheerio.load(response.body);
+  const dts = $("dt")
+    .map((i, element) => {
+      return $(element).text();
+    })
+    .get();
+  t.true(dts.includes("December 2003"));
+  t.true(dts.includes("January 2020"));
 });
 
 test("plog archive page redirect trailing slash", async (t) => {
