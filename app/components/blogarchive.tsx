@@ -21,7 +21,7 @@ export function BlogArchive({ groups }: Props) {
         {groups.map(({ date, posts }) => {
           return (
             <Fragment key={date}>
-              <dt>{formatDate(date)}</dt>
+              <dt>{formatDateShort(date)}</dt>
               {posts.map((post) => {
                 const count = `${intl.format(post.comments)} comment${
                   post.comments === 1 ? "" : "s"
@@ -49,4 +49,33 @@ export function BlogArchive({ groups }: Props) {
       </dl>
     </div>
   );
+}
+
+// The date string here is of the format "YYYY.MM"
+// From that format it as "May 2023"
+function formatDateShort(date: string) {
+  const split = date.split(".");
+  if (split.length !== 2) {
+    return date;
+  }
+  const [year, month] = split;
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const monthNumber = parseInt(month, 10);
+  if (monthNames[monthNumber - 1]) {
+    return `${monthNames[monthNumber - 1]} ${year}`;
+  }
+  return `${month} ${year}`;
 }
