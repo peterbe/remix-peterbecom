@@ -1,0 +1,3 @@
+@import "./styles/post.css";
+/* This makes the assumption that all blog posts will benefit from highlight.css */
+@import "./styles/highlight.css";
