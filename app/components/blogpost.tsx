@@ -58,9 +58,9 @@ export function Blogpost({ post, comments, page }: Props) {
 
       {post.url && <AboutPostURL url={post.url} />}
 
-      <CarbonAd />
-
       <div dangerouslySetInnerHTML={{ __html: post.body }} />
+
+      <CarbonAd />
 
       <PostComments post={post} comments={comments} page={page} />
 
