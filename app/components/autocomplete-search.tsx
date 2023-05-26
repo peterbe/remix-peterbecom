@@ -113,6 +113,7 @@ export default function AutocompleteSearch({ goTo }: Props) {
           results={data.results}
           meta={data.meta}
           highlight={highlight}
+          goTo={goToCallback}
         />
       )}
       {data && input.trim() && <FullSearchLink input={input} />}
@@ -146,10 +147,12 @@ function Results({
   results,
   meta,
   highlight,
+  goTo,
 }: {
   results: Document[];
   meta: SearchMeta;
   highlight: number;
+  goTo: (url: string) => void;
 }) {
   return (
     <div>
@@ -172,6 +175,9 @@ function Results({
           >
             <Link
               to={postURL(doc.oid)}
+              onClick={() => {
+                goTo(postURL(doc.oid));
+              }}
               dangerouslySetInnerHTML={{ __html: doc.title }}
             ></Link>{" "}
             <small>{formatDateBasic(doc.date)}</small>
