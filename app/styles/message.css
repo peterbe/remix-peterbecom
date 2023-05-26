@@ -1,0 +1,27 @@
+.message {
+  padding: var(--form-element-spacing-vertical)
+    var(--form-element-spacing-horizontal);
+  border-radius: var(--border-radius);
+}
+.message .header,
+.message .body {
+  margin: 10px;
+}
+.message.negative {
+  background-color: #ffebee;
+  color: #b71c1c;
+}
+.message.warning {
+  background-color: #fff8e1;
+  color: #ff6f00;
+}
+.message.positive {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+}
+.close.icon {
+  float: right;
+  font-style: normal;
+  cursor: pointer;
+  color: var(--color);
+}

@@ -1,0 +1,28 @@
+#comments {
+  margin-top: 60px;
+}
+span.not-approved {
+  color: orange;
+  font-style: italic;
+}
+#comments .d-1 {
+  margin-left: 25px;
+}
+#comments .d-2 {
+  margin-left: 45px;
+}
+#comments .d-3 {
+  margin-left: 65px;
+}
+#comments .d-4 {
+  margin-left: 85px;
+}
+#comments .d-5 {
+  margin-left: 105px;
+}
+#comments .d-6 {
+  margin-left: 125px;
+}
+#comments .d-7 {
+  margin-left: 145px;
+}
