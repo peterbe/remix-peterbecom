@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
 import type { Group } from "~/types";
-import { categoryURL, formatDate, postURL } from "~/utils/utils";
+import { categoryURL, postURL } from "~/utils/utils";
 
 import { Nav } from "./nav";
 
