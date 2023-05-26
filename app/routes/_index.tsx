@@ -1,4 +1,4 @@
-import pico from "@picocss/pico/css/pico.css";
+// import pico from "@picocss/pico/css/pico.css";
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
@@ -7,7 +7,8 @@ import Rollbar from "rollbar";
 
 import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
-import styles from "~/styles/globals.css";
+// import styles from "~/styles/globals.css";
+import global from "~/styles/build/global.css";
 import highlight from "~/styles/highlight.css";
 import homepage from "~/styles/homepage.css";
 import post from "~/styles/post.css";
@@ -16,8 +17,10 @@ import { absoluteURL } from "~/utils/utils";
 
 export function links() {
   return [
-    { rel: "stylesheet", href: pico },
-    { rel: "stylesheet", href: styles },
+    // { rel: "stylesheet", href: pico },
+    // { rel: "stylesheet", href: styles },
+    { rel: "stylesheet", href: global },
+
     // These are extra and generally won't be needed on most overriding
     // pages such as `about.tsx`.
     { rel: "stylesheet", href: homepage, extra: "homepage" },
