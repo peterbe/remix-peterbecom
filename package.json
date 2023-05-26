@@ -3,7 +3,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "npm run parcel:build && remix build",
-    "parcel:build": "parcel build --dist-dir app/styles/build app/global.css",
+    "parcel:build": "parcel build --dist-dir app/styles/build app/*.css",
     "dev": "npm-run-all build --parallel \"dev:*\"",
     "dev:node": "cross-env NODE_ENV=development esrun --watch ./server.ts ",
     "dev:remix": "remix watch",
