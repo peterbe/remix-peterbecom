@@ -236,6 +236,7 @@ test("strange Chinese searches", async (t) => {
   });
   const response = await get(`/search?${sp}`);
   t.is(response.statusCode, 400);
+  t.is(response.headers["content-type"], "text/plain; charset=utf-8");
 });
 
 test("ok Chinese searches", async (t) => {
@@ -244,4 +245,16 @@ test("ok Chinese searches", async (t) => {
   });
   const response = await get(`/search?${sp}`);
   t.is(response.statusCode, 200);
+});
+
+test("junk URLs", async (t) => {
+  for (const url of [
+    "/xmlrpc.php",
+    "/blog/wp-login.php",
+    "/about/wp-login.php",
+  ]) {
+    const response = await get(url);
+    t.is(response.statusCode, 400);
+    t.is(response.headers["content-type"], "text/plain; charset=utf-8");
+  }
 });
