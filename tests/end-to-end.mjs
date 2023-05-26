@@ -229,3 +229,19 @@ test("canonical link on home page", async (t) => {
     t.is(href, "https://www.peterbe.com" + url);
   }
 });
+
+test("strange Chinese searches", async (t) => {
+  const sp = new URLSearchParams({
+    q: "大发00体育-%28备用网站%20KL99%fff%29-乐动体育-永盈会体育-亿博体育",
+  });
+  const response = await get(`/search?${sp}`);
+  t.is(response.statusCode, 400);
+});
+
+test("ok Chinese searches", async (t) => {
+  const sp = new URLSearchParams({
+    q: "彼得",
+  });
+  const response = await get(`/search?${sp}`);
+  t.is(response.statusCode, 200);
+});

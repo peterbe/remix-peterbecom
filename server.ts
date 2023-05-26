@@ -1,7 +1,8 @@
 import shrinkRay from "shrink-ray-current";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import { dynamicImages } from "./server/dynamic-images.js";
-import { legacyRedirects } from "./server/legacy-redirects";
+import { legacyRedirects } from "./server/legacy-redirects.js";
+import { junkBlock } from "./server/junk-block.js";
 
 import asyncHandler from "express-async-handler";
 import path from "path";
@@ -57,6 +58,7 @@ app.use("/cache/", backendProxy);
 app.use("*/ping", backendProxy);
 
 app.use(legacyRedirects);
+app.use(junkBlock);
 
 app.all(
   "*",
