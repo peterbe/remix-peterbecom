@@ -7,8 +7,8 @@ import Rollbar from "rollbar";
 import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
 import global from "~/styles/build/global.css";
-import homepage from "~/styles/homepage.css";
 import post from "~/styles/build/post.css";
+import homepage from "~/styles/homepage.css";
 import type { HomepagePost } from "~/types";
 import { absoluteURL } from "~/utils/utils";
 
