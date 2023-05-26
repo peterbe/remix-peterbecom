@@ -9,7 +9,6 @@ import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
 // import styles from "~/styles/globals.css";
 import global from "~/styles/build/global.css";
-
 import highlight from "~/styles/highlight.css";
 import homepage from "~/styles/homepage.css";
 import post from "~/styles/post.css";
