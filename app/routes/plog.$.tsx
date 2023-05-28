@@ -108,7 +108,7 @@ export const meta: V2_MetaFunction = ({ data, params, location }) => {
 
   if (!data) {
     // In catch CatchBoundary
-    return [{ title: "No data" }];
+    return [{ title: "Page not found" }];
   }
 
   let pageTitle = "";
