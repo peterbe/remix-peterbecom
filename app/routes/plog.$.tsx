@@ -33,11 +33,13 @@ export const loader = async ({ params }: LoaderArgs) => {
   }
 
   if (dynamicPage.endsWith("/")) {
-    return redirect(`/plog/${dynamicPage.slice(0, -1)}`);
+    return redirect(`/plog/${encodeURIComponent(dynamicPage.slice(0, -1))}`);
   }
 
   if (dynamicPage.endsWith("/p1")) {
-    return redirect(`/plog/${dynamicPage.replace(/\/p1$/, "")}`);
+    return redirect(
+      `/plog/${encodeURIComponent(dynamicPage.replace(/\/p1$/, ""))}`
+    );
   }
 
   let page = 1;

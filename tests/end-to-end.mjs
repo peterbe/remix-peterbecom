@@ -258,3 +258,27 @@ test("junk URLs", async (t) => {
     t.is(response.headers["content-type"], "text/plain; charset=utf-8");
   }
 });
+
+test("go to blog post with trailing slash", async (t) => {
+  const response = await get("/plog/blogitem-20030629-2128/");
+  t.is(response.statusCode, 302);
+  t.is(response.headers["location"], "/plog/blogitem-20030629-2128");
+});
+
+test("go to blog post with trailing /p1", async (t) => {
+  const response = await get("/plog/blogitem-20030629-2128/p1");
+  t.is(response.statusCode, 302);
+  t.is(response.headers["location"], "/plog/blogitem-20030629-2128");
+});
+
+test("redirect from trailing slash with Unicode", async (t) => {
+  const response = await get("/plog/تیک/");
+  t.is(response.statusCode, 302);
+  t.is(response.headers["location"], encodeURI("/plog/تیک"));
+});
+
+test("redirect from trailing /1 with Unicode", async (t) => {
+  const response = await get("/plog/تیک/p1");
+  t.is(response.statusCode, 302);
+  t.is(response.headers["location"], encodeURI("/plog/تیک"));
+});
