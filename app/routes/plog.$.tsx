@@ -99,16 +99,12 @@ function cacheHeaders(seconds: number) {
 }
 
 export const meta: V2_MetaFunction = ({ data, params, location }) => {
-  // invariant(params.oid, `params.oid is required`);
-  // console.log("PARAMS (meta)", params);
   const oid = params["*"]?.split("/")[0];
   if (!oid) throw new Error("No oid");
 
-  // const { oid } = params;
-
   if (!data) {
     // In catch CatchBoundary
-    return [{ title: "No data" }];
+    return [{ title: "Page not found" }];
   }
 
   let pageTitle = "";
