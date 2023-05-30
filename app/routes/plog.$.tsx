@@ -150,6 +150,10 @@ export const meta: V2_MetaFunction = ({ data, params, location }) => {
       rel: "canonical",
       href: absoluteURL(location.pathname),
     },
+    {
+      name: "description",
+      content: summary,
+    },
   ];
   return tags.filter((o) => Object.values(o).every((x) => x !== undefined));
 };
