@@ -92,6 +92,16 @@ export const meta: V2_MetaFunction = ({ data, location }) => {
       rel: "canonical",
       href: absoluteURL(location.pathname),
     },
+    {
+      name: "description",
+      content:
+        "Find songs by lyrics. Use Songsear.ch when you can't remember the name of the song.",
+    },
+    {
+      property: "og:description",
+      content:
+        "Songsear.ch is a search engine for song lyrics. You can find the song if you only know parts of the song's lyrics.",
+    },
   ];
 };
 
