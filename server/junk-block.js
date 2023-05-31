@@ -16,9 +16,8 @@ export function junkBlock(req, res, next) {
     return res.status(400).type("text").send("Junk path basename");
   }
 
-  // Been seeing a lot of requests like
-  // /plog/blogitem-040601-1/p8&sa=U&ved=2ahUKEw...&usg=AOv
-  if (req.path.includes("&sa=") && req.path.includes("&ved=")) {
+  // Any request that uses & without a & is junk
+  if (req.path.includes("&") && !req.path.includes("?")) {
     return res.redirect(req.path.split("&")[0]);
   }
 
