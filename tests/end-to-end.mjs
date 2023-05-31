@@ -282,3 +282,15 @@ test("redirect from trailing /1 with Unicode", async (t) => {
   t.is(response.statusCode, 302);
   t.is(response.headers["location"], encodeURI("/plog/تیک"));
 });
+
+test("redirect from urls with & without a ?", async (t) => {
+  const response = await get("/&a=b");
+  t.is(response.statusCode, 302);
+  t.is(response.headers["location"], "/");
+});
+
+test("redirect from urls with & before the ?", async (t) => {
+  const response = await get("/&a=b?c=d");
+  t.is(response.statusCode, 302);
+  t.is(response.headers["location"], "/");
+});
