@@ -13,7 +13,6 @@ import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { Footer } from "~/components/footer";
 
 import { GoogleAnalytics } from "./utils/googleanalytics";
-// import { ThemeToggler, useTheme } from "./utils/theme-toggler";
 
 export const loader = async () => {
   return json({ gaTrackingId: process.env.GA_TRACKING_ID });
@@ -22,10 +21,7 @@ export const loader = async () => {
 export default function App() {
   const { gaTrackingId } = useLoaderData<typeof loader>();
 
-  // const { theme, setTheme } = useTheme();
-
   return (
-    // <html lang="en" data-theme={theme || undefined}>
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
@@ -46,8 +42,6 @@ export default function App() {
         </main>
 
         <Footer />
-
-        {/* <ThemeToggler theme={theme} setTheme={setTheme} /> */}
       </body>
     </html>
   );
