@@ -22,6 +22,13 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
+export function headers() {
+  const seconds = 60 * 60;
+  return {
+    "cache-control": `public, max-age=${seconds}`,
+  };
+}
+
 export default function View() {
   return <Search />;
 }
