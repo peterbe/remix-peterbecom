@@ -14,6 +14,7 @@ export function GoogleAnalytics({ gaTrackingId }: { gaTrackingId?: string }) {
   if (process.env.NODE_ENV === "development" || !gaTrackingId) {
     return null;
   }
+  // Based on https://analytics.google.com/analytics/web/#/a94373p359308548/admin/streams/table/4759787800
   return (
     <>
       <script
@@ -21,17 +22,12 @@ export function GoogleAnalytics({ gaTrackingId }: { gaTrackingId?: string }) {
         src={`https://www.googletagmanager.com/gtag/js?id=${gaTrackingId}`}
       />
       <script
-        async
-        id="gtag-init"
         dangerouslySetInnerHTML={{
           __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${gaTrackingId}', {
-                page_path: window.location.pathname,
-              });
-            `,
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date()); gtag('config', '${gaTrackingId}');
+            `.trim(),
         }}
       />
     </>
