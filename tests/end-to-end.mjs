@@ -294,3 +294,10 @@ test("redirect from urls with & before the ?", async (t) => {
   t.is(response.statusCode, 302);
   t.is(response.headers["location"], "/");
 });
+
+test("search skeleton page", async (t) => {
+  const response = await get("/search?q=stuff");
+  t.is(response.statusCode, 200);
+  t.true(isCached(response));
+  t.is(response.headers["content-encoding"], "br");
+});
