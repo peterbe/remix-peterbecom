@@ -3,6 +3,7 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import { dynamicImages } from "./server/dynamic-images.js";
 import { legacyRedirects } from "./server/legacy-redirects.js";
 import { junkBlock } from "./server/junk-block.js";
+import { ip } from "./server/ip.js";
 
 import asyncHandler from "express-async-handler";
 import path from "path";
@@ -37,7 +38,7 @@ app.use(
 app.use(
   morgan(
     process.env.NODE_ENV === "production"
-      ? ":remote-addr :method :url [:date[iso]] :status :res[content-length] - :response-time ms [:user-agent]"
+      ? ":method :url [:date[iso]] :status :res[content-length] - :response-time ms [:user-agent]"
       : "tiny"
   )
 );
@@ -68,6 +69,7 @@ app.use("*/ping", backendProxy);
 
 app.use(legacyRedirects);
 app.use(junkBlock);
+app.use("/_ip", ip);
 
 app.all(
   "*",
