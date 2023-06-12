@@ -21,5 +21,8 @@ module.exports = {
 
     // https://remix.run/docs/en/1.15.0/pages/v2#formmethod
     v2_normalizeFormMethod: true,
+
+    // https://remix.run/docs/en/1.17.0/pages/v2#route-headers
+    v2_headers: true,
   },
 };
