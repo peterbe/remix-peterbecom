@@ -78,8 +78,8 @@ function cacheHeaders(seconds: number) {
 }
 
 export const meta: V2_MetaFunction = ({ data, location }) => {
-  let pageTitle = "Find song by lyrics";
-  let page = data?.page || 1;
+  const pageTitle = "Find song by lyrics";
+  const page = data?.page || 1;
 
   // The contents of the `<title>` has to be a string
   const title = `${pageTitle} ${
@@ -94,13 +94,12 @@ export const meta: V2_MetaFunction = ({ data, location }) => {
     },
     {
       name: "description",
-      content:
-        "Find songs by lyrics. Use Songsear.ch when you can't remember the name of the song.",
+      content: "Find songs by lyrics.",
     },
     {
       property: "og:description",
       content:
-        "Songsear.ch is a search engine for song lyrics. You can find the song if you only know parts of the song's lyrics.",
+        "You can find the song if you only know parts of the song's lyrics.",
     },
   ];
 };
