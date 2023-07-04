@@ -1,5 +1,4 @@
-import { useNavigate } from "@remix-run/react";
-import { useSearchParams } from "@remix-run/react";
+import { useNavigate, useSearchParams } from "@remix-run/react";
 import { useState } from "react";
 
 export function SearchForm() {

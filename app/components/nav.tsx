@@ -1,8 +1,6 @@
-import { useLocation, useNavigate } from "@remix-run/react";
-import { Link } from "@remix-run/react";
+import { Link, useLocation, useNavigate } from "@remix-run/react";
 import type { ReactNode } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ModalSearch } from "./modal-search";
 

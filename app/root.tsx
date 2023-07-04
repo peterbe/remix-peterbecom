@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node";
 import {
+  isRouteErrorResponse,
   Links,
   LiveReload,
   Meta,
@@ -7,8 +8,8 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteError,
 } from "@remix-run/react";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 
 import { Footer } from "~/components/footer";
 
