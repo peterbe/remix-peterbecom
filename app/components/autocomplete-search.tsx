@@ -53,7 +53,7 @@ export default function AutocompleteSearch({ goTo }: Props) {
     {
       revalidateOnFocus: false,
       keepPreviousData: true,
-    }
+    },
   );
 
   const [highlight, setHighlight] = useState(-1);
@@ -64,7 +64,7 @@ export default function AutocompleteSearch({ goTo }: Props) {
       if (e.key === "ArrowDown") {
         if (data) {
           setHighlight((highlight) =>
-            Math.min(data.results.length - 1, highlight + 1)
+            Math.min(data.results.length - 1, highlight + 1),
           );
           e.preventDefault();
         }

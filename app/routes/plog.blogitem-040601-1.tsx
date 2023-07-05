@@ -69,7 +69,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   const cacheSeconds = 60 * 60 * 12;
   return json(
     { post, comments, page },
-    { headers: cacheHeaders(cacheSeconds) }
+    { headers: cacheHeaders(cacheSeconds) },
   );
 };
 

@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 
 const AutocompleteSearch = lazy(
-  () => import("~/components/autocomplete-search")
+  () => import("~/components/autocomplete-search"),
 );
 
 type Props = {

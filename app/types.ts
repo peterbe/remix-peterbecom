@@ -62,7 +62,7 @@ export type AddOwnComment = (
   name: string,
   email: string,
   parent: string | null,
-  depth: number
+  depth: number,
 ) => void;
 
 export interface AddOwnCommentProps {

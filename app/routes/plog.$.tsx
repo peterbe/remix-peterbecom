@@ -38,7 +38,7 @@ export const loader = async ({ params }: LoaderArgs) => {
 
   if (dynamicPage.endsWith("/p1")) {
     return redirect(
-      `/plog/${encodeURIComponent(dynamicPage.replace(/\/p1$/, ""))}`
+      `/plog/${encodeURIComponent(dynamicPage.replace(/\/p1$/, ""))}`,
     );
   }
 
@@ -85,7 +85,7 @@ export const loader = async ({ params }: LoaderArgs) => {
     post.pub_date && isNotPublished(post.pub_date) ? 0 : 60 * 60 * 12;
   return json(
     { post, comments, page },
-    { headers: cacheHeaders(cacheSeconds) }
+    { headers: cacheHeaders(cacheSeconds) },
   );
 };
 

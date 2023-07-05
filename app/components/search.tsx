@@ -69,7 +69,7 @@ export function Search() {
     {
       revalidateOnFocus: false,
       // keepPreviousData: true,
-    }
+    },
   );
 
   if (data && data.results) {

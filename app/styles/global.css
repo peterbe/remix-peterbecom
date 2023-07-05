@@ -692,12 +692,21 @@ a,
   color: var(--color);
   -webkit-text-decoration: var(--text-decoration);
   text-decoration: var(--text-decoration);
-  transition: background-color var(--transition), color var(--transition),
-    box-shadow var(--transition), -webkit-text-decoration var(--transition);
-  transition: background-color var(--transition), color var(--transition),
-    text-decoration var(--transition), box-shadow var(--transition);
-  transition: background-color var(--transition), color var(--transition),
-    text-decoration var(--transition), box-shadow var(--transition),
+  transition:
+    background-color var(--transition),
+    color var(--transition),
+    box-shadow var(--transition),
+    -webkit-text-decoration var(--transition);
+  transition:
+    background-color var(--transition),
+    color var(--transition),
+    text-decoration var(--transition),
+    box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    color var(--transition),
+    text-decoration var(--transition),
+    box-shadow var(--transition),
     -webkit-text-decoration var(--transition);
   outline: none;
 }
@@ -959,8 +968,11 @@ input[type="reset"],
   line-height: var(--line-height);
   text-align: center;
   cursor: pointer;
-  transition: background-color var(--transition), border-color var(--transition),
-    color var(--transition), box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    box-shadow var(--transition);
   outline: none;
 }
 
@@ -1259,8 +1271,11 @@ textarea {
   box-shadow: var(--box-shadow);
   color: var(--color);
   font-weight: var(--font-weight);
-  transition: background-color var(--transition), border-color var(--transition),
-    color var(--transition), box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    box-shadow var(--transition);
   outline: none;
 }
 
@@ -1673,8 +1688,11 @@ input:not(
   line-height: var(--line-height);
   text-align: center;
   cursor: pointer;
-  transition: background-color var(--transition), border-color var(--transition),
-    color var(--transition), box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    box-shadow var(--transition);
   outline: none;
   margin-inline-start: 0;
   margin-inline-end: calc(var(--spacing) / 2);
@@ -1705,11 +1723,16 @@ input:not(
   line-height: var(--line-height);
   text-align: center;
   cursor: pointer;
-  -webkit-transition: background-color var(--transition),
-    border-color var(--transition), color var(--transition),
+  -webkit-transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
     box-shadow var(--transition);
-  transition: background-color var(--transition), border-color var(--transition),
-    color var(--transition), box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    box-shadow var(--transition);
   outline: none;
   margin-inline-start: 0;
   margin-inline-end: calc(var(--spacing) / 2);
@@ -1738,11 +1761,16 @@ input:not(
   line-height: var(--line-height);
   text-align: center;
   cursor: pointer;
-  -ms-transition: background-color var(--transition),
-    border-color var(--transition), color var(--transition),
+  -ms-transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
     box-shadow var(--transition);
-  transition: background-color var(--transition), border-color var(--transition),
-    color var(--transition), box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    box-shadow var(--transition);
   outline: none;
   margin-inline-start: 0;
   margin-inline-end: calc(var(--spacing) / 2);
@@ -1767,9 +1795,12 @@ input:not(
   height: 0.25rem;
   border-radius: var(--border-radius);
   background-color: var(--range-border-color);
-  -webkit-transition: background-color var(--transition),
+  -webkit-transition:
+    background-color var(--transition),
     box-shadow var(--transition);
-  transition: background-color var(--transition), box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    box-shadow var(--transition);
 }
 
 [type="range"]::-moz-range-track {
@@ -1777,9 +1808,12 @@ input:not(
   height: 0.25rem;
   border-radius: var(--border-radius);
   background-color: var(--range-border-color);
-  -moz-transition: background-color var(--transition),
+  -moz-transition:
+    background-color var(--transition),
     box-shadow var(--transition);
-  transition: background-color var(--transition), box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    box-shadow var(--transition);
 }
 
 [type="range"]::-ms-track {
@@ -1787,9 +1821,12 @@ input:not(
   height: 0.25rem;
   border-radius: var(--border-radius);
   background-color: var(--range-border-color);
-  -ms-transition: background-color var(--transition),
+  -ms-transition:
+    background-color var(--transition),
     box-shadow var(--transition);
-  transition: background-color var(--transition), box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    box-shadow var(--transition);
 }
 
 [type="range"]::-webkit-slider-thumb {
@@ -1799,9 +1836,12 @@ input:not(
   border: 2px solid var(--range-thumb-border-color);
   background-color: var(--range-thumb-color);
   cursor: pointer;
-  -webkit-transition: background-color var(--transition),
+  -webkit-transition:
+    background-color var(--transition),
     transform var(--transition);
-  transition: background-color var(--transition), transform var(--transition);
+  transition:
+    background-color var(--transition),
+    transform var(--transition);
   border-radius: 50%;
   margin-top: -0.5rem;
 }
@@ -1813,9 +1853,12 @@ input:not(
   border: 2px solid var(--range-thumb-border-color);
   background-color: var(--range-thumb-color);
   cursor: pointer;
-  -moz-transition: background-color var(--transition),
+  -moz-transition:
+    background-color var(--transition),
     transform var(--transition);
-  transition: background-color var(--transition), transform var(--transition);
+  transition:
+    background-color var(--transition),
+    transform var(--transition);
   border-radius: 50%;
   margin-top: -0.5rem;
 }
@@ -1827,9 +1870,12 @@ input:not(
   border: 2px solid var(--range-thumb-border-color);
   background-color: var(--range-thumb-color);
   cursor: pointer;
-  -ms-transition: background-color var(--transition),
+  -ms-transition:
+    background-color var(--transition),
     transform var(--transition);
-  transition: background-color var(--transition), transform var(--transition);
+  transition:
+    background-color var(--transition),
+    transform var(--transition);
   border-radius: 50%;
   margin-top: -0.5rem;
 }
@@ -1877,7 +1923,9 @@ input:not(
     [type="range"],
     [type="file"]
   )[type="search"][aria-invalid] {
-  background-position: 1.125rem 50%, right 0.75rem center;
+  background-position:
+    1.125rem 50%,
+    right 0.75rem center;
   -webkit-padding-start: calc(
     var(--form-element-spacing-horizontal) + 1.75rem
   ) !important;
@@ -1926,7 +1974,9 @@ input:not(
     [type="range"],
     [type="file"]
   )[type="search"][aria-invalid] {
-  background-position: right 1.125rem center, 0.75rem 50%;
+  background-position:
+    right 1.125rem center,
+    0.75rem 50%;
 }
 
 :where(table) {
@@ -2582,8 +2632,11 @@ details[role="list"] summary:not([role]) {
   color: var(--form-element-placeholder-color);
   line-height: inherit;
   cursor: pointer;
-  transition: background-color var(--transition), border-color var(--transition),
-    color var(--transition), box-shadow var(--transition);
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    box-shadow var(--transition);
 }
 
 details[role="list"] summary:not([role]):active,
@@ -3207,8 +3260,18 @@ span.not-approved {
   --font-size: 14px;
   max-width: var(--width);
   text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans,
-    Ubuntu, Cantarell, Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen-Sans,
+    Ubuntu,
+    Cantarell,
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    sans-serif;
   font-size: var(--font-size);
   background-color: #fafafa;
   border-radius: 4px;
