@@ -25,7 +25,7 @@ const timeoutConfiguration = {
 
 export async function get<T>(
   uri: string,
-  { throwHttpErrors = false, followRedirect = true } = {}
+  { throwHttpErrors = false, followRedirect = true } = {},
 ) {
   if (!uri.startsWith("/")) {
     throw new Error(`uri parameter should start with / (not: ${uri})`);

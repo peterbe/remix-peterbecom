@@ -92,7 +92,7 @@ export function CommentForm({
         if (editHash) {
           textarea.setSelectionRange(
             textarea.value.length,
-            textarea.value.length
+            textarea.value.length,
           );
         }
       }
@@ -190,7 +190,7 @@ export function CommentForm({
       try {
         localStorage.setItem(
           LOCALESTORAGE_NAME_KEY,
-          JSON.stringify({ name, email })
+          JSON.stringify({ name, email }),
         );
       } catch (error) {
         console.warn("Unable to save in localStorage");

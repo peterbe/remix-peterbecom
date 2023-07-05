@@ -194,15 +194,15 @@ export default function SongSearchAutocomplete() {
 
   const fetchAutocompleteSuggestionsDebounced = debounce(
     800,
-    fetchAutocompleteSuggestions
+    fetchAutocompleteSuggestions,
   );
   const fetchAutocompleteSuggestionsDebouncedLong = debounce(
     1800,
-    fetchAutocompleteSuggestions
+    fetchAutocompleteSuggestions,
   );
   const fetchAutocompleteSuggestionsThrottled = throttle(
     1100,
-    fetchAutocompleteSuggestions
+    fetchAutocompleteSuggestions,
   );
 
   function fetchAutocompleteSuggestions() {

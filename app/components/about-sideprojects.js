@@ -36,8 +36,8 @@ exports.sideProjects.push({
         react_1.Link,
         __assign(
           { to: "/plog/announcing-you-should-watch" },
-          { children: "Blog post about it here" }
-        )
+          { children: "Blog post about it here" },
+        ),
       ),
       ".",
       " ",
@@ -45,8 +45,8 @@ exports.sideProjects.push({
         react_1.Link,
         __assign(
           { to: "/plog/the-technology-behind-you-should-watch" },
-          { children: "Blog post about the technology used" }
-        )
+          { children: "Blog post about the technology used" },
+        ),
       ),
       ".",
     ],
