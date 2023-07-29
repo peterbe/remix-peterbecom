@@ -72,7 +72,6 @@ export default function AutocompleteSearch({ goTo }: Props) {
         setHighlight((highlight) => Math.max(-1, highlight - 1));
         e.preventDefault();
       } else if (e.key === "Enter") {
-        console.log("enter!");
         if (data && highlight > -1) {
           goToCallback(postURL(data.results[highlight].oid));
           e.preventDefault();

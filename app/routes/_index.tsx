@@ -118,7 +118,12 @@ export default function View() {
   );
 }
 
+// This runs both on the server and the client.
+// It happens if an error is thrown in a loader function or
+// if you get a routing error such as a 404.
 export function ErrorBoundary() {
+  console.log("ERROR BOUNDARY IN routes/_index.tsx");
+
   const error = useRouteError();
   const location = useLocation();
 
