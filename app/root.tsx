@@ -48,6 +48,9 @@ export default function App() {
   );
 }
 
+// I *think* this never executes on the server.
+// And if you remove this, it won't fall back on the ErrorBoundary
+// exported in routes/_index.tsx.
 export function ErrorBoundary() {
   const error = useRouteError();
 
@@ -70,7 +73,7 @@ export function ErrorBoundary() {
       <body style={{ margin: 40, fontFamily: "sans-serif" }}>
         <h1>{pageNotFound ? "Page not found" : "Error"}</h1>
 
-        <p>Something went wrong.</p>
+        <p>Something went wrong in root error boundary.</p>
         <pre>{errorMessage}</pre>
       </body>
     </html>

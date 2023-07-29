@@ -24,3 +24,5 @@ lintfix:
 
 test:
     npm run test
+
+format: lintfix
