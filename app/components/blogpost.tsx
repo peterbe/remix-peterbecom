@@ -9,6 +9,8 @@ import { PostComments } from "./comments";
 import { Nav } from "./nav";
 import { ScrollToTop } from "./scroll-to-top";
 
+import { Ping } from "./ping";
+
 type Props = {
   post: Post;
   comments: Comments;
@@ -67,6 +69,8 @@ export function Blogpost({ post, comments, page }: Props) {
       <RelatedPosts post={post} />
 
       {comments.count >= 10 && <ScrollToTop />}
+
+      <Ping post={post} />
     </div>
   );
 }
