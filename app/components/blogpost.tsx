@@ -7,9 +7,8 @@ import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
 import { CarbonAd } from "./carbonad";
 import { PostComments } from "./comments";
 import { Nav } from "./nav";
-import { ScrollToTop } from "./scroll-to-top";
-
 import { Ping } from "./ping";
+import { ScrollToTop } from "./scroll-to-top";
 
 type Props = {
   post: Post;

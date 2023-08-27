@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import type { Post } from "~/types";
 
 const PING_DELAY = 800;
@@ -18,7 +19,7 @@ export function Ping({ post }: Props) {
       let pinged: string[] = [];
       try {
         pinged.push(
-          ...(window.sessionStorage.getItem("pinged") || "").split("/")
+          ...(window.sessionStorage.getItem("pinged") || "").split("/"),
         );
       } catch (err) {
         console.warn("sessionStorage.getItem() not working", err);
