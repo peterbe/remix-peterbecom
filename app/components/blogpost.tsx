@@ -7,6 +7,7 @@ import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
 import { CarbonAd } from "./carbonad";
 import { PostComments } from "./comments";
 import { Nav } from "./nav";
+import { Ping } from "./ping";
 import { ScrollToTop } from "./scroll-to-top";
 
 type Props = {
@@ -67,6 +68,8 @@ export function Blogpost({ post, comments, page }: Props) {
       <RelatedPosts post={post} />
 
       {comments.count >= 10 && <ScrollToTop />}
+
+      <Ping post={post} />
     </div>
   );
 }
