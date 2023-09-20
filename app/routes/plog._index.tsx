@@ -1,4 +1,4 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -21,21 +21,21 @@ interface ServerData {
   groups: Group[];
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { pathname } = new URL(request.url);
   if (pathname.endsWith("/")) {
     return redirect(pathname.slice(0, -1));
   }
   const fetchURL = "/api/v1/plog/";
   const response = await get<ServerData>(fetchURL);
-  if (response.statusCode >= 500) {
-    throw new Error(`${response.statusCode} from ${fetchURL}`);
+  if (response.status >= 500) {
+    throw new Error(`${response.status} from ${fetchURL}`);
   }
-  const { groups } = response.body;
+  const { groups } = response.data;
   return json({ groups });
-};
+}
 
-export const meta: V2_MetaFunction = ({ location }) => {
+export const meta: MetaFunction<typeof loader> = ({ location }) => {
   return [
     {
       title: "Blog archive - Peterbe.com",

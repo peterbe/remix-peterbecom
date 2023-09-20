@@ -1,4 +1,4 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -24,7 +24,7 @@ interface ServerData {
   comments: Comments;
 }
 
-export const loader = async ({ params }: LoaderArgs) => {
+export async function loader({ params }: LoaderFunctionArgs) {
   // invariant(params.oid, `params.oid is required`);
   const dynamicPage = params["*"];
   if (!dynamicPage) {
@@ -73,13 +73,13 @@ export const loader = async ({ params }: LoaderArgs) => {
   const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}?${sp}`;
 
   const response = await get<ServerData>(fetchURL);
-  if (response.statusCode === 404) {
+  if (response.status === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
   }
-  if (response.statusCode >= 500) {
-    throw new Error(`${response.statusCode} from ${fetchURL}`);
+  if (response.status >= 500) {
+    throw new Error(`${response.status} from ${fetchURL}`);
   }
-  const { post, comments } = response.body;
+  const { post, comments } = response.data;
 
   const cacheSeconds =
     post.pub_date && isNotPublished(post.pub_date) ? 0 : 60 * 60 * 12;
@@ -87,7 +87,7 @@ export const loader = async ({ params }: LoaderArgs) => {
     { post, comments, page },
     { headers: cacheHeaders(cacheSeconds) },
   );
-};
+}
 
 function isNotPublished(date: string) {
   const actualDate = new Date(date);
@@ -98,7 +98,11 @@ function cacheHeaders(seconds: number) {
   return { "cache-control": `public, max-age=${seconds}` };
 }
 
-export const meta: V2_MetaFunction = ({ data, params, location }) => {
+export const meta: MetaFunction<typeof loader> = ({
+  data,
+  params,
+  location,
+}) => {
   const oid = params["*"]?.split("/")[0];
   if (!oid) throw new Error("No oid");
 

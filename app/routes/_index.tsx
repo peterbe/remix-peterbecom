@@ -1,4 +1,4 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   isRouteErrorResponse,
@@ -33,7 +33,7 @@ interface ServerData {
   previous_page: number | null;
 }
 
-export const loader = async ({ params }: LoaderArgs) => {
+export async function loader({ params }: LoaderFunctionArgs) {
   const dynamicPage = params["*"] || "";
 
   let page = 1;
@@ -67,24 +67,24 @@ export const loader = async ({ params }: LoaderArgs) => {
   const url = `/api/v1/plog/homepage?${sp}`;
   const response = await get<ServerData>(url, { followRedirect: false });
 
-  if (response.statusCode === 404 || response.statusCode === 400) {
+  if (response.status === 404 || response.status === 400) {
     throw new Response("Not Found", { status: 404 });
   }
-  if (response.statusCode === 301 && response.headers.location) {
+  if (response.status === 301 && response.headers.location) {
     return redirect(response.headers.location, 308);
   }
-  if (response.statusCode >= 500) {
-    throw new Error(`${response.statusCode} from ${url}`);
+  if (response.status >= 500) {
+    throw new Error(`${response.status} from ${url}`);
   }
   const {
     posts,
     next_page: nextPage,
     previous_page: previousPage,
-  } = response.body;
+  } = response.data;
   return json({ categories, posts, nextPage, previousPage, page });
-};
+}
 
-export const meta: V2_MetaFunction = ({ location }) => {
+export const meta: MetaFunction<typeof loader> = ({ location }) => {
   return [
     {
       title: "Peterbe.com - Stuff in Peter's head",

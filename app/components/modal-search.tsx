@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 
 const AutocompleteSearch = lazy(
+  // @ts-ignore
   () => import("~/components/autocomplete-search"),
 );
 

@@ -1,4 +1,4 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 
 import { About } from "~/components/about";
 import styles from "~/styles/about.css";
@@ -14,7 +14,7 @@ export function links() {
   ];
 }
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [
     {
       title: "About Peterbe.com",
