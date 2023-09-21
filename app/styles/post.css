@@ -3,6 +3,11 @@ pre {
   border: 1px solid var(--code-color);
 }
 
+/* The old style <pre> from pygments */
+/* div.highlight pre  {
+  padding: 10px;
+} */
+
 img.floatright {
   float: right;
   margin: 0 0 7px 7px;
