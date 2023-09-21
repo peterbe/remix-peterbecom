@@ -37,7 +37,7 @@ axiosRetry(axios, {
 
 export async function get<T>(
   uri: string,
-  { throwHttpErrors = false, followRedirect = true, timeout = TIMEOUT } = {}
+  { throwHttpErrors = false, followRedirect = true, timeout = TIMEOUT } = {},
 ) {
   if (!uri.startsWith("/")) {
     throw new Error(`uri parameter should start with / (not: ${uri})`);
