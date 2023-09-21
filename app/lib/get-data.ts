@@ -37,7 +37,7 @@ axiosRetry(axios, {
 
 export async function get<T>(
   uri: string,
-  { throwHttpErrors = false, followRedirect = true, timeout = TIMEOUT } = {},
+  { throwHttpErrors = false, followRedirect = true, timeout = TIMEOUT } = {}
 ) {
   if (!uri.startsWith("/")) {
     throw new Error(`uri parameter should start with / (not: ${uri})`);
@@ -51,6 +51,10 @@ export async function get<T>(
     maxRedirects: followRedirect ? 10 : 0,
     // retry: retryConfiguration,
     // timeout: timeoutConfiguration,
+    validateStatus: function (status) {
+      if (throwHttpErrors) return status >= 200 && status < 300; // default
+      return true;
+    },
   });
   const t1 = new Date();
   console.log(`Fetch ${uri} took ${t1.getTime() - t0.getTime()} ms`);

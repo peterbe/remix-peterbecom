@@ -142,7 +142,7 @@ export function ErrorBoundary() {
     "Error in routes/_index.tsx",
     typeof error,
     error instanceof Error,
-    error,
+    error
   );
 
   if (typeof process === "object" && process.env.ROLLBAR_ACCESS_TOKEN) {
