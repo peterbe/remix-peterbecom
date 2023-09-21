@@ -1,3 +1,7 @@
 @import "./styles/post.css";
+
 /* This makes the assumption that all blog posts will benefit from highlight.css */
-@import "./styles/highlight.css";
+@import "./styles/highlight.css"; /* Delete this once all pygments's generated HTML is removed */
+
+/* This makes the assumption that all blog posts will benefit from highlight.js.css */
+@import "./styles/highlight.js.css";
