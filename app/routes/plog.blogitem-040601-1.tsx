@@ -1,4 +1,4 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -23,7 +23,7 @@ interface ServerData {
   comments: Comments;
 }
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   // invariant(params.oid, `params.oid is required`);
   // console.log("IN plog.$oid.tsx PARAMS:", params);
   const { pathname } = new URL(request.url);
@@ -58,26 +58,26 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}?${sp}`;
 
   const response = await get<ServerData>(fetchURL);
-  if (response.statusCode === 404) {
+  if (response.status === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
   }
-  if (response.statusCode >= 500) {
-    throw new Error(`${response.statusCode} from ${fetchURL}`);
+  if (response.status >= 500) {
+    throw new Error(`${response.status} from ${fetchURL}`);
   }
-  const { post, comments } = response.body;
+  const { post, comments } = response.data;
 
   const cacheSeconds = 60 * 60 * 12;
   return json(
     { post, comments, page },
     { headers: cacheHeaders(cacheSeconds) },
   );
-};
+}
 
 function cacheHeaders(seconds: number) {
   return { "cache-control": `public, max-age=${seconds}` };
 }
 
-export const meta: V2_MetaFunction = ({ data, location }) => {
+export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   const pageTitle = "Find song by lyrics";
   const page = data?.page || 1;
 

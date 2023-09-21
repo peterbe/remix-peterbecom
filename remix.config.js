@@ -11,18 +11,14 @@ module.exports = {
   serverModuleFormat: "cjs",
 
   future: {
-    v2_routeConvention: true,
-
+    // v2_routeConvention: true,
     // https://remix.run/docs/en/1.14.3/route/meta#metav2
-    v2_meta: true,
-
+    // v2_meta: true,
     // https://remix.run/docs/en/1.15.0/pages/v2#catchboundary-and-errorboundary
-    v2_errorBoundary: true,
-
+    // v2_errorBoundary: true,
     // https://remix.run/docs/en/1.15.0/pages/v2#formmethod
-    v2_normalizeFormMethod: true,
-
+    // v2_normalizeFormMethod: true,
     // https://remix.run/docs/en/1.17.0/pages/v2#route-headers
-    v2_headers: true,
+    // v2_headers: true,
   },
 };
