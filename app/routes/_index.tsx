@@ -124,11 +124,6 @@ export default function View() {
 export function ErrorBoundary() {
   const error = useRouteError();
   const location = useLocation();
-  console.log(
-    "ERROR BOUNDARY IN routes/_index.tsx",
-    error && error.toString(),
-    { pathname: location.pathname, search: location.search },
-  );
 
   if (isRouteErrorResponse(error)) {
     if (error.status >= 400 && error.status < 500) {
@@ -141,11 +136,11 @@ export function ErrorBoundary() {
       );
     }
   }
+
   console.log(
-    "Error in routes/_index.tsx",
-    typeof error,
-    error instanceof Error,
-    error,
+    "ERROR BOUNDARY IN routes/_index.tsx",
+    error && error.toString(),
+    { pathname: location.pathname, search: location.search }
   );
 
   if (typeof process === "object" && process.env.ROLLBAR_ACCESS_TOKEN) {
