@@ -15,7 +15,8 @@
     "test": "curl --fail -s http://localhost:3000 > /dev/null && ava",
     "test:watch": "ava --watch",
     "prettier:write": "prettier --write app *.ts",
-    "prettier:check": "prettier --check app *.ts"
+    "prettier:check": "prettier --check app *.ts",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@digitak/esrun": "3.2.24",
@@ -54,6 +55,7 @@
     "dotenv": "16.3.1",
     "eslint": "8.49.0",
     "eslint-plugin-simple-import-sort": "10.0.0",
+    "husky": "8.0.3",
     "nodemon": "3.0.1",
     "npm-run-all": "4.1.5",
     "parcel": "2.9.3",
