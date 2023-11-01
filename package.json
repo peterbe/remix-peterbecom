@@ -23,7 +23,7 @@
     "@picocss/pico": "1.5.10",
     "@remix-run/express": "2.0.1",
     "@remix-run/node": "2.0.1",
-    "@remix-run/react": "2.0.1",
+    "@remix-run/react": "2.2.0",
     "axios": "1.6.0",
     "axios-retry": "3.8.0",
     "compression": "1.7.4",
