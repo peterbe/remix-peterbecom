@@ -44,5 +44,5 @@ pre code.hljs {
     padding-top: 0;
 }
 pre:has(.hljs) {
-    padding: 0px;
+    padding: 0;
 }
