@@ -355,8 +355,8 @@ export function CommentForm({
                 ? "Saving changes"
                 : "Save changes"
               : submitting
-              ? "Posting comment"
-              : "Post comment"}
+                ? "Posting comment"
+                : "Post comment"}
           </button>
 
           <p className="note-about-email">
