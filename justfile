@@ -26,3 +26,6 @@ test:
     npm run test
 
 format: lintfix
+
+install:
+    npm install
