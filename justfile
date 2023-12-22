@@ -5,6 +5,7 @@ dev:
     npm run dev
 
 build:
+    rm -rf .parcel-cache # to avoid seg faults in parcel
     npm run build
 
 start: build
