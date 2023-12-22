@@ -31,3 +31,7 @@ export function absoluteURL(uri: string) {
   }
   return uri;
 }
+
+export function searchURL(query: string) {
+  return `/search?q=${encodeURIComponent(query)}`;
+}

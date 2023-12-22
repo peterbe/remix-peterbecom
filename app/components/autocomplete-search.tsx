@@ -3,20 +3,29 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import { useDebounce } from "usehooks-ts";
 
-import { formatDateBasic, postURL } from "~/utils/utils";
+// import { formatDateBasic, postURL } from "~/utils/utils";
 
-interface Document {
-  oid: string;
-  title: string;
-  date: string;
+function searchURL(q: string) {
+  return `/search?${new URLSearchParams({ q }).toString()}`;
 }
+
+// interface Document {
+//   oid: string;
+//   title: string;
+//   date: string;
+// }
 
 type SearchMeta = {
   found: number;
 };
 
+type TypeaheadResult = {
+  term: string;
+  highlights: string[];
+};
+
 type ServerData = {
-  results: Document[];
+  results: TypeaheadResult[];
   meta: SearchMeta;
 };
 
@@ -36,7 +45,7 @@ export default function AutocompleteSearch({ goTo }: Props) {
   }, []);
 
   const apiURL = debouncedInput.trim()
-    ? `/api/v1/autocomplete?${new URLSearchParams({
+    ? `/api/v1/typeahead?${new URLSearchParams({
         q: debouncedInput.trim(),
       }).toString()}`
     : null;
@@ -73,7 +82,8 @@ export default function AutocompleteSearch({ goTo }: Props) {
         e.preventDefault();
       } else if (e.key === "Enter") {
         if (data && highlight > -1) {
-          goToCallback(postURL(data.results[highlight].oid));
+          // goToCallback(postURL(data.results[highlight].oid));
+          goToCallback(searchURL(data.results[highlight].term));
           e.preventDefault();
         }
       }
@@ -89,9 +99,10 @@ export default function AutocompleteSearch({ goTo }: Props) {
           event.preventDefault();
 
           if (highlight === -1) {
-            goTo(`/search?${new URLSearchParams({ q: input }).toString()}`);
+            goTo(searchURL(input));
           } else if (data && data.results && data.results[highlight]) {
-            goTo(postURL(data.results[highlight].oid));
+            // goTo(postURL(data.results[highlight].oid));
+            goTo(searchURL(data.results[highlight].term));
           }
         }}
       >
@@ -108,7 +119,13 @@ export default function AutocompleteSearch({ goTo }: Props) {
 
       {error && <SearchError error={error} input={input} />}
       {input.trim() && data && data.results && (
-        <Results
+        // <Results
+        //   results={data.results}
+        //   meta={data.meta}
+        //   highlight={highlight}
+        //   goTo={goToCallback}
+        // />
+        <TypeaheadResults
           results={data.results}
           meta={data.meta}
           highlight={highlight}
@@ -123,9 +140,7 @@ export default function AutocompleteSearch({ goTo }: Props) {
 function FullSearchLink({ input }: { input: string }) {
   return (
     <p style={{ margin: 20, textAlign: "center", fontStyle: "italic" }}>
-      <Link to={`/search?${new URLSearchParams({ q: input }).toString()}`}>
-        Full search
-      </Link>
+      <Link to={searchURL(input)}>Full search</Link>
     </p>
   );
 }
@@ -142,13 +157,58 @@ function SearchError({ error, input }: { error: Error; input: string }) {
   );
 }
 
-function Results({
+// function Results({
+//   results,
+//   meta,
+//   highlight,
+//   goTo,
+// }: {
+//   results: Document[];
+//   meta: SearchMeta;
+//   highlight: number;
+//   goTo: (url: string) => void;
+// }) {
+//   return (
+//     <div>
+//       <p style={{ textAlign: "right", fontSize: "0.8rem", marginBottom: 0 }}>
+//         {meta.found.toLocaleString()} found
+//       </p>
+//       {results.map((doc, i) => {
+//         return (
+//           <p
+//             key={doc.oid}
+//             style={
+//               i === highlight
+//                 ? {
+//                     backgroundColor: "var(--code-background-color)",
+//                     padding: 5,
+//                     marginBottom: 10,
+//                   }
+//                 : { padding: 5, marginBottom: 10 }
+//             }
+//           >
+//             <Link
+//               to={postURL(doc.oid)}
+//               onClick={() => {
+//                 goTo(postURL(doc.oid));
+//               }}
+//               dangerouslySetInnerHTML={{ __html: doc.title }}
+//             ></Link>{" "}
+//             <small>{formatDateBasic(doc.date)}</small>
+//           </p>
+//         );
+//       })}
+//     </div>
+//   );
+// }
+
+function TypeaheadResults({
   results,
   meta,
   highlight,
   goTo,
 }: {
-  results: Document[];
+  results: TypeaheadResult[];
   meta: SearchMeta;
   highlight: number;
   goTo: (url: string) => void;
@@ -156,12 +216,12 @@ function Results({
   return (
     <div>
       <p style={{ textAlign: "right", fontSize: "0.8rem", marginBottom: 0 }}>
-        {meta.found} found
+        {meta.found.toLocaleString()} found
       </p>
       {results.map((doc, i) => {
         return (
           <p
-            key={doc.oid}
+            key={doc.term}
             style={
               i === highlight
                 ? {
@@ -173,13 +233,14 @@ function Results({
             }
           >
             <Link
-              to={postURL(doc.oid)}
+              to={searchURL(doc.term)}
               onClick={() => {
-                goTo(postURL(doc.oid));
+                goTo(searchURL(doc.term));
               }}
-              dangerouslySetInnerHTML={{ __html: doc.title }}
-            ></Link>{" "}
-            <small>{formatDateBasic(doc.date)}</small>
+              dangerouslySetInnerHTML={{
+                __html: doc.highlights.length ? doc.highlights[0] : doc.term,
+              }}
+            ></Link>
           </p>
         );
       })}
