@@ -15,18 +15,24 @@ export function Contact() {
         <a href="https://github.com/peterbe">@peterbe</a>
       </p>
 
-      <h3>Twitter</h3>
+      <h3>Telegram</h3>
+      <p>@peppebe</p>
+
+      <h3>LinkedIn</h3>
       <p>
-        <a href="https://twitter.com/peterbe">@peterbe</a>
+        <a href="https://www.linkedin.com/in/peterbe/">@peterbe</a>
       </p>
 
       <h3>Instagram</h3>
       <p>
-        <a href="https://www.instagram.com/peppebe/">@peppebe</a>
+        <a href="https://www.instagram.com/peppebe/">@peppebe</a> (
+        <em>inactive</em>)
       </p>
 
-      <h3>Telegram</h3>
-      <p>@peppebe</p>
+      <h3>Twitter</h3>
+      <p>
+        <a href="https://twitter.com/peterbe">@peterbe</a> (<em>inactive</em>)
+      </p>
     </div>
   );
 }
