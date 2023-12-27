@@ -6,13 +6,6 @@
   color: green;
 }
 
-mark {
-  padding: unset;
-  background-color: unset;
-  color: var(--color);
-  font-weight: bold;
-}
-
 b mark {
   font-weight: bolder;
   font-style: italic;

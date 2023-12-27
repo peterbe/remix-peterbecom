@@ -2,6 +2,7 @@
 # https://just.systems/
 
 dev:
+    rm -rf .parcel-cache # to avoid seg faults in parcel
     npm run dev
 
 build:

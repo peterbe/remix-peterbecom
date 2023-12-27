@@ -3,8 +3,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import { useDebounce } from "usehooks-ts";
 
-// import { formatDateBasic, postURL } from "~/utils/utils";
-
 function searchURL(q: string) {
   return `/search?${new URLSearchParams({ q }).toString()}`;
 }
@@ -82,7 +80,6 @@ export default function AutocompleteSearch({ goTo }: Props) {
         e.preventDefault();
       } else if (e.key === "Enter") {
         if (data && highlight > -1) {
-          // goToCallback(postURL(data.results[highlight].oid));
           goToCallback(searchURL(data.results[highlight].term));
           e.preventDefault();
         }
@@ -101,7 +98,6 @@ export default function AutocompleteSearch({ goTo }: Props) {
           if (highlight === -1) {
             goTo(searchURL(input));
           } else if (data && data.results && data.results[highlight]) {
-            // goTo(postURL(data.results[highlight].oid));
             goTo(searchURL(data.results[highlight].term));
           }
         }}
@@ -140,7 +136,9 @@ export default function AutocompleteSearch({ goTo }: Props) {
 function FullSearchLink({ input }: { input: string }) {
   return (
     <p style={{ margin: 20, textAlign: "center", fontStyle: "italic" }}>
-      <Link to={searchURL(input)}>Full search</Link>
+      <Link to={searchURL(input)}>
+        Search for "<em>{input}</em>"
+      </Link>
     </p>
   );
 }
@@ -216,7 +214,7 @@ function TypeaheadResults({
   return (
     <div>
       <p style={{ textAlign: "right", fontSize: "0.8rem", marginBottom: 0 }}>
-        {meta.found.toLocaleString()} found
+        {meta.found.toLocaleString()} suggestions
       </p>
       {results.map((doc, i) => {
         return (
@@ -227,9 +225,9 @@ function TypeaheadResults({
                 ? {
                     backgroundColor: "var(--code-background-color)",
                     padding: 5,
-                    marginBottom: 10,
+                    marginBottom: 0,
                   }
-                : { padding: 5, marginBottom: 10 }
+                : { padding: 5, marginBottom: 0 }
             }
           >
             <Link

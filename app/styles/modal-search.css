@@ -19,3 +19,11 @@ dialog {
     width: 700px;
   }
 }
+
+/* The yellow was a bit too loud and noisy in the autocomplete search */
+dialog mark {
+  background-color: unset;
+  font-weight: bold;
+  color: unset;
+  padding: unset;
+}
