@@ -103,7 +103,7 @@ function AboutScreensaver() {
         padding: 10,
       }}
     >
-      <strong style={{ fontSize: "250%" }}>
+      <strong style={{ fontSize: "220%" }}>
         {colors.map(([char, color]) => {
           return (
             <span key={char + color} style={{ color }}>
@@ -113,7 +113,7 @@ function AboutScreensaver() {
         })}
       </strong>
       <br />
-      <em>Click anywere to cancel</em>
+      <em>Don't hate!</em>
     </div>
   );
 }

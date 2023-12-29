@@ -6,12 +6,14 @@ const ConfettiLazy = lazy(
   () => import("~/components/confetti-screensaver"),
 );
 
+const LAZY_START_SECONDS = 30;
+
 export function Screensaver() {
   const [loadScreensaver, setLoadScreensaver] = useState(false);
   useEffect(() => {
     window.setTimeout(() => {
       setLoadScreensaver(true);
-    }, 10000);
+    }, LAZY_START_SECONDS * 1000);
   }, []);
 
   const { pathname } = useLocation();
