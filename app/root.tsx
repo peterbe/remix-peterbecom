@@ -12,6 +12,7 @@ import {
 } from "@remix-run/react";
 
 import { Footer } from "~/components/footer";
+import { Screensaver } from "~/components/screensaver";
 
 import { GoogleAnalytics } from "./utils/googleanalytics";
 
@@ -43,6 +44,7 @@ export default function App() {
         </main>
 
         <Footer />
+        <Screensaver />
       </body>
     </html>
   );
