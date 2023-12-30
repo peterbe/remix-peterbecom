@@ -3,6 +3,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "npm run parcel:build && remix build",
+    "build:witholdbuildpreserved": "node scripts/backup-old-build.mjs && npm run parcel:build && remix build && node scripts/restore-old-build.mjs",
     "parcel:build": "parcel build --dist-dir app/styles/build app/*.css",
     "dev": "npm-run-all build --parallel \"dev:*\"",
     "dev:node": "cross-env NODE_ENV=development esrun --watch ./server.ts ",
