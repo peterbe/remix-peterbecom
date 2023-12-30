@@ -154,10 +154,6 @@ export const meta: MetaFunction<typeof loader> = ({
       rel: "canonical",
       href: absoluteURL(location.pathname),
     },
-    {
-      name: "description",
-      content: summary,
-    },
   ];
   return tags.filter((o) => Object.values(o).every((x) => x !== undefined));
 };
