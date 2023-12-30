@@ -24,7 +24,7 @@ export default function ConfettiScreensaver() {
           emojis,
         });
       }
-    }, 2300);
+    }, 3000);
     return () => {
       clearInterval(interval);
     };
@@ -97,8 +97,8 @@ function AboutScreensaver() {
         left: "50%",
         textAlign: "center",
         top: window.scrollY,
-        backgroundColor: "white",
-        backdropFilter: "blur(10px)",
+        // backgroundColor: "white",
+        // backdropFilter: "blur(10px)",
         borderRadius: 10,
         padding: 10,
       }}
