@@ -19,19 +19,12 @@ function copyDirectory(src, dest) {
     if (fs.statSync(srcPath).isDirectory()) {
       // If it is a directory, recursively copy its contents
       copyDirectory(srcPath, destPath);
-    } else if (fs.existsSync(destPath)) {
+    } else if (!fs.existsSync(destPath)) {
       // If it is a file, copy the file to the destination
       fs.copyFileSync(srcPath, destPath);
       const ageSeconds =
         (new Date().getTime() - fs.statSync(srcPath).mtimeMs) / 1000;
-      console.log(
-        "COPY",
-        srcPath,
-        "-->",
-        destPath,
-        ageSeconds / 60,
-        "minutes old"
-      );
+      console.log("COPY", srcPath, "-->", destPath, formatSeconds(ageSeconds));
     }
   });
 }
@@ -40,3 +33,15 @@ const ROOT = "/tmp/_old_build";
 const DESTINATION = "public/build";
 
 copyDirectory(ROOT, DESTINATION);
+
+function formatSeconds(seconds) {
+  const minutes = seconds / 60;
+  const hours = minutes / 60;
+  const days = hours / 24;
+  const weeks = days / 7;
+  if (weeks > 1) return `${weeks.toFixed(1)} weeks`;
+  if (days > 1) return `${days.toFixed(1)} days`;
+  if (hours > 1) return `${hours.toFixed(1)} hours`;
+  if (minutes > 1) return `${minutes.toFixed(1)} minutes`;
+  return `${seconds.toFixed(0)} seconds`;
+}
