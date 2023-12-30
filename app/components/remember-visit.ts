@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import type { Comments, Post } from "~/types";
+import type { Post } from "~/types";
 
 const STORAGE_KEY = "visited-posts";
 
 export type RememberedPost = {
   oid: string;
-  comments: number;
   categories: string[];
   title: string;
   pubDate: string;
@@ -15,15 +14,14 @@ export type RememberedPost = {
 
 const DELAY_SECONDS = 2;
 
-export function useRememberVisit(post: Post, comments: Comments) {
-  function remember() {
+export function useRememberVisit(post: Post) {
+  const remember = useCallback(() => {
     const previous = JSON.parse(
       localStorage.getItem(STORAGE_KEY) || "[]",
     ) as RememberedPost[];
     let save = false;
     if (previous.length > 0 && previous[0].oid === post.oid) {
       // Update
-      previous[0].comments = comments.count;
       previous[0].title = post.title;
       previous[0].categories = post.categories;
       previous[0].pubDate = post.pub_date;
@@ -41,7 +39,6 @@ export function useRememberVisit(post: Post, comments: Comments) {
       // Add new post
       previous.unshift({
         oid: post.oid,
-        comments: comments.count,
         categories: post.categories,
         title: post.title,
         pubDate: post.pub_date,
@@ -53,7 +50,7 @@ export function useRememberVisit(post: Post, comments: Comments) {
     if (save) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(previous.slice(0, 20)));
     }
-  }
+  }, [post]);
 
   useEffect(() => {
     let mounted = true;
@@ -64,7 +61,7 @@ export function useRememberVisit(post: Post, comments: Comments) {
     return () => {
       mounted = false;
     };
-  }, [post, comments]);
+  }, [post, remember]);
 }
 
 export function useRecentVisits() {
@@ -75,9 +72,20 @@ export function useRecentVisits() {
     ) as RememberedPost[];
     setVisited(previous);
   }, []);
+  const [undoVisisted, setUndoVisited] = useState<RememberedPost[]>([]);
   function clearVisited() {
     localStorage.removeItem(STORAGE_KEY);
+    setUndoVisited(visited);
     setVisited([]);
   }
-  return { visited, clearVisited };
+
+  function undoClearVisited() {
+    if (undoVisisted.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(undoVisisted));
+      setVisited(undoVisisted);
+      setUndoVisited([]);
+    }
+  }
+  const undoable = undoVisisted.length > 0;
+  return { visited, clearVisited, undoClearVisited, undoable };
 }

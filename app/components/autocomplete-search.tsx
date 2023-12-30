@@ -30,7 +30,9 @@ type Props = {
 };
 
 export default function AutocompleteSearch({ goTo }: Props) {
-  const { visited, clearVisited } = useRecentVisits();
+  const { visited, clearVisited, undoClearVisited, undoable } =
+    useRecentVisits();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [input, setInput] = useState("");
   const debouncedInput = useDebounce<string>(input, 100);
@@ -112,10 +114,12 @@ export default function AutocompleteSearch({ goTo }: Props) {
         />
       </form>
 
-      {!input.trim() && visited.length > 0 && (
+      {!input.trim() && (visited.length > 0 || undoable) && (
         <RecentVisits
           visited={visited}
           clearVisited={clearVisited}
+          undoClearVisited={undoClearVisited}
+          undoable={undoable}
           goTo={goToCallback}
         />
       )}
@@ -159,10 +163,14 @@ function SearchError({ error, input }: { error: Error; input: string }) {
 function RecentVisits({
   visited,
   clearVisited,
+  undoClearVisited,
+  undoable,
   goTo,
 }: {
   visited: RememberedPost[];
   clearVisited: () => void;
+  undoClearVisited: () => void;
+  undoable: boolean;
   goTo: (url: string) => void;
 }) {
   return (
@@ -185,9 +193,16 @@ function RecentVisits({
           </p>
         );
       })}
-      <button className="secondary outline" onClick={clearVisited}>
-        Clear visited
-      </button>
+      {undoable && (
+        <button className="secondary outline" onClick={undoClearVisited}>
+          Undo clear
+        </button>
+      )}
+      {visited.length > 0 && (
+        <button className="secondary outline" onClick={clearVisited}>
+          Clear visited
+        </button>
+      )}
     </div>
   );
 }
