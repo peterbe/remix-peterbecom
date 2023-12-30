@@ -51,8 +51,6 @@ export function useRememberVisit(post: Post, comments: Comments) {
       save = true;
     }
     if (save) {
-      console.log("SAVE....", previous);
-
       localStorage.setItem(STORAGE_KEY, JSON.stringify(previous.slice(0, 20)));
     }
   }

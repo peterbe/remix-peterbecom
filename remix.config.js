@@ -21,4 +21,9 @@ module.exports = {
     // https://remix.run/docs/en/1.17.0/pages/v2#route-headers
     // v2_headers: true,
   },
+
+  // https://github.com/remix-run/remix/issues/2958#issuecomment-1744836495
+  dev: {
+    port: 8002,
+  },
 };
