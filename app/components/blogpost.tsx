@@ -19,7 +19,7 @@ type Props = {
 export function Blogpost({ post, comments, page }: Props) {
   const pubDate = new Date(post.pub_date);
 
-  useRememberVisit(post, comments);
+  useRememberVisit(post);
 
   return (
     <div>
