@@ -136,12 +136,10 @@ export function ErrorBoundary() {
       );
     }
   }
-
   console.log(
     "ERROR BOUNDARY IN routes/_index.tsx",
     error && error.toString(),
     { pathname: location.pathname, search: location.search },
-    { rollbarEnabled: Boolean(process.env.ROLLBAR_ACCESS_TOKEN) },
   );
 
   if (typeof process === "object" && process.env.ROLLBAR_ACCESS_TOKEN) {
