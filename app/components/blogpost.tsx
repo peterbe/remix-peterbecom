@@ -8,6 +8,7 @@ import { CarbonAd } from "./carbonad";
 import { PostComments } from "./comments";
 import { Nav } from "./nav";
 import { Ping } from "./ping";
+import { useRememberVisit } from "./remember-visit";
 import { ScrollToTop } from "./scroll-to-top";
 
 type Props = {
@@ -17,6 +18,8 @@ type Props = {
 };
 export function Blogpost({ post, comments, page }: Props) {
   const pubDate = new Date(post.pub_date);
+
+  useRememberVisit(post, comments);
 
   return (
     <div>

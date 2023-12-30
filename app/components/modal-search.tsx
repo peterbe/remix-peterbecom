@@ -37,7 +37,6 @@ export function ModalSearch({ onClose }: Props) {
           </a>
           Search
         </header>
-
         <Suspense fallback={<div>Loading...</div>}>
           <AutocompleteSearch
             goTo={(url) => {
