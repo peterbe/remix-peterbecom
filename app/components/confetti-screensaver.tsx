@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { EMOJIS } from "./emojis";
 
 // Determines how long to wait after
-const STARTS_SECONDS = 100;
+const STARTS_SECONDS = 130;
 
 export default function ConfettiScreensaver() {
   const [run, setRun] = useState(false);
