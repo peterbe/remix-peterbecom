@@ -6,7 +6,7 @@ const ConfettiLazy = lazy(
   () => import("~/components/confetti-screensaver"),
 );
 
-const LAZY_START_SECONDS = 30;
+const LAZY_START_SECONDS = 60;
 
 export function Screensaver() {
   const [loadScreensaver, setLoadScreensaver] = useState(false);
