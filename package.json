@@ -4,11 +4,11 @@
   "scripts": {
     "build": "npm run parcel:build && remix build",
     "build:witholdbuildpreserved": "rm -fr /tmp/_old_build && node scripts/backup-old-build.mjs && npm run parcel:build && remix build && node scripts/restore-old-build.mjs",
-    "parcel:build": "parcel build --dist-dir app/styles/build app/*.css",
+    "parcel:build": "parcel build --dist-dir app/styles/build app/*.{css,scss}",
     "dev": "npm-run-all build --parallel \"dev:*\"",
     "dev:node": "cross-env NODE_ENV=development esrun --watch ./server.ts ",
     "dev:remix": "remix watch",
-    "dev:parcel": "parcel watch --dist-dir app/styles/build app/global.css",
+    "dev:parcel": "parcel watch --dist-dir app/styles/build app/global.scss",
     "start": "cross-env NODE_ENV=production esrun ./server.ts",
     "tsc": "tsc",
     "lint": "eslint app",
@@ -20,7 +20,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@picocss/pico": "1.5.11",
+    "@picocss/pico": "2.0.0",
     "@remix-run/express": "2.6.0",
     "@remix-run/node": "2.6.0",
     "@remix-run/react": "2.6.0",
@@ -45,6 +45,7 @@
     "usehooks-ts": "2.14.0"
   },
   "devDependencies": {
+    "@parcel/transformer-sass": "2.11.0",
     "@remix-run/dev": "2.6.0",
     "@remix-run/eslint-config": "2.6.0",
     "@types/morgan": "1.9.9",

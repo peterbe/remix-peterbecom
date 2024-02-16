@@ -21,7 +21,7 @@ export function ModalSearch({ onClose }: Props) {
   }, [onClose]);
 
   return (
-    <dialog open>
+    <dialog open className="autocomplete-search">
       <article>
         <header>
           <a

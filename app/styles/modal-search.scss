@@ -20,10 +20,19 @@ dialog {
   }
 }
 
-/* The yellow was a bit too loud and noisy in the autocomplete search */
-dialog mark {
-  background-color: unset;
-  font-weight: bold;
-  color: unset;
-  padding: unset;
+dialog {
+  .autocomplete-search {
+    article {
+      position: fixed;
+      top: 50px;
+    }
+  }
+
+  /* The yellow was a bit too loud and noisy in the autocomplete search */
+  mark {
+    background-color: unset;
+    font-weight: bold;
+    color: unset;
+    padding: unset;
+  }
 }
