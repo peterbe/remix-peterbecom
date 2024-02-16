@@ -52,13 +52,19 @@ export default function ConfettiScreensaver() {
     function noticeMouseOver() {
       setRun(false);
     }
+    function noticeAnyEvent() {
+      setRun(false);
+    }
     window.addEventListener("scroll", noticeScroll);
     window.addEventListener("click", noticeAnyClick);
     window.addEventListener("mouseover", noticeMouseOver);
+    window.addEventListener("input", noticeAnyEvent);
+
     return () => {
       window.removeEventListener("scroll", noticeScroll);
       window.removeEventListener("click", noticeAnyClick);
       window.removeEventListener("mouseover", noticeMouseOver);
+      window.removeEventListener("input", noticeAnyEvent);
     };
   }, [run]);
 

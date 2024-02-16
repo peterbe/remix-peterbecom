@@ -8,7 +8,7 @@
 #nav form {
   margin: 0;
 }
-#nav input[type="search"] {
+/* #nav input[type="search"] {
   height: 35px;
   background-image: none;
   border-radius: 3rem;
@@ -24,4 +24,4 @@
     height: 45px;
     border-radius: 5rem;
   }
-}
+} */

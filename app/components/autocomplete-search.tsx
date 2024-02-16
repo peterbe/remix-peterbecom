@@ -106,6 +106,7 @@ export default function AutocompleteSearch({ goTo }: Props) {
         <input
           type="search"
           name="q"
+          aria-label="Search"
           placeholder="Search"
           ref={inputRef}
           onChange={(event) => {

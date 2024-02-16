@@ -9,17 +9,43 @@ const ConfettiLazy = lazy(
 const LAZY_START_SECONDS = 60;
 
 export function Screensaver() {
-  const [loadScreensaver, setLoadScreensaver] = useState(false);
-  useEffect(() => {
-    window.setTimeout(() => {
-      setLoadScreensaver(true);
-    }, LAZY_START_SECONDS * 1000);
-  }, []);
-
   const { pathname } = useLocation();
   if (pathname.startsWith("/plog/blogitem-040601-1")) {
     return null;
   }
+  return <DelayedScreensaver />;
+}
+
+function DelayedScreensaver() {
+  const [loadScreensaver, setLoadScreensaver] = useState(false);
+  useEffect(() => {
+    const startWaiting = () => {
+      return window.setTimeout(() => {
+        setLoadScreensaver(true);
+      }, LAZY_START_SECONDS * 1000);
+    };
+
+    let timer = startWaiting();
+    function restartWaiting() {
+      window.clearTimeout(timer);
+      timer = startWaiting();
+    }
+    let throttle = false;
+    function delayLazyStart() {
+      if (!throttle) {
+        restartWaiting();
+        throttle = true;
+        setTimeout(() => {
+          throttle = false;
+        }, 1000);
+      }
+    }
+
+    window.addEventListener("scroll", delayLazyStart);
+    return () => {
+      window.removeEventListener("scroll", delayLazyStart);
+    };
+  }, []);
 
   return (
     <div>

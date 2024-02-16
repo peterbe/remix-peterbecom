@@ -17,6 +17,7 @@ export function SearchForm() {
         type="search"
         name="q"
         placeholder="Search"
+        aria-label="Search"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
