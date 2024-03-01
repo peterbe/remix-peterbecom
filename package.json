@@ -22,7 +22,7 @@
   "dependencies": {
     "@picocss/pico": "2.0.0",
     "@remix-run/express": "2.6.0",
-    "@remix-run/node": "2.6.0",
+    "@remix-run/node": "2.8.0",
     "@remix-run/react": "2.6.0",
     "axios": "1.6.7",
     "axios-retry": "4.0.0",
