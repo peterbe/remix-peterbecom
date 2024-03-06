@@ -47,7 +47,14 @@ article.about-filters .grid div {
 article.about-filters .grid div p {
   margin-bottom: 0;
 }
-
+article.homepage-post {
+  margin-bottom: 50px;
+}
+@media (min-width: 576px) {
+  article.homepage-post {
+    margin-bottom: 100px;
+  }
+}
 article.homepage-post header {
   margin-bottom: 20px;
 }
