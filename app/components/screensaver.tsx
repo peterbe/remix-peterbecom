@@ -6,24 +6,23 @@ const ConfettiLazy = lazy(
   () => import("~/components/confetti-screensaver"),
 );
 
-type Props = {
-  lazyStartSeconds: number;
-};
-export function Screensaver({ lazyStartSeconds }: Props) {
+const LAZY_START_SECONDS = 60;
+
+export function Screensaver() {
   const { pathname } = useLocation();
   if (pathname.startsWith("/plog/blogitem-040601-1")) {
     return null;
   }
-  return <DelayedScreensaver lazyStartSeconds={lazyStartSeconds} />;
+  return <DelayedScreensaver />;
 }
 
-function DelayedScreensaver({ lazyStartSeconds }: Props) {
+function DelayedScreensaver() {
   const [loadScreensaver, setLoadScreensaver] = useState(false);
   useEffect(() => {
     const startWaiting = () => {
       return window.setTimeout(() => {
         setLoadScreensaver(true);
-      }, lazyStartSeconds * 1000);
+      }, LAZY_START_SECONDS * 1000);
     };
 
     let timer = startWaiting();
