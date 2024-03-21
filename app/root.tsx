@@ -17,11 +17,18 @@ import { Screensaver } from "~/components/screensaver";
 import { GoogleAnalytics } from "./utils/googleanalytics";
 
 export const loader = async () => {
-  return json({ gaTrackingId: process.env.GA_TRACKING_ID });
+  const screensaverLazyStartSeconds = process.env.SCREENSAVER_LAZY_START_SECONDS
+    ? parseInt(process.env.SCREENSAVER_LAZY_START_SECONDS)
+    : 60 * 2; // 2 minutes by default
+  return json({
+    gaTrackingId: process.env.GA_TRACKING_ID,
+    screensaverLazyStartSeconds,
+  });
 };
 
 export default function App() {
-  const { gaTrackingId } = useLoaderData<typeof loader>();
+  const { gaTrackingId, screensaverLazyStartSeconds } =
+    useLoaderData<typeof loader>();
 
   return (
     <html lang="en">
@@ -44,7 +51,7 @@ export default function App() {
         </main>
 
         <Footer />
-        <Screensaver />
+        <Screensaver lazyStartSeconds={screensaverLazyStartSeconds} />
       </body>
     </html>
   );
