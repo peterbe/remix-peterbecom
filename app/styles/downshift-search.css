@@ -1,0 +1,41 @@
+.downshift-wrapper {
+  position: relative;
+}
+
+.downshift-wrapper input::placeholder {
+  opacity: 0.5;
+}
+
+.downshift-dropdown {
+  position: absolute;
+  z-index: 10;
+  /* top: 105px; */
+  /* box-shadow: "0 0 0 1px #000"; */
+  box-shadow: var(--pico-box-shadow);
+  background-color: var(--pico-background-color);
+  min-width: 330px;
+}
+.downshift-dropdown ul {
+  padding-left: 0;
+  margin-bottom: 0;
+}
+.downshift-dropdown li {
+  list-style: none;
+  padding: 5px;
+  border-radius: var(--pico-border-radius);
+  cursor: pointer;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  border: 0 !important;
+}
+.downshift-highlighted {
+  background-color: var(--pico-contrast-focus);
+}

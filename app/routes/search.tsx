@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 
 import { Search } from "~/components/search";
+import downshiftSearch from "~/styles/downshift-search.css";
 import search from "~/styles/search.css";
 import { absoluteURL } from "~/utils/utils";
 
@@ -10,6 +11,7 @@ export function links() {
   return [
     ...rootLinks().filter((x) => !x.extra),
     { rel: "stylesheet", href: search },
+    { rel: "stylesheet", href: downshiftSearch },
     { rel: "canonical", href: absoluteURL("/search") },
   ];
 }

@@ -1,130 +1,189 @@
 import { useNavigate, useSearchParams } from "@remix-run/react";
 import { useCombobox } from "downshift";
 import { useState } from "react";
+import useSWR from "swr";
+import { useDebounceValue } from "usehooks-ts";
+
+type SearchMeta = {
+  found: number;
+};
+
+type TypeaheadResult = {
+  term: string;
+  highlights: string[];
+  faux?: true;
+};
+
+type ServerData = {
+  results: TypeaheadResult[];
+  meta: SearchMeta;
+};
 
 export function SearchForm() {
-  const [searchParams] = useSearchParams();
-  // const [query, setQuery] = useState(searchParams.get("q") || "");
-  const [query] = useState(searchParams.get("q") || "");
   const navigate = useNavigate();
-  return (
-    <form
-      action="/search"
-      onSubmit={(event) => {
-        event.preventDefault();
-        navigate(`/search?${new URLSearchParams({ q: query }).toString()}`);
-      }}
-    >
-      <ComboBox />
-      {/* <input
-        type="search"
-        name="q"
-        placeholder="Search"
-        aria-label="Search"
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-      /> */}
-    </form>
+
+  const [searchParams] = useSearchParams();
+  const [query] = useState(searchParams.get("q") || "");
+
+  const [input, setInput] = useState(query);
+
+  const debouncedInput = useDebounceValue<string>(input, 100);
+
+  const apiURL = debouncedInput[0].trim()
+    ? `/api/v1/typeahead?${new URLSearchParams({
+        q: debouncedInput[0].trim(),
+      }).toString()}`
+    : null;
+
+  const { data, error } = useSWR<ServerData, Error>(
+    apiURL,
+    async (url) => {
+      const r = await fetch(url);
+      if (!r.ok) {
+        throw new Error(`${r.status} on ${url}`);
+      }
+      return r.json();
+    },
+    {
+      revalidateOnFocus: false,
+      keepPreviousData: true,
+    },
   );
-}
+  const debouncedError = useDebounceValue<Error | undefined>(error, 500);
 
-type Book = {
-  id: string;
-  author: string;
-  title: string;
-};
-const books: Book[] = [
-  { id: "book-1", author: "Harper Lee", title: "To Kill a Mockingbird" },
-  { id: "book-2", author: "Lev Tolstoy", title: "War and Peace" },
-  { id: "book-3", author: "Fyodor Dostoyevsy", title: "The Idiot" },
-  { id: "book-4", author: "Oscar Wilde", title: "A Picture of Dorian Gray" },
-  { id: "book-5", author: "George Orwell", title: "1984" },
-  { id: "book-6", author: "Jane Austen", title: "Pride and Prejudice" },
-  { id: "book-7", author: "Marcus Aurelius", title: "Meditations" },
-  {
-    id: "book-8",
-    author: "Fyodor Dostoevsky",
-    title: "The Brothers Karamazov",
-  },
-  { id: "book-9", author: "Lev Tolstoy", title: "Anna Karenina" },
-  { id: "book-10", author: "Fyodor Dostoevsky", title: "Crime and Punishment" },
-];
-function getBooksFilter(inputValue: string) {
-  const lowerCasedInputValue = inputValue.toLowerCase();
+  const items = (input.trim() && data?.results) || [];
+  const hasSearchResults = items.length > 0;
+  if (
+    input.trim() &&
+    input.trim().length > 2 &&
+    !items.find((item) => item.faux) &&
+    input !== query
+  ) {
+    items.push({
+      term: input,
+      highlights: [input],
+      faux: true,
+    });
+  }
 
-  return function booksFilter(book: Book) {
-    return (
-      !inputValue ||
-      book.title.toLowerCase().includes(lowerCasedInputValue) ||
-      book.author.toLowerCase().includes(lowerCasedInputValue)
-    );
-  };
-}
-
-function ComboBox() {
-  const [items, setItems] = useState(books);
   const {
     isOpen,
-    getToggleButtonProps,
+    // getToggleButtonProps,
     getLabelProps,
     getMenuProps,
     getInputProps,
     highlightedIndex,
     getItemProps,
-    selectedItem,
+    // selectedItem,
   } = useCombobox({
     onInputValueChange({ inputValue }) {
-      setItems(books.filter(getBooksFilter(inputValue)));
+      setInput(inputValue);
     },
     items,
     itemToString(item) {
-      return item ? item.title : "";
+      return item ? item.term : "";
     },
+    onSelectedItemChange: ({ selectedItem }) => {
+      if (selectedItem) {
+        navigate(
+          `/search?${new URLSearchParams({ q: selectedItem.term }).toString()}`,
+        );
+      }
+    },
+    initialInputValue: query,
   });
 
   return (
-    <div>
+    <form
+      className="downshift-wrapper"
+      action="/search"
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (input.trim()) {
+          navigate(
+            `/search?${new URLSearchParams({ q: input.trim() }).toString()}`,
+          );
+        }
+      }}
+    >
       <div>
-        <label className="w-fit" {...getLabelProps()}>
+        <label className="visually-hidden" {...getLabelProps()}>
           Search terms:
         </label>
-        <fieldset role="group">
+        <fieldset role="search">
           <input
             placeholder="Search anything on this blog"
+            type="search"
             {...getInputProps()}
           />
-          <button
+          <input type="submit" value="Search" />
+          {/* <button
             aria-label="toggle menu"
             type="button"
             {...getToggleButtonProps()}
           >
             {isOpen ? <>&#8593;</> : <>&#8595;</>}
-          </button>
+          </button> */}
         </fieldset>
+        {debouncedError[0] && (
+          <small>Autocomplete encountered an error 😥</small>
+        )}
       </div>
-      <ul
-        className={`absolute w-72 bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 z-10 ${
-          !(isOpen && items.length) && "hidden"
-        }`}
-        {...getMenuProps()}
+      <article
+        className={`downshift-dropdown ${!(isOpen && hasSearchResults) && "visually-hidden"}`}
       >
-        {isOpen &&
-          items.map((item, index) => {
-            let className = "";
-            if (highlightedIndex === index) className += "highlighted ";
-            if (selectedItem === item) className += "selected ";
-            return (
-              <li
-                className={className}
-                key={item.id}
-                {...getItemProps({ item, index })}
-              >
-                <span>{item.title}</span>
-                <span className="text-sm text-gray-700">{item.author}</span>
-              </li>
-            );
-          })}
-      </ul>
-    </div>
+        <ul {...getMenuProps()}>
+          {isOpen &&
+            items.map((item, index) => {
+              let className = "";
+              if (highlightedIndex === index)
+                className += "downshift-highlighted ";
+
+              if (item.faux) {
+                className += "downshift-faux";
+                return (
+                  <li
+                    className={className}
+                    key={item.term}
+                    {...getItemProps({ item, index })}
+                  >
+                    <i>
+                      Search for <code>{item.term}</code>
+                    </i>
+                  </li>
+                );
+              }
+              return (
+                <li
+                  className={className}
+                  key={`${item.term}${item.faux}`}
+                  {...getItemProps({ item, index })}
+                >
+                  {item.highlights.map((highlight, i) => {
+                    return (
+                      <span
+                        key={i}
+                        dangerouslySetInnerHTML={{ __html: highlight }}
+                      ></span>
+                    );
+                  })}
+                </li>
+              );
+            })}
+          {/* {isOpen && input.trim() && (
+            <li
+              className="downshift-faux"
+              key={input}
+              {...getItemProps({
+                item: { term: input, highlights: [input], faux: true },
+                index: items.length,
+              })}
+            >
+              Search for <i>{input}</i>
+            </li>
+          )} */}
+        </ul>
+      </article>
+    </form>
   );
 }
