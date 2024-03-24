@@ -9,8 +9,6 @@
 .downshift-dropdown {
   position: absolute;
   z-index: 10;
-  /* top: 105px; */
-  /* box-shadow: "0 0 0 1px #000"; */
   box-shadow: var(--pico-box-shadow);
   background-color: var(--pico-background-color);
   min-width: 330px;

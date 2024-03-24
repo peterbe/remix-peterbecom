@@ -68,13 +68,11 @@ export function SearchForm() {
 
   const {
     isOpen,
-    // getToggleButtonProps,
     getLabelProps,
     getMenuProps,
     getInputProps,
     highlightedIndex,
     getItemProps,
-    // selectedItem,
   } = useCombobox({
     onInputValueChange({ inputValue }) {
       setInput(inputValue);
@@ -117,13 +115,6 @@ export function SearchForm() {
             {...getInputProps()}
           />
           <input type="submit" value="Search" />
-          {/* <button
-            aria-label="toggle menu"
-            type="button"
-            {...getToggleButtonProps()}
-          >
-            {isOpen ? <>&#8593;</> : <>&#8595;</>}
-          </button> */}
         </fieldset>
         {debouncedError[0] && (
           <small>Autocomplete encountered an error 😥</small>
@@ -170,18 +161,6 @@ export function SearchForm() {
                 </li>
               );
             })}
-          {/* {isOpen && input.trim() && (
-            <li
-              className="downshift-faux"
-              key={input}
-              {...getItemProps({
-                item: { term: input, highlights: [input], faux: true },
-                index: items.length,
-              })}
-            >
-              Search for <i>{input}</i>
-            </li>
-          )} */}
         </ul>
       </article>
     </form>
