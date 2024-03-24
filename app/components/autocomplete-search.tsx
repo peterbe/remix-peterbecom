@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
-import { useDebounce } from "usehooks-ts";
+import { useDebounceValue } from "usehooks-ts";
 
 import { postURL } from "~/utils/utils";
 
@@ -35,7 +35,7 @@ export default function AutocompleteSearch({ goTo }: Props) {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [input, setInput] = useState("");
-  const debouncedInput = useDebounce<string>(input, 100);
+  const debouncedInput = useDebounceValue<string>(input, 100);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -43,9 +43,9 @@ export default function AutocompleteSearch({ goTo }: Props) {
     }
   }, []);
 
-  const apiURL = debouncedInput.trim()
+  const apiURL = debouncedInput[0].trim()
     ? `/api/v1/typeahead?${new URLSearchParams({
-        q: debouncedInput.trim(),
+        q: debouncedInput[0].trim(),
       }).toString()}`
     : null;
 
