@@ -2,11 +2,17 @@
   margin-bottom: 40px;
 }
 
-.search-result-url {
-  color: green;
+.search-result mark {
+  background-color: unset;
+  font-weight: bold;
+  color: unset;
+  padding: unset;
+}
+.search-result b mark {
+  font-weight: 900;
+  /* font-style: italic; */
 }
 
-b mark {
-  font-weight: bolder;
-  font-style: italic;
+.search-result-url {
+  color: green;
 }
