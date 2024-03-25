@@ -13,6 +13,15 @@
   background-color: var(--pico-background-color);
   min-width: 330px;
 }
+
+/* The yellow was a bit too loud and noisy in the autocomplete search */
+.downshift-dropdown mark {
+  background-color: unset;
+  font-weight: bold;
+  color: unset;
+  padding: unset;
+}
+
 .downshift-dropdown ul {
   padding-left: 0;
   margin-bottom: 0;
