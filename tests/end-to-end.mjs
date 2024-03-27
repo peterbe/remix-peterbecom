@@ -14,9 +14,14 @@ axiosRetry(axios, {
   retries: RETRIES,
   shouldResetTimeout: true,
   retryCondition: (error) => {
-    return (
-      isNetworkOrIdempotentRequestError(error) || error.code === "ECONNABORTED"
-    );
+    if (
+      isNetworkOrIdempotentRequestError(error) ||
+      error.code === "ECONNABORTED"
+    ) {
+      return true;
+    }
+    console.warn("NOT going to retry on error:", error);
+    return false;
   },
   onRetry: (retryCount, error) => {
     console.log(`Retrying (${retryCount}) on ${error.request.path}`);
