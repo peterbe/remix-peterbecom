@@ -1,17 +1,27 @@
 import test from "ava";
 import cheerio from "cheerio";
 import axios from "axios";
-import axiosRetry from "axios-retry";
+import axiosRetry, { isNetworkOrIdempotentRequestError } from "axios-retry";
 import dotenv from "dotenv";
 
 dotenv.config();
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 
 const RETRIES = 3;
-const TIMEOUT = 1000;
+const TIMEOUT = 1500;
 
 axiosRetry(axios, {
   retries: RETRIES,
+  shouldResetTimeout: true,
+  retryCondition: (error) => {
+    return (
+      isNetworkOrIdempotentRequestError(error) || error.code === "ECONNABORTED"
+    );
+  },
+  onRetry: (retryCount, error) => {
+    console.log(`Retrying (${retryCount}) on ${error.request.path}`);
+    return;
+  },
   retryDelay: (retryCount) => {
     return retryCount * 1000;
   },
@@ -23,15 +33,27 @@ async function get(
   throwHttpErrors = false,
   { timeout = TIMEOUT, decompress = true } = {}
 ) {
-  return axios.get(BASE_URL + uri, {
-    timeout,
-    decompress,
-    maxRedirects: followRedirect ? 10 : 0,
-    validateStatus: function (status) {
-      if (throwHttpErrors) return status >= 200 && status < 300; // default
-      return true;
-    },
-  });
+  try {
+    const response = await axios.get(BASE_URL + uri, {
+      timeout,
+      decompress,
+      maxRedirects: followRedirect ? 10 : 0,
+      validateStatus: function (status) {
+        if (throwHttpErrors) return status >= 200 && status < 300; // default
+        return true;
+      },
+    });
+    return response;
+  } catch (err) {
+    throw new Error(
+      `Axios network error on ${uri} (${JSON.stringify({
+        followRedirect,
+        throwHttpErrors,
+        timeout,
+        decompress,
+      })})`
+    );
+  }
 }
 
 function isCached(res) {
