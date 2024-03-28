@@ -36,10 +36,11 @@ async function get(
   uri,
   followRedirect = false,
   throwHttpErrors = false,
-  { timeout = TIMEOUT, decompress = true } = {}
+  { timeout = TIMEOUT, decompress = true, method = "get" } = {}
 ) {
   try {
-    const response = await axios.get(BASE_URL + uri, {
+    const response = await axios(BASE_URL + uri, {
+      method,
       timeout,
       decompress,
       maxRedirects: followRedirect ? 10 : 0,
@@ -51,7 +52,7 @@ async function get(
     return response;
   } catch (err) {
     throw new Error(
-      `Axios network error on ${uri} (${JSON.stringify({
+      `Axios network error on ${method.toUpperCase()} ${uri} (${JSON.stringify({
         followRedirect,
         throwHttpErrors,
         timeout,
@@ -59,6 +60,9 @@ async function get(
       })})`
     );
   }
+}
+async function post(uri, followRedirect = false, throwHttpErrors = false) {
+  return get(uri, followRedirect, throwHttpErrors, { method: "post" });
 }
 
 function isCached(res) {
@@ -353,4 +357,21 @@ test("search skeleton page", async (t) => {
   t.is(response.status, 200);
   t.true(isCached(response));
   t.is(response.headers["content-encoding"], "br");
+});
+
+test("POST request to pages should 405", async (t) => {
+  for (const url of [
+    "/",
+    "/p2",
+    "/oc-Web+development",
+    "/about",
+    "/contact",
+    "/search",
+    "/plog",
+    "/plog/blogitem-040601-1",
+    "/plog/blogitem-20030629-2128",
+  ]) {
+    const response = await post(url);
+    t.is(response.status, 405);
+  }
 });

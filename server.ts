@@ -70,6 +70,7 @@ app.use("*/ping", backendProxy);
 app.use(legacyRedirects);
 app.use(junkBlock);
 app.use("/_ip", ip);
+app.post("*", (req, res) => res.sendStatus(405));
 
 app.all(
   "*",
