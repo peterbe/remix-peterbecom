@@ -1,185 +1,68 @@
 import { Link } from "@remix-run/react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import useSWR from "swr";
-import { useDebounceValue } from "usehooks-ts";
+import { useCallback } from "react";
 
 import { postURL } from "~/utils/utils";
 
+import { type RememberedSearch, useRememberSearch } from "./remember-search";
 import { type RememberedPost, useRecentVisits } from "./remember-visit";
-
-function searchURL(q: string) {
-  return `/search?${new URLSearchParams({ q }).toString()}`;
-}
-
-type SearchMeta = {
-  found: number;
-};
-
-type TypeaheadResult = {
-  term: string;
-  highlights: string[];
-};
-
-type ServerData = {
-  results: TypeaheadResult[];
-  meta: SearchMeta;
-};
+import { SearchForm } from "./searchform";
 
 type Props = {
   goTo: (url: string) => void;
 };
 
 export default function AutocompleteSearch({ goTo }: Props) {
-  const { visited, clearVisited, undoClearVisited, undoable } =
-    useRecentVisits();
+  const { visited, clearVisited } = useRecentVisits();
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [input, setInput] = useState("");
-  const debouncedInput = useDebounceValue<string>(input, 100);
+  const { searches, clearSearches } = useRememberSearch();
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+  const recentSearches = searches;
 
-  const apiURL = debouncedInput[0].trim()
-    ? `/api/v1/typeahead?${new URLSearchParams({
-        q: debouncedInput[0].trim(),
-      }).toString()}`
-    : null;
-
-  const { data, error } = useSWR<ServerData, Error>(
-    apiURL,
-    async (url) => {
-      const r = await fetch(url);
-      if (!r.ok) {
-        throw new Error(`${r.status} on ${url}`);
-      }
-      return r.json();
-    },
-    {
-      revalidateOnFocus: false,
-      keepPreviousData: true,
-    },
-  );
-
-  const [highlight, setHighlight] = useState(-1);
   const goToCallback = useCallback((url: string) => goTo(url), [goTo]);
 
-  useEffect(() => {
-    const close = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown") {
-        if (data) {
-          setHighlight((highlight) =>
-            Math.min(data.results.length - 1, highlight + 1),
-          );
-          e.preventDefault();
-        }
-      } else if (e.key === "ArrowUp") {
-        setHighlight((highlight) => Math.max(-1, highlight - 1));
-        e.preventDefault();
-      } else if (e.key === "Enter") {
-        if (data && highlight > -1) {
-          goToCallback(searchURL(data.results[highlight].term));
-          e.preventDefault();
-        }
-      }
-    };
-    window.addEventListener("keydown", close);
-    return () => window.removeEventListener("keydown", close);
-  }, [data, highlight, goToCallback]);
-
   return (
-    <div>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
+    <div style={{ minHeight: 600 }}>
+      <SearchForm goTo={goToCallback} autofocus={true} />
 
-          if (highlight === -1) {
-            goTo(searchURL(input));
-          } else if (data && data.results && data.results[highlight]) {
-            goTo(searchURL(data.results[highlight].term));
-          }
-        }}
-      >
-        <input
-          type="search"
-          name="q"
-          aria-label="Search"
-          placeholder="Search"
-          ref={inputRef}
-          onChange={(event) => {
-            setInput(event.target.value);
-          }}
-        />
-      </form>
+      {visited.length > 0 && (
+        <RecentVisits visited={visited} goTo={goToCallback} />
+      )}
+      {recentSearches.length > 0 && (
+        <RecentSearches searches={recentSearches} goTo={goToCallback} />
+      )}
 
-      {!input.trim() && (visited.length > 0 || undoable) && (
-        <RecentVisits
+      {(visited.length > 0 || recentSearches.length > 0) && (
+        <Clear
           visited={visited}
+          searches={recentSearches}
+          clearSearches={clearSearches}
           clearVisited={clearVisited}
-          undoClearVisited={undoClearVisited}
-          undoable={undoable}
-          goTo={goToCallback}
         />
       )}
-
-      {error && <SearchError error={error} input={input} />}
-      {input.trim() && data && data.results && (
-        <TypeaheadResults
-          results={data.results}
-          meta={data.meta}
-          highlight={highlight}
-          goTo={goToCallback}
-        />
-      )}
-      {data && input.trim() && <FullSearchLink input={input} />}
     </div>
   );
 }
 
-function FullSearchLink({ input }: { input: string }) {
-  return (
-    <p style={{ margin: 20, textAlign: "center", fontStyle: "italic" }}>
-      <Link to={searchURL(input)}>
-        Search for "<em>{input}</em>"
-      </Link>
-    </p>
-  );
+function RecentHeading({ text }: { text: string }) {
+  return <h4>{text}</h4>;
 }
 
-function SearchError({ error, input }: { error: Error; input: string }) {
-  return (
-    <div>
-      <p>
-        <strong>Error</strong>
-      </p>
-      <p style={{ color: "red" }}>{error.message}</p>
-      <FullSearchLink input={input} />
-    </div>
-  );
+function RecentWrapper({ children }: { children: React.ReactNode }) {
+  return <div style={{ marginTop: 30 }}>{children}</div>;
 }
 
 function RecentVisits({
   visited,
-  clearVisited,
-  undoClearVisited,
-  undoable,
   goTo,
 }: {
   visited: RememberedPost[];
-  clearVisited: () => void;
-  undoClearVisited: () => void;
-  undoable: boolean;
   goTo: (url: string) => void;
 }) {
   return (
-    <div>
-      <p style={{ textAlign: "right", fontSize: "0.8rem", marginBottom: 0 }}>
-        Recently visited
-      </p>
-      {visited.map((doc, i) => {
+    <RecentWrapper>
+      <RecentHeading text="Recently visited" />
+
+      {visited.map((doc) => {
         return (
           <p key={doc.oid} style={{ padding: 5, marginBottom: 10 }}>
             <Link
@@ -194,16 +77,68 @@ function RecentVisits({
           </p>
         );
       })}
-      {undoable && (
-        <button className="secondary outline" onClick={undoClearVisited}>
-          Undo clear
-        </button>
-      )}
-      {visited.length > 0 && (
-        <button className="secondary outline" onClick={clearVisited}>
-          Clear visited
-        </button>
-      )}
+    </RecentWrapper>
+  );
+}
+
+function RecentSearches({
+  searches,
+  goTo,
+}: {
+  searches: RememberedSearch[];
+  goTo: (url: string) => void;
+}) {
+  return (
+    <RecentWrapper>
+      <RecentHeading text="Recent searches" />
+      {searches.map((search, i) => {
+        const url = `/search?${new URLSearchParams({ q: search.term }).toString()}`;
+        return (
+          <p key={search.term} style={{ padding: 5, marginBottom: 10 }}>
+            <Link
+              to={url}
+              onClick={() => {
+                goTo(url);
+              }}
+            >
+              {search.term}
+            </Link>{" "}
+            <small>
+              found {search.found} result
+              {search.found === 1 ? "" : "s"} {approximateVisited(search.date)}
+            </small>
+          </p>
+        );
+      })}
+    </RecentWrapper>
+  );
+}
+
+function Clear({
+  visited,
+  searches,
+  clearSearches,
+  clearVisited,
+}: {
+  visited: RememberedPost[];
+  searches: RememberedSearch[];
+  clearSearches: () => void;
+  clearVisited: () => void;
+}) {
+  return (
+    <div>
+      <fieldset role="group">
+        {visited.length > 0 && (
+          <button className="secondary outline" onClick={clearVisited}>
+            Clear visited
+          </button>
+        )}
+        {searches.length > 0 && (
+          <button className="secondary outline" onClick={clearSearches}>
+            Clear searches
+          </button>
+        )}
+      </fieldset>
     </div>
   );
 }
@@ -233,50 +168,4 @@ function approximateVisited(date: string) {
   }
 
   return "ages ago";
-}
-
-function TypeaheadResults({
-  results,
-  meta,
-  highlight,
-  goTo,
-}: {
-  results: TypeaheadResult[];
-  meta: SearchMeta;
-  highlight: number;
-  goTo: (url: string) => void;
-}) {
-  return (
-    <div>
-      <p style={{ textAlign: "right", fontSize: "0.8rem", marginBottom: 0 }}>
-        {meta.found.toLocaleString()} suggestions
-      </p>
-      {results.map((doc, i) => {
-        return (
-          <p
-            key={doc.term}
-            style={
-              i === highlight
-                ? {
-                    backgroundColor: "var(--code-background-color)",
-                    padding: 5,
-                    marginBottom: 0,
-                  }
-                : { padding: 5, marginBottom: 0 }
-            }
-          >
-            <Link
-              to={searchURL(doc.term)}
-              onClick={() => {
-                goTo(searchURL(doc.term));
-              }}
-              dangerouslySetInnerHTML={{
-                __html: doc.highlights.length ? doc.highlights[0] : doc.term,
-              }}
-            ></Link>
-          </p>
-        );
-      })}
-    </div>
-  );
 }

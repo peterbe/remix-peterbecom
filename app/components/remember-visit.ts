@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { Post } from "~/types";
 
 const STORAGE_KEY = "visited-posts";
+const MAX_REMEMBERED = 5;
 
 export type RememberedPost = {
   oid: string;
@@ -48,7 +49,10 @@ export function useRememberVisit(post: Post) {
       save = true;
     }
     if (save) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(previous.slice(0, 20)));
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(previous.slice(0, MAX_REMEMBERED)),
+      );
     }
   }, [post]);
 

@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from "@remix-run/react";
+import { Link, useNavigate, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -6,6 +6,7 @@ import { useQueryBoolean } from "~/hooks/use-query-hook";
 import { formatDateBasic } from "~/utils/utils";
 
 import { Nav } from "./nav";
+import { useRememberSearch } from "./remember-search";
 import { SearchForm } from "./searchform";
 
 interface Document {
@@ -41,6 +42,7 @@ interface ServerData {
 }
 
 export function Search() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const debug = useQueryBoolean("debug");
@@ -90,6 +92,13 @@ export function Search() {
     extraHead = "Hmmmmmm...";
   }
 
+  const { rememberSearch } = useRememberSearch();
+  useEffect(() => {
+    if (q && data) {
+      rememberSearch({ term: q, found: data.results.count_documents });
+    }
+  }, [q, data]);
+
   useEffect(() => {
     if (q) {
       if (data) {
@@ -104,7 +113,12 @@ export function Search() {
     <div>
       <Nav title={pageTitle} subHead={extraHead} />
 
-      <SearchForm />
+      <SearchForm
+        goTo={(url: string) => {
+          navigate(url);
+        }}
+        autofocus={!q}
+      />
 
       {!q && (
         <p>

@@ -1,6 +1,6 @@
-import { useNavigate, useSearchParams } from "@remix-run/react";
+import { useSearchParams } from "@remix-run/react";
 import { useCombobox } from "downshift";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useDebounceValue } from "usehooks-ts";
 
@@ -19,8 +19,24 @@ type ServerData = {
   meta: SearchMeta;
 };
 
-export function SearchForm() {
-  const navigate = useNavigate();
+type Props = {
+  goTo: (url: string) => void;
+  autofocus?: boolean;
+};
+
+export function SearchForm({ goTo, autofocus }: Props) {
+  useEffect(() => {
+    if (autofocus) {
+      // Using a useRef didn't work. Perhaps the downshift library
+      // props overrides it.
+      const input = document.querySelector<HTMLInputElement>(
+        '.downshift-wrapper input[type="search"]',
+      );
+      if (input) {
+        input.focus();
+      }
+    }
+  }, [autofocus]);
 
   const [searchParams] = useSearchParams();
   const [query] = useState(searchParams.get("q") || "");
@@ -83,7 +99,7 @@ export function SearchForm() {
     },
     onSelectedItemChange: ({ selectedItem }) => {
       if (selectedItem) {
-        navigate(
+        goTo(
           `/search?${new URLSearchParams({ q: selectedItem.term }).toString()}`,
         );
       }
@@ -98,7 +114,7 @@ export function SearchForm() {
       onSubmit={(event) => {
         event.preventDefault();
         if (input.trim()) {
-          navigate(
+          goTo(
             `/search?${new URLSearchParams({ q: input.trim() }).toString()}`,
           );
         }

@@ -25,6 +25,10 @@ a {
   /* For a11y */
   text-decoration: underline;
 }
+nav ul li a {
+  /* For fun */
+  text-decoration-style: wavy;
+}
 
 hgroup > *:last-child,
 .headings > *:last-child {

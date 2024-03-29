@@ -1,9 +1,9 @@
 .downshift-wrapper {
   position: relative;
-}
 
-.downshift-wrapper input::placeholder {
-  opacity: 0.5;
+  input::placeholder {
+    opacity: 0.5;
+  }
 }
 
 .downshift-dropdown {
@@ -11,26 +11,29 @@
   z-index: 10;
   box-shadow: var(--pico-box-shadow);
   background-color: var(--pico-background-color);
-  min-width: 330px;
-}
+  min-width: 230px;
 
-/* The yellow was a bit too loud and noisy in the autocomplete search */
-.downshift-dropdown mark {
-  background-color: unset;
-  font-weight: bold;
-  color: unset;
-  padding: unset;
-}
+  margin: 0;
+  max-width: 650px;
 
-.downshift-dropdown ul {
-  padding-left: 0;
-  margin-bottom: 0;
-}
-.downshift-dropdown li {
-  list-style: none;
-  padding: 5px;
-  border-radius: var(--pico-border-radius);
-  cursor: pointer;
+  /* The yellow was a bit too loud and noisy in the autocomplete search */
+  mark {
+    background-color: unset;
+    font-weight: bold;
+    color: unset;
+    padding: unset;
+  }
+  ul {
+    padding-left: 0;
+    margin-bottom: 0;
+
+    li {
+      list-style: none;
+      padding: 5px;
+      border-radius: var(--pico-border-radius);
+      cursor: pointer;
+    }
+  }
 }
 
 .visually-hidden {
