@@ -3,6 +3,7 @@ import { useCallback } from "react";
 
 import { postURL } from "~/utils/utils";
 
+import { type RememberedSearch, useRememberSearch } from "./remember-search";
 import { type RememberedPost, useRecentVisits } from "./remember-visit";
 import { SearchForm } from "./searchform";
 
@@ -11,8 +12,11 @@ type Props = {
 };
 
 export default function AutocompleteSearch({ goTo }: Props) {
-  const { visited, clearVisited, undoClearVisited, undoable } =
-    useRecentVisits();
+  const { visited, clearVisited } = useRecentVisits();
+
+  const { searches, clearSearches } = useRememberSearch();
+
+  const recentSearches = searches;
 
   const goToCallback = useCallback((url: string) => goTo(url), [goTo]);
 
@@ -21,37 +25,44 @@ export default function AutocompleteSearch({ goTo }: Props) {
       <SearchForm goTo={goToCallback} autofocus={true} />
 
       {visited.length > 0 && (
-        <RecentVisits
+        <RecentVisits visited={visited} goTo={goToCallback} />
+      )}
+      {recentSearches.length > 0 && (
+        <RecentSearches searches={recentSearches} goTo={goToCallback} />
+      )}
+
+      {(visited.length > 0 || recentSearches.length > 0) && (
+        <Clear
           visited={visited}
+          searches={recentSearches}
+          clearSearches={clearSearches}
           clearVisited={clearVisited}
-          undoClearVisited={undoClearVisited}
-          undoable={undoable}
-          goTo={goToCallback}
         />
       )}
     </div>
   );
 }
 
+function RecentHeading({ text }: { text: string }) {
+  return <h4>{text}</h4>;
+}
+
+function RecentWrapper({ children }: { children: React.ReactNode }) {
+  return <div style={{ marginTop: 30 }}>{children}</div>;
+}
+
 function RecentVisits({
   visited,
-  clearVisited,
-  undoClearVisited,
-  undoable,
   goTo,
 }: {
   visited: RememberedPost[];
-  clearVisited: () => void;
-  undoClearVisited: () => void;
-  undoable: boolean;
   goTo: (url: string) => void;
 }) {
   return (
-    <div>
-      <p style={{ textAlign: "right", fontSize: "0.8rem", marginBottom: 0 }}>
-        Recently visited
-      </p>
-      {visited.map((doc, i) => {
+    <RecentWrapper>
+      <RecentHeading text="Recently visited" />
+
+      {visited.map((doc) => {
         return (
           <p key={doc.oid} style={{ padding: 5, marginBottom: 10 }}>
             <Link
@@ -66,16 +77,68 @@ function RecentVisits({
           </p>
         );
       })}
-      {undoable && (
-        <button className="secondary outline" onClick={undoClearVisited}>
-          Undo clear
-        </button>
-      )}
-      {visited.length > 0 && (
-        <button className="secondary outline" onClick={clearVisited}>
-          Clear visited
-        </button>
-      )}
+    </RecentWrapper>
+  );
+}
+
+function RecentSearches({
+  searches,
+  goTo,
+}: {
+  searches: RememberedSearch[];
+  goTo: (url: string) => void;
+}) {
+  return (
+    <RecentWrapper>
+      <RecentHeading text="Recent searches" />
+      {searches.map((search, i) => {
+        const url = `/search?${new URLSearchParams({ q: search.term }).toString()}`;
+        return (
+          <p key={search.term} style={{ padding: 5, marginBottom: 10 }}>
+            <Link
+              to={url}
+              onClick={() => {
+                goTo(url);
+              }}
+            >
+              {search.term}
+            </Link>{" "}
+            <small>
+              found {search.found} result
+              {search.found === 1 ? "" : "s"} {approximateVisited(search.date)}
+            </small>
+          </p>
+        );
+      })}
+    </RecentWrapper>
+  );
+}
+
+function Clear({
+  visited,
+  searches,
+  clearSearches,
+  clearVisited,
+}: {
+  visited: RememberedPost[];
+  searches: RememberedSearch[];
+  clearSearches: () => void;
+  clearVisited: () => void;
+}) {
+  return (
+    <div>
+      <fieldset role="group">
+        {visited.length > 0 && (
+          <button className="secondary outline" onClick={clearVisited}>
+            Clear visited
+          </button>
+        )}
+        {searches.length > 0 && (
+          <button className="secondary outline" onClick={clearSearches}>
+            Clear searches
+          </button>
+        )}
+      </fieldset>
     </div>
   );
 }

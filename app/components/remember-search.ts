@@ -1,27 +1,26 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 const STORAGE_KEY = "search-queries";
+const MAX_REMEMBERED = 5;
 
 export type Search = {
   term: string;
   found: number;
-  //   categories: string[];
-  //   title: string;
-  //   pubDate: string;
-  //   visited: string;
 };
 export type RememberedSearch = Search & {
   date: string;
 };
 
-const DELAY_SECONDS = 1;
+export function useRememberSearch() {
+  let previous: RememberedSearch[] = [];
+  try {
+    previous.push(...JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+  } catch (error) {
+    console.warn("Failed to get recent searches from local storage", error);
+  }
+  const [searches, setSearches] = useState<RememberedSearch[]>(previous);
 
-// type Search = {
-//     term: string
-// }
-
-export function useRememberSearch(search: Search) {
-  const remember = useCallback(() => {
+  function rememberSearch(search: Search) {
     const previous = JSON.parse(
       localStorage.getItem(STORAGE_KEY) || "[]",
     ) as RememberedSearch[];
@@ -41,57 +40,29 @@ export function useRememberSearch(search: Search) {
         }
       }
 
-      // Add new post
+      // Add new entry
       previous.unshift({
         term: search.term,
         found: search.found,
-        // categories: post.categories,
-        // title: post.title,
-        // pubDate: post.pub_date,
         date: new Date().toISOString(),
       });
 
       save = true;
     }
+
     if (save) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(previous.slice(0, 10)));
+      setSearches(previous.slice(0, MAX_REMEMBERED));
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(previous.slice(0, MAX_REMEMBERED)),
+      );
     }
-  }, [search]);
+  }
 
-  useEffect(() => {
-    let mounted = true;
-    setTimeout(() => {
-      if (mounted) remember();
-    }, DELAY_SECONDS * 1000);
-
-    return () => {
-      mounted = false;
-    };
-  }, [search, remember]);
-}
-
-export function useRecentSearches() {
-  const [visited, setVisited] = useState<RememberedSearch[]>([]);
-  useEffect(() => {
-    const previous = JSON.parse(
-      localStorage.getItem(STORAGE_KEY) || "[]",
-    ) as RememberedSearch[];
-    setVisited(previous);
-  }, []);
-  const [undoVisisted, setUndoVisited] = useState<RememberedSearch[]>([]);
-  function clearVisited() {
+  function clearSearches() {
+    setSearches([]);
     localStorage.removeItem(STORAGE_KEY);
-    setUndoVisited(visited);
-    setVisited([]);
   }
 
-  function undoClearVisited() {
-    if (undoVisisted.length > 0) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(undoVisisted));
-      setVisited(undoVisisted);
-      setUndoVisited([]);
-    }
-  }
-  const undoable = undoVisisted.length > 0;
-  return { visited, clearVisited, undoClearVisited, undoable };
+  return { rememberSearch, searches, clearSearches };
 }

@@ -6,6 +6,7 @@ import { useQueryBoolean } from "~/hooks/use-query-hook";
 import { formatDateBasic } from "~/utils/utils";
 
 import { Nav } from "./nav";
+import { useRememberSearch } from "./remember-search";
 import { SearchForm } from "./searchform";
 
 interface Document {
@@ -90,6 +91,13 @@ export function Search() {
   } else if (isLoading) {
     extraHead = "Hmmmmmm...";
   }
+
+  const { rememberSearch } = useRememberSearch();
+  useEffect(() => {
+    if (q && data) {
+      rememberSearch({ term: q, found: data.results.count_documents });
+    }
+  }, [q, data]);
 
   useEffect(() => {
     if (q) {
