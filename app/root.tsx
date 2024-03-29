@@ -19,7 +19,7 @@ import { GoogleAnalytics } from "./utils/googleanalytics";
 export const loader = async () => {
   const screensaverLazyStartSeconds = process.env.SCREENSAVER_LAZY_START_SECONDS
     ? parseInt(process.env.SCREENSAVER_LAZY_START_SECONDS)
-    : 60 * 2; // 2 minutes by default
+    : 60 * 5; // 5 minutes by default
   return json({
     gaTrackingId: process.env.GA_TRACKING_ID,
     screensaverLazyStartSeconds,
