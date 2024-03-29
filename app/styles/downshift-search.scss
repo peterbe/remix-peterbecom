@@ -1,10 +1,11 @@
 .downshift-wrapper {
   position: relative;
+
+  input::placeholder {
+    opacity: 0.5;
+  }
 }
 
-.downshift-wrapper input::placeholder {
-  opacity: 0.5;
-}
 .downshift-dropdown {
   position: absolute;
   z-index: 10;
@@ -14,25 +15,25 @@
 
   margin: 0;
   max-width: 650px;
-}
 
-/* The yellow was a bit too loud and noisy in the autocomplete search */
-.downshift-dropdown mark {
-  background-color: unset;
-  font-weight: bold;
-  color: unset;
-  padding: unset;
-}
+  /* The yellow was a bit too loud and noisy in the autocomplete search */
+  mark {
+    background-color: unset;
+    font-weight: bold;
+    color: unset;
+    padding: unset;
+  }
+  ul {
+    padding-left: 0;
+    margin-bottom: 0;
 
-.downshift-dropdown ul {
-  padding-left: 0;
-  margin-bottom: 0;
-}
-.downshift-dropdown li {
-  list-style: none;
-  padding: 5px;
-  border-radius: var(--pico-border-radius);
-  cursor: pointer;
+    li {
+      list-style: none;
+      padding: 5px;
+      border-radius: var(--pico-border-radius);
+      cursor: pointer;
+    }
+  }
 }
 
 .visually-hidden {

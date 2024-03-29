@@ -1,36 +1,41 @@
 import { useCallback, useEffect, useState } from "react";
 
-import type { Post } from "~/types";
+const STORAGE_KEY = "search-queries";
 
-const STORAGE_KEY = "visited-posts";
-
-export type RememberedPost = {
-  oid: string;
-  categories: string[];
-  title: string;
-  pubDate: string;
-  visited: string;
+export type Search = {
+  term: string;
+  found: number;
+  //   categories: string[];
+  //   title: string;
+  //   pubDate: string;
+  //   visited: string;
+};
+export type RememberedSearch = Search & {
+  date: string;
 };
 
-const DELAY_SECONDS = 2;
+const DELAY_SECONDS = 1;
 
-export function useRememberVisit(post: Post) {
+// type Search = {
+//     term: string
+// }
+
+export function useRememberSearch(search: Search) {
   const remember = useCallback(() => {
     const previous = JSON.parse(
       localStorage.getItem(STORAGE_KEY) || "[]",
-    ) as RememberedPost[];
+    ) as RememberedSearch[];
     let save = false;
-    if (previous.length > 0 && previous[0].oid === post.oid) {
-      // Update
-      previous[0].title = post.title;
-      previous[0].categories = post.categories;
-      previous[0].pubDate = post.pub_date;
-      previous[0].visited = new Date().toISOString();
-      save = true;
+    if (previous.length > 0 && previous[0].term === search.term) {
+      // Update, maybe
+      if (previous[0].found !== search.found) {
+        previous[0].found = search.found;
+        save = true;
+      }
     } else {
       // Remove if previously there
-      while (previous.find((p) => p.oid === post.oid)) {
-        const index = previous.findIndex((p) => p.oid === post.oid);
+      while (previous.find((p) => p.term === search.term)) {
+        const index = previous.findIndex((p) => p.term === search.term);
         if (index > -1) {
           previous.splice(index, 1);
         }
@@ -38,11 +43,12 @@ export function useRememberVisit(post: Post) {
 
       // Add new post
       previous.unshift({
-        oid: post.oid,
-        categories: post.categories,
-        title: post.title,
-        pubDate: post.pub_date,
-        visited: new Date().toISOString(),
+        term: search.term,
+        found: search.found,
+        // categories: post.categories,
+        // title: post.title,
+        // pubDate: post.pub_date,
+        date: new Date().toISOString(),
       });
 
       save = true;
@@ -50,7 +56,7 @@ export function useRememberVisit(post: Post) {
     if (save) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(previous.slice(0, 10)));
     }
-  }, [post]);
+  }, [search]);
 
   useEffect(() => {
     let mounted = true;
@@ -61,18 +67,18 @@ export function useRememberVisit(post: Post) {
     return () => {
       mounted = false;
     };
-  }, [post, remember]);
+  }, [search, remember]);
 }
 
-export function useRecentVisits() {
-  const [visited, setVisited] = useState<RememberedPost[]>([]);
+export function useRecentSearches() {
+  const [visited, setVisited] = useState<RememberedSearch[]>([]);
   useEffect(() => {
     const previous = JSON.parse(
       localStorage.getItem(STORAGE_KEY) || "[]",
-    ) as RememberedPost[];
+    ) as RememberedSearch[];
     setVisited(previous);
   }, []);
-  const [undoVisisted, setUndoVisited] = useState<RememberedPost[]>([]);
+  const [undoVisisted, setUndoVisited] = useState<RememberedSearch[]>([]);
   function clearVisited() {
     localStorage.removeItem(STORAGE_KEY);
     setUndoVisited(visited);

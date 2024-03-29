@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from "@remix-run/react";
+import { Link, useNavigate, useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -41,6 +41,7 @@ interface ServerData {
 }
 
 export function Search() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const debug = useQueryBoolean("debug");
@@ -104,7 +105,12 @@ export function Search() {
     <div>
       <Nav title={pageTitle} subHead={extraHead} />
 
-      <SearchForm />
+      <SearchForm
+        goTo={(url: string) => {
+          navigate(url);
+        }}
+        autofocus={!q}
+      />
 
       {!q && (
         <p>
