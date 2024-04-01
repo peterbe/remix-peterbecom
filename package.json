@@ -28,7 +28,7 @@
     "axios-retry": "4.1.0",
     "compression": "1.7.4",
     "cross-env": "7.0.3",
-    "downshift": "9.0.0",
+    "downshift": "9.0.1",
     "esrun": "3.2.26",
     "express": "4.19.2",
     "express-async-handler": "1.2.0",
