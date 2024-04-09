@@ -2,7 +2,7 @@ import { useSearchParams } from "@remix-run/react";
 import { useCombobox } from "downshift";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { useDebounceValue } from "usehooks-ts";
+import { useDebounceValue, useMediaQuery } from "usehooks-ts";
 
 type SearchMeta = {
   found: number;
@@ -43,11 +43,14 @@ export function SearchForm({ goTo, autofocus }: Props) {
 
   const [input, setInput] = useState(query);
 
+  const isLarge = useMediaQuery("(min-width: 768px)");
+
   const debouncedInput = useDebounceValue<string>(input, 100);
 
   const apiURL = debouncedInput[0].trim()
     ? `/api/v1/typeahead?${new URLSearchParams({
         q: debouncedInput[0].trim(),
+        n: isLarge ? "9" : "6",
       }).toString()}`
     : null;
 

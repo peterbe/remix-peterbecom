@@ -1,5 +1,5 @@
 import { Link, useNavigate, useSearchParams } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
 
 import { useQueryBoolean } from "~/hooks/use-query-hook";
@@ -15,6 +15,7 @@ interface Document {
   date: string;
   comment_oid: string | null;
   summary: string;
+  categories?: string[];
 
   score: number;
   score_boosted?: number;
@@ -47,9 +48,15 @@ export function Search() {
   const q = searchParams.get("q");
   const debug = useQueryBoolean("debug");
 
-  const pageTitle = q && q.trim() ? `Searching for "${q}"` : "Search";
+  let pageTitle = "Search";
+  if (q && q.trim()) {
+    if (q.startsWith('"') && q.endsWith('"')) {
+      pageTitle = `Searching for ${q}`;
+    } else {
+      pageTitle = `Searching for "${q}"`;
+    }
+  }
   let extraHead = null;
-  const baseURL = "https://www.peterbe.com";
 
   const apiURL =
     q && q.trim()
@@ -162,12 +169,25 @@ export function Search() {
                     <DebugResult document={result} />
                   )}
                   &nbsp;
-                  <small>{formatDateBasic(result.date)}</small>
+                  {formatDateBasic(result.date)}
                   <br />
-                  <Link to={url} className="search-result-url">
-                    {baseURL}
+                  <Link
+                    to={url}
+                    className="search-result-url"
+                    style={{ marginRight: 10 }}
+                  >
                     {url}
-                  </Link>
+                  </Link>{" "}
+                  {(result.categories || []).map((category, i, arr) => {
+                    return (
+                      <Fragment key={category}>
+                        <Link to={category}>
+                          <small>{category}</small>
+                        </Link>
+                        {i < arr.length - 1 ? ", " : ""}
+                      </Fragment>
+                    );
+                  })}
                   <br />
                   <span
                     className="search-summary"

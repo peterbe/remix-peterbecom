@@ -11,12 +11,16 @@ export type RememberedSearch = Search & {
   date: string;
 };
 
+const IS_SERVER = typeof window === "undefined";
+
 export function useRememberSearch() {
   let previous: RememberedSearch[] = [];
-  try {
-    previous.push(...JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
-  } catch (error) {
-    console.warn("Failed to get recent searches from local storage", error);
+  if (!IS_SERVER) {
+    try {
+      previous.push(...JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+    } catch (error) {
+      console.warn("Failed to get recent searches from local storage", error);
+    }
   }
   const [searches, setSearches] = useState<RememberedSearch[]>(previous);
 
