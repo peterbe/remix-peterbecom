@@ -54,6 +54,9 @@ app.use(shrinkRay());
 const backendProxy = createProxyMiddleware({
   target: BACKEND_BASE_URL,
   changeOrigin: true,
+  pathRewrite: function (path, req) {
+    return (req as any).originalUrl as string;
+  },
 });
 app.use("*/rss.xml", backendProxy);
 app.use("/robots.txt", backendProxy);
