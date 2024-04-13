@@ -17,7 +17,7 @@ dotenv.config();
 const BACKEND_BASE_URL = process.env.API_BASE || "http://127.0.0.1:8000";
 const BUILD_DIR = path.resolve("build");
 
-const app = express();
+export const app = express();
 
 // app.use(compression());
 
@@ -93,9 +93,11 @@ app.all(
 );
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-  console.log(`Express server listening on port ${port}`);
-});
+export async function main() {
+  return app.listen(port, () => {
+    console.log(`Express server listening on port ${port}`);
+  });
+}
 
 function purgeRequireCache() {
   // purge require cache on requests for "server side HMR" this won't let
