@@ -9,12 +9,12 @@
     "dev:node": "cross-env NODE_ENV=development esrun --watch ./server.ts ",
     "dev:remix": "remix watch",
     "dev:parcel": "parcel watch --dist-dir app/styles/build app/global.scss",
-    "start": "cross-env NODE_ENV=production esrun ./server.ts",
+    "start": "cross-env NODE_ENV=production esrun ./start-server.ts",
     "tsc": "tsc",
     "lint": "eslint app",
     "lintfix": "eslint app --fix && npm run prettier:write",
-    "test": "curl --fail -s http://localhost:3000 > /dev/null && ava",
-    "test:watch": "ava --watch",
+    "test": "vitest --run",
+    "test:watch": "vitest --watch",
     "prettier:write": "prettier --write app *.ts",
     "prettier:check": "prettier --check app *.ts",
     "prepare": "husky"
@@ -53,7 +53,7 @@
     "@types/react": "18.2.75",
     "@types/react-dom": "18.2.24",
     "@types/throttle-debounce": "5.0.2",
-    "ava": "6.1.2",
+    "@vitest/ui": "1.5.0",
     "cheerio": "1.0.0-rc.12",
     "dotenv": "16.4.5",
     "eslint": "8.57.0",
@@ -64,7 +64,8 @@
     "parcel": "2.12.0",
     "prettier": "3.2.5",
     "sharp": "0.33.3",
-    "typescript": "5.4.4"
+    "typescript": "5.4.4",
+    "vitest": "1.5.0"
   },
   "engines": {
     "node": ">=16"

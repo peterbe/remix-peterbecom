@@ -136,11 +136,10 @@ export function ErrorBoundary() {
       );
     }
   }
-  console.log(
-    "ERROR BOUNDARY IN routes/_index.tsx",
-    error && error.toString(),
-    { pathname: location.pathname, search: location.search },
-  );
+
+  console.log("ERROR BOUNDARY IN routes/_index.tsx");
+  console.log((error && error.toString()) || "no error");
+  console.log({ pathname: location.pathname, search: location.search });
 
   if (typeof process === "object" && process.env.ROLLBAR_ACCESS_TOKEN) {
     const rollbar = new Rollbar({
