@@ -84,7 +84,9 @@ function Post({ post }: { post: HomepagePost }) {
       <header>
         <hgroup>
           <h2>
-            <Link to={postURL(post.oid)}>{post.title}</Link>
+            <Link to={postURL(post.oid)} unstable_viewTransition>
+              {post.title}
+            </Link>
           </h2>
           <h3>
             <b>{formatDateBasic(post.pub_date)}</b>
@@ -115,7 +117,7 @@ function Post({ post }: { post: HomepagePost }) {
       <div dangerouslySetInnerHTML={{ __html: post.html }} />
       <footer>
         <p>
-          <Link to={`/plog/${post.oid}#commentform`}>
+          <Link to={`/plog/${post.oid}#commentform`} unstable_viewTransition>
             Please post a comment if you have thoughts or questions
           </Link>
         </p>

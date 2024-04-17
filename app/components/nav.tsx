@@ -61,6 +61,7 @@ export function Nav({
                   return (
                     <li key={to}>
                       <Link
+                        unstable_viewTransition
                         to={to}
                         className={pathname === to ? "secondary" : undefined}
                         title={

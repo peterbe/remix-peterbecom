@@ -48,6 +48,7 @@ export function Blogpost({ post, comments, page }: Props) {
                       to={categoryURL(category)}
                       rel="nofollow"
                       title={`Filter by the '${category}' category'`}
+                      unstable_viewTransition
                     >
                       {category}
                     </Link>
@@ -103,7 +104,9 @@ function RelatedPosts({ post }: { post: Post }) {
           <>
             <dt>Previous:</dt>
             <dd>
-              <Link to={postURL(previousPost.oid)}>{previousPost.title}</Link>{" "}
+              <Link to={postURL(previousPost.oid)} unstable_viewTransition>
+                {previousPost.title}
+              </Link>{" "}
               <small>{formatDateBasic(previousPost.pub_date)}</small>{" "}
               <SubCategories categories={previousPost.categories || []} />
             </dd>
@@ -114,7 +117,9 @@ function RelatedPosts({ post }: { post: Post }) {
           <>
             <dt>Next:</dt>
             <dd>
-              <Link to={postURL(nextPost.oid)}>{nextPost.title}</Link>{" "}
+              <Link to={postURL(nextPost.oid)} unstable_viewTransition>
+                {nextPost.title}
+              </Link>{" "}
               <small>{formatDateBasic(nextPost.pub_date)}</small>{" "}
               <SubCategories categories={nextPost.categories || []} />
             </dd>
@@ -128,7 +133,9 @@ function RelatedPosts({ post }: { post: Post }) {
             <dt>Related by category:</dt>
             {relatedByCategory.map((related) => (
               <dd key={related.oid}>
-                <Link to={postURL(related.oid)}>{related.title}</Link>{" "}
+                <Link to={postURL(related.oid)} unstable_viewTransition>
+                  {related.title}
+                </Link>{" "}
                 <small>{formatDateBasic(related.pub_date)}</small>{" "}
                 <SubCategories categories={related.categories || []} />
               </dd>
@@ -143,7 +150,9 @@ function RelatedPosts({ post }: { post: Post }) {
             <dt>Related by keyword:</dt>
             {relatedByKeyword.map((related) => (
               <dd key={related.oid}>
-                <Link to={postURL(related.oid)}>{related.title}</Link>{" "}
+                <Link to={postURL(related.oid)} unstable_viewTransition>
+                  {related.title}
+                </Link>{" "}
                 <small>{formatDateBasic(related.pub_date)}</small>{" "}
                 <SubCategories categories={related.categories || []} />
               </dd>
@@ -163,6 +172,7 @@ function SubCategories({ categories }: { categories: string[] }) {
           <Link
             to={categoryURL(category)}
             title={`Filter by the '${category}' category`}
+            unstable_viewTransition
           >
             <small>{category}</small>
           </Link>
