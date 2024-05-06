@@ -3361,17 +3361,6 @@ span.not-approved {
   }
 }
 
-.carbonads_outer {
-  min-height: 145px;
-  margin-bottom: 20px;
-}
-
-@media (width >= 768px) {
-  .carbonads_outer {
-    min-height: 14px;
-  }
-}
-
 dialog {
   min-width: 390px;
   align-items: start;
