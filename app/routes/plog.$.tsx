@@ -163,8 +163,11 @@ export const meta: MetaFunction<typeof loader> = ({
 
 export default function View() {
   const { post, comments, page } = useLoaderData<typeof loader>();
-  console.log("IN VIEW", { page, oid: post.oid });
   if (post.oid === "blogitem-040601-1") {
+    // XXX Can this ever happen!?
+    console.warn(
+      "Rendering the Lyricspost component from the blog post route!",
+    );
     return <Lyricspost post={post} comments={comments} page={page} />;
   }
 

@@ -17,8 +17,6 @@ type Props = {
   page: number;
 };
 export function Blogpost({ post, comments, page }: Props) {
-  console.log("In Blogpost", { page });
-
   const pubDate = new Date(post.pub_date);
 
   useRememberVisit(post);
