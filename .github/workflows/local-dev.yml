@@ -34,11 +34,13 @@ jobs:
       - name: Navigate to the server
         run: |
           sleep 3
-          curl --retry-connrefused --retry 3 http://localhost:3000
+          curl --retry-connrefused --retry 4 http://localhost:3000
 
       - name: Debug any server outputs
         if: failure()
         run: |
+          echo "___NETSTAT___"
+          netstat -nplt
           echo "____STDOUT____"
           cat /tmp/stdout.log
           echo "____STDERR____"
