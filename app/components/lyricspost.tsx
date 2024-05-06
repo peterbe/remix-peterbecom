@@ -11,8 +11,6 @@ type Props = {
   page: number;
 };
 export function Lyricspost({ post, comments, page }: Props) {
-  console.log("RENDERING Lyricspost", { page });
-
   return (
     <div>
       <hgroup>
