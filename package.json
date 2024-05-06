@@ -6,7 +6,7 @@
     "build:witholdbuildpreserved": "rm -fr /tmp/_old_build && node scripts/backup-old-build.mjs && npm run parcel:build && remix build && node scripts/restore-old-build.mjs",
     "parcel:build": "parcel build --dist-dir app/styles/build app/*.{css,scss}",
     "dev": "npm-run-all build --parallel \"dev:*\"",
-    "dev:node": "cross-env NODE_ENV=development esrun --watch ./server.ts ",
+    "dev:node": "cross-env NODE_ENV=development esrun --watch ./start-server.ts",
     "dev:remix": "remix watch",
     "dev:parcel": "parcel watch --dist-dir app/styles/build app/global.scss",
     "start": "cross-env NODE_ENV=production esrun ./start-server.ts",

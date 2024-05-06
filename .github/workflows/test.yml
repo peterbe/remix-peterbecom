@@ -9,6 +9,9 @@ on:
 env:
   GA_TRACKING_ID: G-1234ABC
 
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -27,7 +30,7 @@ jobs:
         id: cached-node_modules
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.github/workflows/test.yml') }}
+          key: ${{ runner.os }}-${{ hashFiles('package*.json') }}-${{ hashFiles('.github/workflows/test.yml') }}
 
       - name: Install
         if: steps.cached-node_modules.outputs.cache-hit != 'true'
@@ -47,11 +50,3 @@ jobs:
           API_BASE: https://www.peterbe.com
           SERVER_URL: http://localhost:3000
         run: npm run test
-
-      - name: Debug any server outputs
-        if: failure()
-        run: |
-          echo "____STDOUT____"
-          cat /tmp/stdout.log
-          echo "____STDERR____"
-          cat /tmp/stderr.log
