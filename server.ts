@@ -35,13 +35,13 @@ app.use(
 // app.use(morgan("tiny"));
 // app.use(morgan("dev"));
 // app.use(morgan("common"));
-app.use(
-  morgan(
-    process.env.NODE_ENV === "production"
-      ? ":method :url [:date[iso]] :status :res[content-length] - :response-time ms [:user-agent]"
-      : "tiny",
-  ),
-);
+// app.use(
+//   morgan(
+//     process.env.NODE_ENV === "production"
+//       ? ":method :url [:date[iso]] :status :res[content-length] - :response-time ms [:user-agent]"
+//       : "tiny",
+//   ),
+// );
 
 // Everything else (like favicon.ico) is cached for an hour. You may want to be
 // more aggressive with this caching.

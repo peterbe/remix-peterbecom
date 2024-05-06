@@ -25,6 +25,8 @@ interface ServerData {
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   // invariant(params.oid, `params.oid is required`);
+  console.log("URL*******************************:", { url: request.url });
+
   // console.log("IN plog.$oid.tsx PARAMS:", params);
   const { pathname } = new URL(request.url);
   if (pathname.endsWith("/")) {
@@ -68,8 +70,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const { post, comments } = response.data;
 
   const cacheSeconds = 60 * 60 * 12;
+  console.log({ RETUNING_PAGE: page });
+
   return json(
-    { post, comments, page },
+    { post, comments, page, uriPathname: pathname },
     { headers: cacheHeaders(cacheSeconds) },
   );
 }
@@ -106,7 +110,9 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
 };
 
 export default function View() {
-  const { post, comments, page } = useLoaderData<typeof loader>();
+  const { post, comments, page, uriPathname } = useLoaderData<typeof loader>();
+  console.log("IN VIEW FUNCTION", { page, uriPathname });
+
   return <Lyricspost post={post} comments={comments} page={page} />;
 }
 

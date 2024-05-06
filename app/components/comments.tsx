@@ -18,6 +18,8 @@ type Props = {
   page: number;
 };
 export function PostComments({ post, comments, page }: Props) {
+  console.log("RENDERING PostComments", { page });
+
   const disallowComments = post.disallow_comments;
   const hideComments = post.hide_comments;
   const [parent, setParent] = useState<string | null>(null);
