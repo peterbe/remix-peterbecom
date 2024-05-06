@@ -1,0 +1,45 @@
+name: Local dev
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+    contents: read
+
+jobs:
+  local-dev:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: End-to-end test the server
+        env:
+          API_BASE: https://www.peterbe.com
+          SERVER_URL: http://localhost:3000
+        run: npm run dev > /tmp/stdout.log 2> /tmp/stderr.log &
+
+      - name: Navigate to the server
+        run: |
+          sleep 3
+          curl --retry-connrefused --retry 3 http://localhost:3000
+
+      - name: Debug any server outputs
+        if: failure()
+        run: |
+          echo "____STDOUT____"
+          cat /tmp/stdout.log
+          echo "____STDERR____"
+          cat /tmp/stderr.log
