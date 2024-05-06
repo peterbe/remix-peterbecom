@@ -1,6 +1,5 @@
 import { Link } from "@remix-run/react";
 import type { ReactNode } from "react";
-import React from "react";
 
 type SideProject = {
   id: string;
