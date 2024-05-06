@@ -8,7 +8,7 @@
     "dev": "npm-run-all build --parallel \"dev:*\"",
     "dev:node": "cross-env NODE_ENV=development esrun --watch ./start-server.ts",
     "dev:remix": "remix watch",
-    "#dev:parcel": "parcel watch --dist-dir app/styles/build app/global.scss",
+    "dev:parcel": "parcel watch --dist-dir app/styles/build app/global.scss",
     "start": "cross-env NODE_ENV=production esrun ./start-server.ts",
     "tsc": "tsc",
     "lint": "eslint app",
