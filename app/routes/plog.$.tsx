@@ -3,7 +3,6 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
 import { Blogpost } from "~/components/blogpost";
-import { Lyricspost } from "~/components/lyricspost";
 import { get } from "~/lib/get-data";
 import blogpost from "~/styles/blogpost.css";
 import type { Comments, Post } from "~/types";
@@ -83,6 +82,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   const cacheSeconds =
     post.pub_date && isNotPublished(post.pub_date) ? 0 : 60 * 60 * 12;
+
   return json(
     { post, comments, page },
     { headers: cacheHeaders(cacheSeconds) },
@@ -160,10 +160,6 @@ export const meta: MetaFunction<typeof loader> = ({
 
 export default function View() {
   const { post, comments, page } = useLoaderData<typeof loader>();
-  if (post.oid === "blogitem-040601-1") {
-    return <Lyricspost post={post} comments={comments} page={page} />;
-  }
-
   return <Blogpost post={post} comments={comments} page={page} />;
 }
 
