@@ -83,6 +83,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   const cacheSeconds =
     post.pub_date && isNotPublished(post.pub_date) ? 0 : 60 * 60 * 12;
+
+  console.log("IN LOADER", { page, oid: post.oid });
+
   return json(
     { post, comments, page },
     { headers: cacheHeaders(cacheSeconds) },
@@ -160,6 +163,7 @@ export const meta: MetaFunction<typeof loader> = ({
 
 export default function View() {
   const { post, comments, page } = useLoaderData<typeof loader>();
+  console.log("IN VIEW", { page, oid: post.oid });
   if (post.oid === "blogitem-040601-1") {
     return <Lyricspost post={post} comments={comments} page={page} />;
   }
