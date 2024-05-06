@@ -61,7 +61,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   if (response.status === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
   }
-  if (response.status >= 500) {
+  if (response.status != 200) {
+    console.warn(`UNEXPECTED STATUS (${response.status}) from ${fetchURL}`);
     throw new Error(`${response.status} from ${fetchURL}`);
   }
   const { post, comments } = response.data;

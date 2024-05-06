@@ -30,6 +30,8 @@ export async function get<T>(
     },
   });
   const t1 = new Date();
-  console.log(`Fetch ${uri} took ${t1.getTime() - t0.getTime()} ms`);
+  if (response.status === 200) {
+    console.log(`Fetch ${uri} took ${t1.getTime() - t0.getTime()} ms`);
+  }
   return response;
 }
