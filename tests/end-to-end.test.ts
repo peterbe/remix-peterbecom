@@ -1,5 +1,5 @@
-import { expect, test } from "vitest";
-import cheerio from "cheerio";
+import { describe, expect, test } from "vitest";
+import cheerio, { CheerioAPI } from "cheerio";
 import axios, { AxiosResponse } from "axios";
 import axiosRetry, { isNetworkOrIdempotentRequestError } from "axios-retry";
 import dotenv from "dotenv";
@@ -76,9 +76,22 @@ function isCached(res: AxiosResponse) {
   const maxAge = parseInt(cc.match(/max-age=(\d+)/)[1], 10);
   return maxAge > 0 && /public/.test(cc);
 }
-// async function sleep(seconds = 3) {
-//   return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
-// }
+
+function skipToNavWorks(body: string | CheerioAPI) {
+  const $ = typeof body === "string" ? cheerio.load(body) : body;
+
+  const links = $("ul.skip-to-nav a[href]")
+    .map((i, element) => $(element).attr("href"))
+    .get();
+  for (const href of links) {
+    if (!$(href).length) {
+      console.warn(`No element that matches '${href}'`);
+      return false;
+    }
+  }
+
+  return true;
+}
 
 test("home page", async () => {
   const response = await get("/", false, false, { decompress: false });
@@ -384,5 +397,19 @@ test("POST request to pages should 405", async () => {
   ]) {
     const response = await post(url);
     expect(response.status).toBe(405);
+  }
+});
+
+test("skip-to-nav", async () => {
+  for (const url of [
+    "/",
+    "/about",
+    "/contact",
+    "/plog",
+    "/plog/blogitem-20030629-2128",
+  ]) {
+    const response = await get(url);
+    expect(response.status).toBe(200);
+    expect(skipToNavWorks(response.data)).toBe(true);
   }
 });

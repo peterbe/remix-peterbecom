@@ -13,6 +13,7 @@ import {
 
 import { Footer } from "~/components/footer";
 import { Screensaver } from "~/components/screensaver";
+import { SkipToNav } from "~/components/skip-to-nav";
 
 import { GoogleAnalytics } from "./utils/googleanalytics";
 
@@ -43,17 +44,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <ul id="nav-access" className="skip-to-nav">
-          <li>
-            <a href="#main-nav">Skip to main navigation</a>
-          </li>
-          <li>
-            <a href="#main-content">Skip to main content</a>
-          </li>
-          <li>
-            <a href="#main-search">Skip to search</a>
-          </li>
-        </ul>
+        <SkipToNav />
         <main className="container">
           <Outlet />
           <ScrollRestoration />
