@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
 
 import { useQueryBoolean } from "~/hooks/use-query-hook";
-import { formatDateBasic } from "~/utils/utils";
+import { categoryURL, formatDateBasic } from "~/utils/utils";
 
 import { Nav } from "./nav";
 import { useRememberSearch } from "./remember-search";
@@ -181,7 +181,7 @@ export function Search() {
                   {(result.categories || []).map((category, i, arr) => {
                     return (
                       <Fragment key={category}>
-                        <Link to={category}>
+                        <Link to={categoryURL(category)}>
                           <small>{category}</small>
                         </Link>
                         {i < arr.length - 1 ? ", " : ""}
