@@ -26,9 +26,11 @@ export function Homepage({
       <Nav title="Peterbe.com" />
       <AboutFilters categories={categories} page={page} />
 
-      {posts.map((post) => (
-        <Post key={post.oid} post={post} />
-      ))}
+      <div id="main-content">
+        {posts.map((post) => (
+          <Post key={post.oid} post={post} />
+        ))}
+      </div>
 
       <Pagination
         categories={categories}

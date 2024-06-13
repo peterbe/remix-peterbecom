@@ -21,7 +21,7 @@ export function Nav({
   title = "Peterbe.com",
   subHead = "Peter Bengtsson's blog",
 }: Props) {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -41,6 +41,13 @@ export function Nav({
     return () => window.removeEventListener("keydown", close);
   }, [navigate]);
 
+  useEffect(() => {
+    // console.log("CURRENT HASH", { hash });
+    if (hash === "#main-search") {
+      setOpen(true);
+    }
+  }, [hash]);
+
   return (
     <div id="nav">
       <h1>{title}</h1>
@@ -50,7 +57,7 @@ export function Nav({
           <div>{subHead}</div>
         </div>
         <div>
-          <nav>
+          <nav id="main-nav">
             <ul>
               {links
                 .filter(([to]) => {
@@ -67,6 +74,7 @@ export function Nav({
                         title={
                           to === "/search" ? `Shortcut key: '/'` : undefined
                         }
+                        id={to === "/search" ? "main-search" : undefined}
                         onClick={(event) => {
                           if (to === "/search") {
                             event.preventDefault();

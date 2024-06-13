@@ -147,7 +147,7 @@ export function Search() {
       {isLoading && <LoadingSpace />}
 
       {data && data.results && (
-        <div>
+        <div id="main-content">
           {data.results.documents.map((result) => {
             let url = `/plog/${result.oid}`;
             if (result.comment_oid) {

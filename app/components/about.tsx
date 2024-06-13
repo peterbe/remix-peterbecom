@@ -16,43 +16,45 @@ export function About() {
   return (
     <div className="about">
       <Nav title={"About Peterbe.com"} />
-      <p>
-        My name is <strong>Peter Bengtsson</strong> and I&apos;m a web
-        developer. This is by personal blog.
-      </p>
-      <ul>
-        <li>Born and raised in Sweden for two decades</li>
-        <li>Studied and lived in London, England for one decade</li>
-        <li>Moved to Californa, then South Carolina for the last decade</li>
-      </ul>
-      <p>
-        I work at <a href="https://github.com">GitHub</a> on the{" "}
-        <a href="https://github.com/github/docs">Docs Engineering team</a>.
-        Prior to that, to that <a href="https://www.mozilla.org">Mozilla</a> and{" "}
-        <a href="https://developer.mozilla.org">MDN Web Docs</a>.
-      </p>
-      <p>
-        The{" "}
-        <a href="https://podcasts.apple.com/us/podcast/the-mycelium-network-podcast/id1639357086">
-          The Mycelium Network Podcast
-        </a>{" "}
-        did an interview with me in August 2022. Link to episode on{" "}
-        <a href="https://podcasts.apple.com/us/podcast/the-mycelium-network-podcast-with-peter-bengtsson/id1639357086?i=1000577933476">
-          Apple
-        </a>{" "}
-        and{" "}
-        <a href="https://open.spotify.com/episode/2vw6EShZOFdgLBEQPHFsAx?si=637a3ac26b074fe5">
-          Spotify
-        </a>
-        .
-      </p>
-      <p>
-        Almost all of my work is Open Source and available on{" "}
-        <a href="https://github.com/peterbe">my GitHub account</a> including
-        this site itself:{" "}
-        <a href="https://github.com/peterbe/remix-peterbecom">front-end</a>,{" "}
-        <a href="https://github.com/peterbe/django-peterbecom">back-end</a>.
-      </p>
+      <div id="main-content">
+        <p>
+          My name is <strong>Peter Bengtsson</strong> and I&apos;m a web
+          developer. This is by personal blog.
+        </p>
+        <ul>
+          <li>Born and raised in Sweden for two decades</li>
+          <li>Studied and lived in London, England for one decade</li>
+          <li>Moved to Californa, then South Carolina for the last decade</li>
+        </ul>
+        <p>
+          I work at <a href="https://github.com">GitHub</a> on the{" "}
+          <a href="https://github.com/github/docs">Docs Engineering team</a>.
+          Prior to that, to that <a href="https://www.mozilla.org">Mozilla</a>{" "}
+          and <a href="https://developer.mozilla.org">MDN Web Docs</a>.
+        </p>
+        <p>
+          The{" "}
+          <a href="https://podcasts.apple.com/us/podcast/the-mycelium-network-podcast/id1639357086">
+            The Mycelium Network Podcast
+          </a>{" "}
+          did an interview with me in August 2022. Link to episode on{" "}
+          <a href="https://podcasts.apple.com/us/podcast/the-mycelium-network-podcast-with-peter-bengtsson/id1639357086?i=1000577933476">
+            Apple
+          </a>{" "}
+          and{" "}
+          <a href="https://open.spotify.com/episode/2vw6EShZOFdgLBEQPHFsAx?si=637a3ac26b074fe5">
+            Spotify
+          </a>
+          .
+        </p>
+        <p>
+          Almost all of my work is Open Source and available on{" "}
+          <a href="https://github.com/peterbe">my GitHub account</a> including
+          this site itself:{" "}
+          <a href="https://github.com/peterbe/remix-peterbecom">front-end</a>,{" "}
+          <a href="https://github.com/peterbe/django-peterbecom">back-end</a>.
+        </p>
+      </div>
 
       <h2>Side projects</h2>
 

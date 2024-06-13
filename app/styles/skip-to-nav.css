@@ -1,0 +1,28 @@
+/*
+Keyboard & screen reader skip link menu
+From https://github.com/schalkneethling/common-components/tree/main/components/skip-to-nav
+********************************************************************** */
+
+.skip-to-nav {
+  position: absolute;
+  top: -20em;
+  width: 100%;
+  z-index: 300;
+}
+
+.skip-to-nav a {
+  background-color: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
+  left: 0;
+  padding: 1rem;
+  position: absolute;
+  right: 0;
+  text-align: center;
+}
+
+.skip-to-nav a:hover,
+.skip-to-nav a:focus {
+  box-shadow: 3px 3px 5px #eee;
+  text-decoration: none;
+  top: 20em;
+}
