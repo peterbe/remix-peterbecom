@@ -17,7 +17,7 @@ export function BlogArchive({ groups }: Props) {
     <div>
       <Nav title="Blog archive" />
 
-      <dl>
+      <dl id="main-content">
         {groups.map(({ date, posts }) => {
           return (
             <Fragment key={date}>

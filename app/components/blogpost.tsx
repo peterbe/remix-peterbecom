@@ -65,7 +65,7 @@ export function Blogpost({ post, comments, page }: Props) {
 
       <CarbonAd />
 
-      <div dangerouslySetInnerHTML={{ __html: post.body }} />
+      <div id="main-content" dangerouslySetInnerHTML={{ __html: post.body }} />
 
       <PostComments post={post} comments={comments} page={page} />
 
