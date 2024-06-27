@@ -41,6 +41,11 @@ export interface Comments {
   next_page: number | null;
   previous_page: number | null;
   tree: Comment[];
+
+  // The `comments.total_pages` was introduced late.
+  // Once we know the CDN is properly purged this can be assumed to
+  // always be present.
+  total_pages?: number;
 }
 
 export interface OwnComment {
