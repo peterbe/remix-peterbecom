@@ -21,8 +21,12 @@ export function PostComments({ post, comments, page }: Props) {
   const disallowComments = post.disallow_comments;
   const hideComments = post.hide_comments;
   const [parent, setParent] = useState<string | null>(null);
-  const totalPages =
-    comments.truncated && comments.truncated !== true
+  // The `comments.total_pages` was introduced late.
+  // Once we know the CDN is properly purged this can be assumed to
+  // always be present.
+  const totalPages = comments.total_pages
+    ? comments.total_pages
+    : comments.truncated && comments.truncated !== true
       ? Math.ceil(comments.count / comments.truncated)
       : 1;
 
@@ -45,29 +49,7 @@ export function PostComments({ post, comments, page }: Props) {
           prevPage={comments.previous_page}
         />
 
-        {!disallowComments && comments.count > 5 && (
-          <a
-            href="#commentsform"
-            role="button"
-            className="mini"
-            style={{ marginLeft: 0 }}
-            onClick={(event) => {
-              const dest =
-                document.querySelector<HTMLDivElement>("#commentsform");
-              if (dest) {
-                event.preventDefault();
-                dest.scrollIntoView({ behavior: "smooth" });
-                setTimeout(() => {
-                  const textarea =
-                    dest.querySelector<HTMLTextAreaElement>("textarea");
-                  if (textarea) textarea.focus();
-                }, 1000);
-              }
-            }}
-          >
-            Post your own comment
-          </a>
-        )}
+        {!disallowComments && comments.count > 5 && <PostOwnComment />}
       </div>
 
       {hideComments && comments.count && (
@@ -93,6 +75,31 @@ export function PostComments({ post, comments, page }: Props) {
         </p>
       )}
     </div>
+  );
+}
+
+function PostOwnComment() {
+  return (
+    <a
+      href="#commentsform"
+      role="button"
+      className="mini"
+      style={{ marginLeft: 0 }}
+      onClick={(event) => {
+        const dest = document.querySelector<HTMLDivElement>("#commentsform");
+        if (dest) {
+          event.preventDefault();
+          dest.scrollIntoView({ behavior: "smooth" });
+          setTimeout(() => {
+            const textarea =
+              dest.querySelector<HTMLTextAreaElement>("textarea");
+            if (textarea) textarea.focus();
+          }, 1000);
+        }
+      }}
+    >
+      Post your own comment
+    </a>
   );
 }
 
@@ -176,7 +183,8 @@ function getPaginationURL(oid: string, page: number) {
   if (page !== 1) {
     start += `/p${page}`;
   }
-  return `${start}#comments`;
+  // return `${start}#comments`;
+  return start;
 }
 
 function ShowCommentTree({
