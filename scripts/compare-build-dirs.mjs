@@ -38,6 +38,7 @@ function getSizes(dir) {
     if (ent.isDirectory()) {
       Object.assign(sizes, getSizes(join(dir, ent.name)));
     } else {
+      // Too weird to compare! Skip.
       if (/chunk-[A-Z0-9]{8}\./.test(ent.name)) {
         continue;
       }
@@ -60,9 +61,6 @@ function getTuples(baseDir, otherDir) {
       size,
     ])
   );
-  // const otherSizes = getSizes(otherDir);
-  // console.log(baseSizes);
-  // console.log(otherSizes);
   const tuples = [];
   for (const [path, before] of Object.entries(baseSizes)) {
     const after = otherSizes[path] || 0;

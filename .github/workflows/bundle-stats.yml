@@ -46,7 +46,7 @@ jobs:
             ref: main
             path: main
 
-      - name: Cache node_modules
+      - name: Cache node_modules in main
         uses: actions/cache@v4
         id: cached-node_modules-main
         with:
@@ -59,6 +59,7 @@ jobs:
         run: npm ci
 
       - name: Build main
+        if: ${{ github.event_name == 'pull_request' }}
         working-directory: main
         run: npm run build
 
