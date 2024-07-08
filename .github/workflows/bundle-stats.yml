@@ -75,7 +75,6 @@ jobs:
           echo ""
           markdown=$(node scripts/compare-build-dirs.mjs main/public/build public/build)
           echo "::set-output name=markdown::${markdown//$'\n'/%0A}"
-          # echo "$markdown" > compare.md
 
       - name: Find Comment
         if: ${{ github.event_name == 'pull_request' && steps.set-markdown.outputs.markdown != '' }}
@@ -91,5 +90,5 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
-          body: ${{ steps.set-markdown.outputs.markdown  }}
+          body: ${{ steps.set-markdown.outputs.markdown }}
           edit-mode: replace

@@ -9,7 +9,7 @@ function main(dir1, dir2) {
   const totalSize2 = getTotalSize(dir2);
   console.log(`Total size of ${dir1}: ${formatFilSize(totalSize1)}`);
   console.log(`Total size of ${dir2}: ${formatFilSize(totalSize2)}`);
-  const totalDifference = totalSize1 - totalSize2;
+  const totalDifference = totalSize2 - totalSize1;
   console.log(`\n**Difference: ${formatFilSize(totalDifference)}**\n`);
   if (!totalDifference) {
     return;
