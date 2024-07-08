@@ -50,7 +50,7 @@ jobs:
         uses: actions/cache@v4
         id: cached-node_modules-main
         with:
-          path: node_modules
+          path: main/node_modules
           key: ${{ runner.os }}-${{ hashFiles('main/package*.json') }}-${{ hashFiles('.github/workflows/bundle-stats.yml') }}
 
       - name: Install from main
