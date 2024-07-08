@@ -63,6 +63,8 @@ jobs:
         run: npm run build
 
       - name: Compare
+        id: set-markdown
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
 
           echo "This PR (size):"
@@ -71,4 +73,23 @@ jobs:
           du -sh main/public/build
 
           echo ""
-          node scripts/compare-build-dirs.mjs main/public/build public/build
+          markdown=$(node scripts/compare-build-dirs.mjs main/public/build public/build)
+          echo "::set-output name=markdown::${markdown//$'\n'/%0A}"
+          # echo "$markdown" > compare.md
+
+      - name: Find Comment
+        if: ${{ github.event_name == 'pull_request' && steps.set-markdown.outputs.markdown != '' }}
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: "bundle-stats"
+
+      - name: Post comparison
+        if: ${{ github.event_name == 'pull_request' && steps.set-markdown.outputs.markdown != '' }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.number }}
+          body: ${{ steps.set-markdown.outputs.markdown  }}
+          edit-mode: replace
