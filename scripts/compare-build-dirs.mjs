@@ -7,10 +7,10 @@ main(dir1, dir2);
 function main(dir1, dir2) {
   const totalSize1 = getTotalSize(dir1);
   const totalSize2 = getTotalSize(dir2);
-  console.log(`Total size of ${dir1}: ${formatFilSize(totalSize1)}`);
-  console.log(`Total size of ${dir2}: ${formatFilSize(totalSize2)}`);
+  console.log(`Total size of ${dir1}: ${formatSize(totalSize1)}`);
+  console.log(`Total size of ${dir2}: ${formatSize(totalSize2)}`);
   const totalDifference = totalSize2 - totalSize1;
-  console.log(`\n**Difference: ${formatFilSize(totalDifference)}**\n`);
+  console.log(`\n**Difference: ${formatSize(totalDifference)}**\n`);
   if (!totalDifference) {
     return;
   }
@@ -25,8 +25,9 @@ function main(dir1, dir2) {
     if (isNew) {
     }
     const sizeDifference = after - before;
+
     console.log(
-      ` - \`${path}\`: ${formatFilSize(before)} -> ${formatFilSize(after)} (${formatFilSize(sizeDifference)}) (${isNew ? "new" : "changed"})`
+      ` - \`${path}\`: ${formatSize(before)} -> ${formatSize(after)} (${formatSize(sizeDifference)}) (${isNew ? "new" : "changed"})`
     );
   }
 }
@@ -39,11 +40,14 @@ function getSizes(dir) {
       Object.assign(sizes, getSizes(join(dir, ent.name)));
     } else {
       // Too weird to compare! Skip.
-      if (/chunk-[A-Z0-9]{8}\./.test(ent.name)) {
-        continue;
-      }
-      const { size } = statSync(join(dir, ent.name));
-      sizes[normalizeName(join(dir, ent.name))] = size;
+      // if (/chunk-[A-Z0-9]{8}\./.test(ent.name)) {
+      //   continue;
+      // }
+      const filePath = join(dir, ent.name);
+      const { size } = statSync(filePath);
+
+      sizes[normalizeName(filePath)] =
+        (sizes[normalizeName(filePath)] || 0) + size;
     }
   }
   return sizes;
@@ -79,7 +83,7 @@ function normalizeName(name) {
   return name.replace(/-[A-Z0-9]{8}\./, ".");
 }
 
-function formatFilSize(size) {
+function formatSize(size) {
   const negative = size < 0;
   size = Math.abs(size);
   const units = ["B", "KB", "MB", "GB"];
@@ -88,7 +92,7 @@ function formatFilSize(size) {
     size /= 1024;
     unitIndex++;
   }
-  return `${negative ? "-" : ""}${size.toFixed(2)} ${units[unitIndex]}`;
+  return `${negative ? "-" : ""}${size.toFixed(unitIndex === 0 ? 0 : 2)} ${units[unitIndex]}`;
 }
 
 function getTotalSize(dir) {
