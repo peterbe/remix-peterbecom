@@ -53,4 +53,9 @@ jobs:
       - name: Compare
         run: |
 
+          echo "This PR (size):"
+          du -sh public/build
+          echo "Main (size):"
+          du -sh main/public/build
+
           diff -qr public/build main/public/build
