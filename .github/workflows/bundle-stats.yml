@@ -70,4 +70,5 @@ jobs:
           echo "Main (size):"
           du -sh main/public/build
 
-          diff -qr public/build main/public/build
+          echo ""
+          node scripts/compare-build-dirs.mjs main/public/build public/build
