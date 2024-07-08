@@ -83,7 +83,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          body-includes: "bundle-stats"
+          body-includes: "Total size of "
 
       - name: Post comparison
         if: ${{ github.event_name == 'pull_request' && steps.set-markdown.outputs.markdown != '' }}
