@@ -46,9 +46,21 @@ jobs:
             ref: main
             path: main
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: cached-node_modules-main
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('main/package*.json') }}-${{ hashFiles('.github/workflows/bundle-stats.yml') }}
+
+      - name: Install from main
+        working-directory: main
+        if: steps.cached-node_modules-main.outputs.cache-hit != 'true'
+        run: npm ci
+
       - name: Build main
         working-directory: main
-        run: npm ci && npm run build
+        run: npm run build
 
       - name: Compare
         run: |
