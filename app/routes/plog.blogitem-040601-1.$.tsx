@@ -1,12 +1,13 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import * as v from "valibot";
 
 import { Lyricspost } from "~/components/lyricspost";
 import { get } from "~/lib/get-data";
 import lyricspost from "~/styles/lyricspost.css";
-import type { Comments, Post } from "~/types";
-import { absoluteURL } from "~/utils/utils";
+import { absoluteURL, handleValiError } from "~/utils/utils";
+import { ServerData } from "~/valibot-types";
 
 import { links as rootLinks } from "./_index";
 export { ErrorBoundary } from "./_index";
@@ -18,15 +19,7 @@ export function links() {
   ];
 }
 
-interface ServerData {
-  post: Post;
-  comments: Comments;
-}
-
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  // invariant(params.oid, `params.oid is required`);
-
-  // console.log("IN plog.$oid.tsx PARAMS:", params);
   const { pathname } = new URL(request.url);
   if (pathname.endsWith("/")) {
     return redirect(pathname.slice(0, -1));
@@ -58,7 +51,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const sp = new URLSearchParams({ page: `${page}` });
   const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}?${sp}`;
 
-  const response = await get<ServerData>(fetchURL);
+  const response = await get(fetchURL);
   if (response.status === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
   }
@@ -66,14 +59,19 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     console.warn(`UNEXPECTED STATUS (${response.status}) from ${fetchURL}`);
     throw new Error(`${response.status} from ${fetchURL}`);
   }
-  const { post, comments } = response.data;
+  try {
+    const { post, comments } = v.parse(ServerData, response.data);
 
-  const cacheSeconds = 60 * 60 * 12;
+    const cacheSeconds = 60 * 60 * 12;
 
-  return json(
-    { post, comments, page },
-    { headers: cacheHeaders(cacheSeconds) },
-  );
+    return json(
+      { post, comments, page },
+      { headers: cacheHeaders(cacheSeconds) },
+    );
+  } catch (error) {
+    handleValiError(error);
+    throw error;
+  }
 }
 
 function cacheHeaders(seconds: number) {

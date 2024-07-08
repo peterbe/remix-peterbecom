@@ -1,12 +1,13 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import * as v from "valibot";
 
 import { Blogpost } from "~/components/blogpost";
 import { get } from "~/lib/get-data";
 import blogpost from "~/styles/blogpost.css";
-import type { Comments, Post } from "~/types";
-import { absoluteURL } from "~/utils/utils";
+import { absoluteURL, handleValiError } from "~/utils/utils";
+import { ServerData } from "~/valibot-types";
 
 import { links as rootLinks } from "./_index";
 export { ErrorBoundary } from "./_index";
@@ -16,11 +17,6 @@ export function links() {
     ...rootLinks().filter((x) => !x.extra || x.extra === "post"),
     { rel: "stylesheet", href: blogpost },
   ];
-}
-
-interface ServerData {
-  post: Post;
-  comments: Comments;
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -71,22 +67,27 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const sp = new URLSearchParams({ page: `${page}` });
   const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}?${sp}`;
 
-  const response = await get<ServerData>(fetchURL);
+  const response = await get(fetchURL);
   if (response.status === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
   }
   if (response.status >= 500) {
     throw new Error(`${response.status} from ${fetchURL}`);
   }
-  const { post, comments } = response.data;
+  try {
+    const { post, comments } = v.parse(ServerData, response.data);
 
-  const cacheSeconds =
-    post.pub_date && isNotPublished(post.pub_date) ? 0 : 60 * 60 * 12;
+    const cacheSeconds =
+      post.pub_date && isNotPublished(post.pub_date) ? 0 : 60 * 60 * 12;
 
-  return json(
-    { post, comments, page },
-    { headers: cacheHeaders(cacheSeconds) },
-  );
+    return json(
+      { post, comments, page },
+      { headers: cacheHeaders(cacheSeconds) },
+    );
+  } catch (error) {
+    handleValiError(error);
+    throw error;
+  }
 }
 
 function isNotPublished(date: string) {

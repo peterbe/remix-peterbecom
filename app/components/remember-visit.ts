@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import type { Post } from "~/types";
+import type { Post } from "~/valibot-types";
 
 const STORAGE_KEY = "visited-posts";
 const MAX_REMEMBERED = 5;

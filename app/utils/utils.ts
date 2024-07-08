@@ -1,3 +1,5 @@
+import * as v from "valibot";
+
 export function formatDateBasic(date: string) {
   return new Date(date).toLocaleDateString("en-us", {
     year: "numeric",
@@ -34,4 +36,15 @@ export function absoluteURL(uri: string) {
 
 export function searchURL(query: string) {
   return `/search?q=${encodeURIComponent(query)}`;
+}
+
+export function handleValiError(error: unknown) {
+  if (v.isValiError(error)) {
+    error.issues.forEach((issue, i) => {
+      if (issue.path)
+        console.error(
+          `#${i + 1} Validation issue in ${issue.path.map((p) => p.key).join(".")}`,
+        );
+    });
+  }
 }

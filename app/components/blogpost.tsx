@@ -1,8 +1,8 @@
 import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
-import type { Comments, Post } from "~/types";
 import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
+import type { Comments, Post } from "~/valibot-types";
 
 import { CarbonAd } from "./carbonad";
 import { PostComments } from "./comments";
