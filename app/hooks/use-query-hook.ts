@@ -1,6 +1,6 @@
 import { useSearchParams } from "@remix-run/react";
 
-export function useQueryString(name: string) {
+function useQueryString(name: string) {
   const [searchParams] = useSearchParams();
   return searchParams.get(name);
 }
