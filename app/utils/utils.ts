@@ -11,14 +11,6 @@ export function formatDateBasic(date: string) {
   });
 }
 
-export function formatDate(date: string) {
-  return new Date(date).toLocaleDateString("en-us", {
-    year: "numeric",
-    month: "long",
-    timeZone: "UTC",
-  });
-}
-
 export function postURL(oid: string) {
   return `/plog/${oid}`;
 }
@@ -32,10 +24,6 @@ export function absoluteURL(uri: string) {
     return `https://www.peterbe.com${uri}`;
   }
   return uri;
-}
-
-export function searchURL(query: string) {
-  return `/search?q=${encodeURIComponent(query)}`;
 }
 
 export function handleValiError(error: unknown) {

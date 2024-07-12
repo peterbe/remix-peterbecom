@@ -1,13 +1,13 @@
 import { useLocation } from "@remix-run/react";
 import { useEffect } from "react";
 
-import * as gtag from "~/utils/gtags.client";
+import { pageview } from "~/utils/gtags.client";
 
 export function GoogleAnalytics({ gaTrackingId }: { gaTrackingId?: string }) {
   const location = useLocation();
   useEffect(() => {
     if (gaTrackingId && process.env.NODE_ENV !== "development") {
-      gtag.pageview(location.pathname, gaTrackingId);
+      pageview(location.pathname, gaTrackingId);
     }
   }, [location, gaTrackingId]);
 
@@ -25,7 +25,7 @@ export function GoogleAnalytics({ gaTrackingId }: { gaTrackingId?: string }) {
         dangerouslySetInnerHTML={{
           __html: `
 window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
+function gtag(){dataLayer.push(arguments)}
 gtag('js', new Date()); gtag('config', '${gaTrackingId}');
             `.trim(),
         }}
