@@ -1,4 +1,4 @@
-import type { Comments, Post } from "~/types";
+import type { Comments, Post } from "~/valibot-types";
 
 import { CarbonAd } from "./carbonad";
 import { PostComments } from "./comments";
