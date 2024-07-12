@@ -113,7 +113,7 @@ export default function SongSearchAutocomplete() {
     setAutocompleteHighlight(-1);
     setShowAutocompleteSuggestions(true);
 
-    sendEvent({ submit: q });
+    sendEvent({ type: "submit", q });
 
     document.location.href = gotoURL;
   }
@@ -124,7 +124,7 @@ export default function SongSearchAutocomplete() {
     setAutocompleteSuggestions(null);
     setAutocompleteHighlight(-1);
 
-    sendEvent({ select: gotoURL, q });
+    sendEvent({ type: "select", gotoURL, q });
 
     document.location.href = gotoURL;
   }
@@ -240,7 +240,7 @@ export default function SongSearchAutocomplete() {
         console.warn(`Catch fetching ${url} ('${q}'): ${ex.toString()}`);
       });
 
-    sendEvent({ autocomplete: q });
+    sendEvent({ type: "autocomplete", q });
   }
 
   function onKeyDownSearch(key: string): boolean {
@@ -268,7 +268,7 @@ export default function SongSearchAutocomplete() {
             setAutocompleteSuggestions(null);
             setAutocompleteHighlight(-1);
 
-            sendEvent({ enter: gotoURL, q });
+            sendEvent({ type: "enter", gotoURL, q });
 
             document.location.href = absolutifyUrl(gotoURL);
           }
