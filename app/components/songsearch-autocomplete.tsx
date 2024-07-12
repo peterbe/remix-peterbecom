@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { debounce, throttle } from "throttle-debounce";
 
-// import "../../styles/songsearch-autocomplete.css";
+import { sendEvent as _sendEvent } from "../analytics";
+
+const sendEvent = (d: any) => _sendEvent("songsearch-autocomplete", d);
 
 interface Suggestion {
   id: number;
@@ -110,6 +112,9 @@ export default function SongSearchAutocomplete() {
     setAutocompleteSuggestions(null);
     setAutocompleteHighlight(-1);
     setShowAutocompleteSuggestions(true);
+
+    sendEvent({ submit: q });
+
     document.location.href = gotoURL;
   }
 
@@ -118,6 +123,9 @@ export default function SongSearchAutocomplete() {
     setRedirectingSearch(gotoURL);
     setAutocompleteSuggestions(null);
     setAutocompleteHighlight(-1);
+
+    sendEvent({ select: gotoURL, q });
+
     document.location.href = gotoURL;
   }
 
@@ -231,6 +239,8 @@ export default function SongSearchAutocomplete() {
       .catch((ex) => {
         console.warn(`Catch fetching ${url} ('${q}'): ${ex.toString()}`);
       });
+
+    sendEvent({ autocomplete: q });
   }
 
   function onKeyDownSearch(key: string): boolean {
@@ -258,34 +268,9 @@ export default function SongSearchAutocomplete() {
             setAutocompleteSuggestions(null);
             setAutocompleteHighlight(-1);
 
-            document.location.href = absolutifyUrl(gotoURL);
+            sendEvent({ enter: gotoURL, q });
 
-            // this.setState(
-            //   {
-            //     redirectingSearch: true,
-            //     autocompleteSuggestions: null,
-            //     autocompleteHighlight: -1,
-            //   },
-            //   () => {
-            //     setTimeout(() => {
-            //       if (!this.dismounted) {
-            //         this.setState({ redirectingSearch: false });
-            //       }
-            //     }, 3000);
-            //     document.location.href = absolutifyUrl(
-            //       suggestions[highlight]._url
-            //     );
-            //   }
-            // );
-          } else {
-            // this.setState(
-            //   {
-            //     q: suggestions[highlight].text,
-            //     autocompleteSuggestions: null,
-            //     autocompleteHighlight: -1,
-            //   },
-            //   () => this._submit()
-            // );
+            document.location.href = absolutifyUrl(gotoURL);
           }
           return true;
         }

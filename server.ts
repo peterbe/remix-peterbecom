@@ -73,6 +73,14 @@ app.use("*/ping", backendProxy);
 app.use(legacyRedirects);
 app.use(junkBlock);
 app.use("/_ip", ip);
+app.post(
+  "/events",
+  createProxyMiddleware({
+    target: BACKEND_BASE_URL,
+    changeOrigin: true,
+    pathRewrite: () => "/api/v1/events",
+  }),
+);
 app.post("*", (req, res) => res.sendStatus(405));
 
 app.all(
