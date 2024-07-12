@@ -6,7 +6,7 @@ import * as v from "valibot";
 import { Blogpost } from "~/components/blogpost";
 import { get } from "~/lib/get-data";
 import blogpost from "~/styles/blogpost.css";
-import { absoluteURL, handleValiError } from "~/utils/utils";
+import { absoluteURL, newValiError } from "~/utils/utils";
 import { ServerData } from "~/valibot-types";
 
 import { links as rootLinks } from "./_index";
@@ -85,8 +85,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       { headers: cacheHeaders(cacheSeconds) },
     );
   } catch (error) {
-    handleValiError(error);
-    throw error;
+    throw newValiError(error);
   }
 }
 

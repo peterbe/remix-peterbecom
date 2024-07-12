@@ -3,7 +3,7 @@ import * as v from "valibot";
 
 import type { AddOwnCommentProps } from "~/types";
 import { Message } from "~/utils/message";
-import { handleValiError } from "~/utils/utils";
+import { newValiError } from "~/utils/utils";
 import type { Post } from "~/valibot-types";
 import { PrepareData, PreviewData, SubmitData } from "~/valibot-types";
 
@@ -119,8 +119,7 @@ export function CommentForm({
         setCsrfmiddlewaretoken(csrfmiddlewaretoken);
         setCsrfmiddlewaretokenTimestamp(new Date());
       } catch (error) {
-        handleValiError(error);
-        throw error;
+        throw newValiError(error);
       }
     }
   }
@@ -144,8 +143,7 @@ export function CommentForm({
         setRenderedComment(comment);
         setPreviewError(null);
       } catch (error) {
-        handleValiError(error);
-        throw error;
+        throw newValiError(error);
       }
     }
   }
@@ -190,8 +188,7 @@ export function CommentForm({
         parent,
       });
     } catch (error) {
-      handleValiError(error);
-      throw error;
+      throw newValiError(error);
     }
   }
 

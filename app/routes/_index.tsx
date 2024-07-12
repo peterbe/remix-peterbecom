@@ -14,8 +14,7 @@ import { get } from "~/lib/get-data";
 import global from "~/styles/build/global.css";
 import post from "~/styles/build/post.css";
 import homepage from "~/styles/homepage.css";
-import { absoluteURL, handleValiError } from "~/utils/utils";
-// import type { HomepagePost } from "~/types";
+import { absoluteURL, newValiError } from "~/utils/utils";
 import { HomepageServerData } from "~/valibot-types";
 
 export function links() {
@@ -28,12 +27,6 @@ export function links() {
     { rel: "stylesheet", href: post, extra: "post" },
   ];
 }
-
-// interface ServerData {
-//   posts: HomepagePost[];
-//   next_page: number | null;
-//   previous_page: number | null;
-// }
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const dynamicPage = params["*"] || "";
@@ -86,8 +79,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     } = v.parse(HomepageServerData, response.data);
     return json({ categories, posts, nextPage, previousPage, page });
   } catch (error) {
-    handleValiError(error);
-    throw error;
+    throw newValiError(error);
   }
 }
 

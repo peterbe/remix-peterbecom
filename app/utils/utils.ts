@@ -26,7 +26,7 @@ export function absoluteURL(uri: string) {
   return uri;
 }
 
-export function handleValiError(error: unknown) {
+function handleValiError(error: unknown) {
   if (v.isValiError(error)) {
     error.issues.forEach((issue, i) => {
       if (issue.path)
@@ -35,4 +35,12 @@ export function handleValiError(error: unknown) {
         );
     });
   }
+}
+
+export function newValiError(error: unknown) {
+  if (v.isValiError(error)) {
+    handleValiError(error);
+    throw new Error(error.message);
+  }
+  return error;
 }
