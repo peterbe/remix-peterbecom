@@ -1,3 +1,6 @@
+import { useLocation } from "@remix-run/react";
+import { useEffect } from "react";
+
 function uuidv4(): string {
   try {
     return crypto.randomUUID();
@@ -51,4 +54,12 @@ export function sendEvent(type: string, data: Data) {
   } catch (err) {
     console.warn("sendBeacon failed", err);
   }
+}
+
+export function useSendPageview() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    sendEvent("pageview", { pathname });
+  }, [pathname]);
 }

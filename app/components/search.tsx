@@ -2,6 +2,7 @@ import { Link, useNavigate, useSearchParams } from "@remix-run/react";
 import { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
 
+import { useSendPageview } from "~/analytics";
 import { useQueryBoolean } from "~/hooks/use-query-hook";
 import { categoryURL, formatDateBasic } from "~/utils/utils";
 
@@ -43,6 +44,7 @@ interface ServerData {
 }
 
 export function Search() {
+  useSendPageview();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");

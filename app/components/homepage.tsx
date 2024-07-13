@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
+import { useSendPageview } from "~/analytics";
 import type { HomepagePost } from "~/types";
 import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
 
@@ -21,6 +22,7 @@ export function Homepage({
   nextPage,
   previousPage,
 }: Props) {
+  useSendPageview();
   return (
     <div>
       <Nav title="Peterbe.com" />

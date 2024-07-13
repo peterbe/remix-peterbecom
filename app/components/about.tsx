@@ -1,9 +1,12 @@
 import { useState } from "react";
 
+import { useSendPageview } from "~/analytics";
+
 import { sideProjects } from "./about-sideprojects";
 import { Nav } from "./nav";
 
 export function About() {
+  useSendPageview();
   const [qInput, setQInput] = useState("");
 
   const sideProjectsFiltered = sideProjects.filter((project) => {

@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
+import { useSendPageview } from "~/analytics";
 import type { Group } from "~/types";
 import { categoryURL, postURL } from "~/utils/utils";
 
@@ -13,6 +14,7 @@ type Props = {
 const intl = new Intl.NumberFormat("en-us");
 
 export function BlogArchive({ groups }: Props) {
+  useSendPageview();
   return (
     <div>
       <Nav title="Blog archive" />
