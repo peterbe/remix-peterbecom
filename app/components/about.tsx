@@ -28,7 +28,7 @@ export function About() {
         </ul>
         <p>
           I work at <a href="https://github.com">GitHub</a> on the{" "}
-          <a href="https://github.com/github/docs">Docs Engineering team</a>.
+          <b>Web Systems</b> team (handling React in GitHub among other things).
           Prior to that, to that <a href="https://www.mozilla.org">Mozilla</a>{" "}
           and <a href="https://developer.mozilla.org">MDN Web Docs</a>.
         </p>
