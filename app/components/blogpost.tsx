@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 import { Fragment } from "react";
 
+import { useSendPageview } from "~/analytics";
 import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
 import type { Comments, Post } from "~/valibot-types";
 
@@ -17,6 +18,7 @@ type Props = {
   page: number;
 };
 export function Blogpost({ post, comments, page }: Props) {
+  useSendPageview();
   const pubDate = new Date(post.pub_date);
 
   useRememberVisit(post);
