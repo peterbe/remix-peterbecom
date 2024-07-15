@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import axiosRetry from "axios-retry";
 import Rollbar from "rollbar";
 
@@ -14,6 +14,14 @@ axiosRetry(axios, {
       `get:Retry ${retryCount} for ${error.request?._currentUrl || "unknown"} msg: ${error}`,
     );
     return retryCount * 1000;
+  },
+  retryCondition(error) {
+    if (error.response) {
+      // Retry on 5xx
+      return error.response.status >= 500;
+    }
+    // any other network errors
+    return true;
   },
 });
 
@@ -33,14 +41,26 @@ export async function get<T>(
   try {
     const response = await axios.get<T>(API_BASE + uri, {
       maxRedirects: followRedirect ? 10 : 0,
-      // Can't set `timeout` or `validateStatus` here because axios-retry
+      // Can't set `timeout` and `validateStatus` here because axios-retry
     });
     const t1 = new Date();
     if (response.status === 200) {
       console.log(`Fetch ${uri} took ${t1.getTime() - t0.getTime()} ms`);
     }
+
     return response;
   } catch (error) {
+    // This weirdness is to be able to return a response, whose
+    // status might be 400, but at the same time get all the benefits
+    // of axios-retry retrying on 5xx errors and network errors.
+    if (
+      error instanceof AxiosError &&
+      error.response &&
+      error.response.status < 500
+    ) {
+      return error.response;
+    }
+
     if (
       reportToRollbar &&
       error instanceof Error &&
