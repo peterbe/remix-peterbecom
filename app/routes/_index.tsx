@@ -141,19 +141,27 @@ export function ErrorBoundary() {
     "Error boundary error was:",
     (error && error.toString()) || "no error",
   );
-  console.log({ pathname: location.pathname, search: location.search });
 
   if (typeof process === "object" && process.env.ROLLBAR_ACCESS_TOKEN) {
+    console.log("ErrorBoundary: Sending error to Rollbar");
     const rollbar = new Rollbar({
       accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     });
-
-    rollbar.error(error instanceof Error ? error : new Error("Unknown error"), {
-      context: {
-        pathname: location.pathname,
-        search: location.search,
+    const { uuid } = rollbar.error(
+      error instanceof Error ? error : new Error("Unknown error"),
+      {
+        context: {
+          pathname: location.pathname,
+          search: location.search,
+        },
       },
-    });
+    );
+    if (uuid)
+      console.log(
+        `ErrorBoundary: Sent Rollbar error https://rollbar.com/occurrence/uuid/?uuid=${uuid}`,
+      );
+  } else {
+    console.log("ErrorBoundary: Not sending error to Rollbar");
   }
 
   let errorMessage = "Unknown error";
