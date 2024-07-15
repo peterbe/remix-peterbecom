@@ -3,7 +3,22 @@ import { debounce, throttle } from "throttle-debounce";
 
 import { sendEvent as _sendEvent } from "../analytics";
 
-const sendEvent = (d: any) => _sendEvent("songsearch-autocomplete", d);
+type SendEventData = {
+  type: "autocomplete" | "submit" | "select" | "enter";
+  q?: string;
+  gotoURL?: string;
+};
+
+let lastAutocompleteQ = "";
+function sendEvent(d: SendEventData) {
+  if (d.type && d.type === "autocomplete") {
+    if (lastAutocompleteQ && d.q && d.q.startsWith(lastAutocompleteQ)) {
+      return;
+    }
+    lastAutocompleteQ = d.q || "";
+  }
+  _sendEvent("songsearch-autocomplete", d);
+}
 
 interface Suggestion {
   id: number;
