@@ -4,12 +4,15 @@ import Rollbar from "rollbar";
 
 import { API_BASE } from "./_constants";
 
-const RETRIES = 3;
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+
+const RETRIES = process.env.NODE_ENV === "development" ? 1 : 3;
 const TIMEOUT = 1000;
 
 axiosRetry(axios, {
   retries: RETRIES,
   retryDelay: (retryCount) => {
+    console.log({ retryCount });
     return retryCount * 1000;
   },
 });
@@ -29,12 +32,8 @@ export async function get<T>(
   const t0 = new Date();
   try {
     const response = await axios.get<T>(API_BASE + uri, {
-      timeout,
       maxRedirects: followRedirect ? 10 : 0,
-      validateStatus: function (status) {
-        if (throwHttpErrors) return status >= 200 && status < 300; // default
-        return true;
-      },
+      // Can't set `timeout` or `validateStatus` here because axios-retry
     });
     const t1 = new Date();
     if (response.status === 200) {
