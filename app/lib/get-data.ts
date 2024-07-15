@@ -4,15 +4,15 @@ import Rollbar from "rollbar";
 
 import { API_BASE } from "./_constants";
 
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-
-const RETRIES = process.env.NODE_ENV === "development" ? 1 : 3;
+const RETRIES = process.env.NODE_ENV === "development" ? 1 : 4;
 const TIMEOUT = 1000;
 
 axiosRetry(axios, {
   retries: RETRIES,
-  retryDelay: (retryCount) => {
-    console.log({ retryCount });
+  retryDelay: (retryCount, error) => {
+    console.log(
+      `get:Retry ${retryCount} for ${error.request?._currentUrl || "unknown"} msg: ${error}`,
+    );
     return retryCount * 1000;
   },
 });
