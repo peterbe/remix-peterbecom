@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { expect, test } from "vitest";
 import cheerio, { CheerioAPI } from "cheerio";
 import axios, { AxiosResponse } from "axios";
 import axiosRetry, { isNetworkOrIdempotentRequestError } from "axios-retry";
