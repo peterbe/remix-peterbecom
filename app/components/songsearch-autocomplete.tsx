@@ -168,9 +168,6 @@ export default function SongSearchAutocomplete() {
   function onBlurSearch() {
     setTimeout(() => {
       setShowAutocompleteSuggestions(false);
-      // this.setState({
-      //   showAutocompleteSuggestions: false,
-      // });
     }, 300);
   }
 
