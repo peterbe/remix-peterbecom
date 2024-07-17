@@ -5,18 +5,14 @@ import * as v from "valibot";
 
 import { Lyricspost } from "~/components/lyricspost";
 import { get } from "~/lib/get-data";
-import lyricspost from "~/styles/lyricspost.css";
+import global from "~/styles/build/global-lyricspost.css";
 import { absoluteURL, newValiError } from "~/utils/utils";
 import { ServerData } from "~/valibot-types";
 
-import { links as rootLinks } from "./_index";
 export { ErrorBoundary } from "./_index";
 
 export function links() {
-  return [
-    ...rootLinks().filter((x) => !x.extra),
-    { rel: "stylesheet", href: lyricspost },
-  ];
+  return [{ rel: "stylesheet", href: global }];
 }
 
 export async function loader({ params, request }: LoaderFunctionArgs) {

@@ -1,10 +1,13 @@
 @use "node_modules/@picocss/pico/scss/pico";
+
+// This is a copy of `./global.scss` but with the stuff removed that
+// isn't needed in the lyrics post app.
+
 @import "./styles/globals.css";
 @import "./styles/message.css";
-@import "./styles/nav.css";
 @import "./styles/comments.css";
 @import "./styles/carbonads.css";
 @import "./styles/carbonads-outer.css";
-@import "./styles/modal-search.scss";
-@import "./styles/downshift-search.scss";
 @import "./styles/skip-to-nav.css";
+
+@import "./styles/lyricspost.css";
