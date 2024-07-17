@@ -27,7 +27,7 @@ function main(dir1, dir2) {
     const sizeDifference = after - before;
 
     console.log(
-      ` - \`${path}\`: ${formatSize(before)} -> ${formatSize(after)} (${formatSize(sizeDifference)}) (${isNew ? "new" : "changed"})`
+      ` - \`${path}\`: ${before} (${formatSize(before)}) -> ${after} (${formatSize(after)}) (${formatSize(sizeDifference)}) (${isNew ? "new" : "changed"})`
     );
   }
 }
@@ -39,10 +39,6 @@ function getSizes(dir) {
     if (ent.isDirectory()) {
       Object.assign(sizes, getSizes(join(dir, ent.name)));
     } else {
-      // Too weird to compare! Skip.
-      // if (/chunk-[A-Z0-9]{8}\./.test(ent.name)) {
-      //   continue;
-      // }
       const filePath = join(dir, ent.name);
       const { size } = statSync(filePath);
 
