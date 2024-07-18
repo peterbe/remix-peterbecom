@@ -69,9 +69,27 @@ export const ServerData = v.object({
   comments: Comments,
 });
 
+const LyricsSearchResultImage = v.object({
+  name: v.string(),
+  thumbnail100: v.string(),
+  url: v.string(),
+});
+const LyricsSearchResultArtist = v.object({
+  name: v.string(),
+});
+const LyricsSearchResultAlbum = v.object({
+  name: v.string(),
+  year: v.optional(v.number()),
+});
 export const LyricsSearchResult = v.object({
   id: v.number(),
-  title: v.string(),
+  name: v.string(),
+  _url: v.string(),
+  year: v.optional(v.number()),
+  image: LyricsSearchResultImage,
+  fragments: v.array(v.string()),
+  artist: LyricsSearchResultArtist,
+  albums: v.array(LyricsSearchResultAlbum),
 });
 
 export type LyricsSearchResult = v.InferInput<typeof LyricsSearchResult>;

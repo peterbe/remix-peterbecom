@@ -16,25 +16,7 @@ export function links() {
   return [{ rel: "stylesheet", href: global }];
 }
 
-// type LyricsResult = {
-//   id: number;
-// };
-// type LyricsResults = LyricsResult[];
-// interface ServerSearchData {
-//   results: LyricsResults;
-//   metadata: {
-//     limit: number;
-//     desperate: boolean;
-//     total: number;
-//     search: string;
-//   };
-//   // comments: Comments;
-// }
-
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  // invariant(params.oid, `params.oid is required`);
-
-  console.log("IN plog.$blogitem-040601.$.tsx PARAMS:", params);
   const { pathname } = new URL(request.url);
   if (pathname.endsWith("/")) {
     return redirect(pathname.slice(0, -1));
@@ -89,6 +71,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       throw new Error(`${response.status} from ${fetchURL}`);
     }
     try {
+      // console.log(response.data);
+
       const { results, metadata } = v.parse(ServerSearchData, response.data);
 
       const cacheSeconds = 60 * 60 * 12;
@@ -131,15 +115,29 @@ function cacheHeaders(seconds: number) {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
-  const pageTitle = "Find song by lyrics";
+  let pageTitle = "Find song by lyrics";
   const page = data?.page || 1;
-
   // The contents of the `<title>` has to be a string
-  const title = `${pageTitle} ${
+  let title = `${pageTitle} ${
     page > 1 ? ` (Page ${page})` : " Looking for songs by the lyrics"
   }`;
+  let description = "Find songs by lyrics.";
+
+  const { pathname } = location;
+  // console.log({
+  //   pathname,
+  //   "data?": !!data,
+  //   "metadata?": data && "metadata" in data,
+  // });
+
+  if (pathname.includes("/search/") && data && "metadata" in data) {
+    const { metadata } = data;
+    title = `"${metadata.search}" ${page > 1 ? ` (page ${page}) ` : ""}- ${pageTitle}`;
+    description = `Searching for song lyrics by "${metadata.search}"`;
+  }
+
   return [
-    { title: title },
+    { title },
     {
       tagName: "link",
       rel: "canonical",
@@ -147,7 +145,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
     },
     {
       name: "description",
-      content: "Find songs by lyrics.",
+      content: description,
     },
     {
       property: "og:description",
@@ -163,8 +161,8 @@ export default function View() {
     const { post, comments, page } = loaderData;
     return <Lyricspost post={post} comments={comments} page={page} />;
   } else if ("results" in loaderData && "metadata" in loaderData) {
-    const { results, metadata } = loaderData;
-    return <LyricsSearch results={results} metadata={metadata} />;
+    const { results, metadata, page } = loaderData;
+    return <LyricsSearch results={results} metadata={metadata} page={page} />;
   } else {
     throw new Error("Unexpected loader data");
   }
