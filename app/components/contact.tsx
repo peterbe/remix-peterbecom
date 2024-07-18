@@ -1,6 +1,9 @@
+import { useSendPageview } from "~/analytics";
+
 import { Nav } from "./nav";
 
 export function Contact() {
+  useSendPageview();
   return (
     <div className="contact">
       <Nav title={"Contact Peter"} />

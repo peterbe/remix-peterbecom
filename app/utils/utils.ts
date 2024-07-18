@@ -1,3 +1,5 @@
+import * as v from "valibot";
+
 export function formatDateBasic(date: string) {
   return new Date(date).toLocaleDateString("en-us", {
     year: "numeric",
@@ -22,4 +24,23 @@ export function absoluteURL(uri: string) {
     return `https://www.peterbe.com${uri}`;
   }
   return uri;
+}
+
+function handleValiError(error: unknown) {
+  if (v.isValiError(error)) {
+    error.issues.forEach((issue, i) => {
+      if (issue.path)
+        console.error(
+          `#${i + 1} Validation issue in ${issue.path.map((p) => p.key).join(".")}`,
+        );
+    });
+  }
+}
+
+export function newValiError(error: unknown) {
+  if (v.isValiError(error)) {
+    handleValiError(error);
+    throw new Error(error.message);
+  }
+  return error;
 }

@@ -1,7 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { debounce, throttle } from "throttle-debounce";
 
-// import "../../styles/songsearch-autocomplete.css";
+import { sendEvent as _sendEvent } from "../analytics";
+
+type SendEventData = {
+  type: "autocomplete" | "submit" | "select" | "enter";
+  q?: string;
+  gotoURL?: string;
+};
+
+let lastAutocompleteQ = "";
+function sendEvent(d: SendEventData) {
+  if (d.type && d.type === "autocomplete") {
+    if (lastAutocompleteQ && d.q && d.q.startsWith(lastAutocompleteQ)) {
+      return;
+    }
+    lastAutocompleteQ = d.q || "";
+  }
+  _sendEvent("songsearch-autocomplete", d);
+}
 
 interface Suggestion {
   id: number;
@@ -110,6 +127,9 @@ export default function SongSearchAutocomplete() {
     setAutocompleteSuggestions(null);
     setAutocompleteHighlight(-1);
     setShowAutocompleteSuggestions(true);
+
+    sendEvent({ type: "submit", q });
+
     document.location.href = gotoURL;
   }
 
@@ -118,6 +138,9 @@ export default function SongSearchAutocomplete() {
     setRedirectingSearch(gotoURL);
     setAutocompleteSuggestions(null);
     setAutocompleteHighlight(-1);
+
+    sendEvent({ type: "select", gotoURL, q });
+
     document.location.href = gotoURL;
   }
 
@@ -145,9 +168,6 @@ export default function SongSearchAutocomplete() {
   function onBlurSearch() {
     setTimeout(() => {
       setShowAutocompleteSuggestions(false);
-      // this.setState({
-      //   showAutocompleteSuggestions: false,
-      // });
     }, 300);
   }
 
@@ -231,6 +251,8 @@ export default function SongSearchAutocomplete() {
       .catch((ex) => {
         console.warn(`Catch fetching ${url} ('${q}'): ${ex.toString()}`);
       });
+
+    sendEvent({ type: "autocomplete", q });
   }
 
   function onKeyDownSearch(key: string): boolean {
@@ -258,34 +280,9 @@ export default function SongSearchAutocomplete() {
             setAutocompleteSuggestions(null);
             setAutocompleteHighlight(-1);
 
-            document.location.href = absolutifyUrl(gotoURL);
+            sendEvent({ type: "enter", gotoURL, q });
 
-            // this.setState(
-            //   {
-            //     redirectingSearch: true,
-            //     autocompleteSuggestions: null,
-            //     autocompleteHighlight: -1,
-            //   },
-            //   () => {
-            //     setTimeout(() => {
-            //       if (!this.dismounted) {
-            //         this.setState({ redirectingSearch: false });
-            //       }
-            //     }, 3000);
-            //     document.location.href = absolutifyUrl(
-            //       suggestions[highlight]._url
-            //     );
-            //   }
-            // );
-          } else {
-            // this.setState(
-            //   {
-            //     q: suggestions[highlight].text,
-            //     autocompleteSuggestions: null,
-            //     autocompleteHighlight: -1,
-            //   },
-            //   () => this._submit()
-            // );
+            document.location.href = absolutifyUrl(gotoURL);
           }
           return true;
         }

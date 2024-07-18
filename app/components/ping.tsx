@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import type { Post } from "~/types";
+import type { Post } from "~/valibot-types";
 
 const PING_DELAY = 800;
 type Props = {

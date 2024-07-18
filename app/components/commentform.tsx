@@ -1,22 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import * as v from "valibot";
 
-import type { AddOwnCommentProps, Post } from "~/types";
+import type { AddOwnCommentProps } from "~/types";
 import { Message } from "~/utils/message";
+import { newValiError } from "~/utils/utils";
+import type { Post } from "~/valibot-types";
+import { PrepareData, PreviewData, SubmitData } from "~/valibot-types";
 
 import { DisplayComment } from "./comment";
-
-interface PrepareData {
-  csrfmiddlewaretoken: string;
-}
-interface PreviewData {
-  comment: string;
-}
-interface SubmitData {
-  oid: string;
-  hash: string;
-  hash_expiration_seconds: number;
-  comment: string;
-}
 
 const LOCALESTORAGE_NAME_KEY = "commenting";
 
@@ -122,9 +113,14 @@ export function CommentForm({
     if (!response.ok) {
       setPrepareError(new Error(`${response.status}`));
     } else {
-      const data: PrepareData = await response.json();
-      setCsrfmiddlewaretoken(data.csrfmiddlewaretoken);
-      setCsrfmiddlewaretokenTimestamp(new Date());
+      const posted = await response.json();
+      try {
+        const { csrfmiddlewaretoken } = v.parse(PrepareData, posted);
+        setCsrfmiddlewaretoken(csrfmiddlewaretoken);
+        setCsrfmiddlewaretokenTimestamp(new Date());
+      } catch (error) {
+        throw newValiError(error);
+      }
     }
   }
 
@@ -141,9 +137,14 @@ export function CommentForm({
     if (!response.ok) {
       setPreviewError(new Error(`${response.status}`));
     } else {
-      const data: PreviewData = await response.json();
-      setRenderedComment(data.comment);
-      setPreviewError(null);
+      const posted = await response.json();
+      try {
+        const { comment } = v.parse(PreviewData, posted);
+        setRenderedComment(comment);
+        setPreviewError(null);
+      } catch (error) {
+        throw newValiError(error);
+      }
     }
   }
 
@@ -169,19 +170,25 @@ export function CommentForm({
     });
     if (!response.ok) {
       throw new Error(`${response.status}`);
-    } else {
-      setSubmitError(null);
-      const data: SubmitData = await response.json();
+    }
+    setSubmitError(null);
+
+    const posted = await response.json();
+    try {
+      const { oid, comment, hash } = v.parse(SubmitData, posted);
+
       addOwnComment({
-        oid: data.oid,
-        renderedComment: data.comment,
-        hash: data.hash,
+        oid,
+        renderedComment: comment,
+        hash,
         comment,
         name,
         email,
         depth,
         parent,
       });
+    } catch (error) {
+      throw newValiError(error);
     }
   }
 

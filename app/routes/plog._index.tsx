@@ -1,12 +1,13 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import * as v from "valibot";
 
 import { BlogArchive } from "~/components/blogarchive";
 import { get } from "~/lib/get-data";
 import archive from "~/styles/blogarchive.css";
-import type { Group } from "~/types";
 import { absoluteURL } from "~/utils/utils";
+import { IndexServerData } from "~/valibot-types";
 
 import { links as rootLinks } from "./_index";
 
@@ -17,22 +18,29 @@ export function links() {
   ];
 }
 
-interface ServerData {
-  groups: Group[];
-}
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const { pathname } = new URL(request.url);
   if (pathname.endsWith("/")) {
     return redirect(pathname.slice(0, -1));
   }
   const fetchURL = "/api/v1/plog/";
-  const response = await get<ServerData>(fetchURL);
+  const response = await get(fetchURL);
   if (response.status >= 500) {
     throw new Error(`${response.status} from ${fetchURL}`);
   }
-  const { groups } = response.data;
-  return json({ groups });
+  try {
+    const { groups } = v.parse(IndexServerData, response.data);
+    return json({ groups });
+  } catch (error) {
+    if (v.isValiError(error)) {
+      const issue = error.issues[0];
+      if (issue.path)
+        console.error(
+          `Validation issue in ${issue.path.map((p) => p.key).join(".")}`,
+        );
+    }
+    throw error;
+  }
 }
 
 export const meta: MetaFunction<typeof loader> = ({ location }) => {

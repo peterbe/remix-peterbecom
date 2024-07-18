@@ -7,14 +7,15 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import Rollbar from "rollbar";
+import * as v from "valibot";
 
 import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
 import global from "~/styles/build/global.css";
 import post from "~/styles/build/post.css";
 import homepage from "~/styles/homepage.css";
-import type { HomepagePost } from "~/types";
-import { absoluteURL } from "~/utils/utils";
+import { absoluteURL, newValiError } from "~/utils/utils";
+import { HomepageServerData } from "~/valibot-types";
 
 export function links() {
   return [
@@ -25,12 +26,6 @@ export function links() {
     { rel: "stylesheet", href: homepage, extra: "homepage" },
     { rel: "stylesheet", href: post, extra: "post" },
   ];
-}
-
-interface ServerData {
-  posts: HomepagePost[];
-  next_page: number | null;
-  previous_page: number | null;
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -65,7 +60,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const sp = new URLSearchParams({ page: `${page}` });
   categories.forEach((category) => sp.append("oc", category));
   const url = `/api/v1/plog/homepage?${sp}`;
-  const response = await get<ServerData>(url, { followRedirect: false });
+  const response = await get(url, { followRedirect: false });
 
   if (response.status === 404 || response.status === 400) {
     throw new Response("Not Found", { status: 404 });
@@ -76,12 +71,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
   if (response.status >= 500) {
     throw new Error(`${response.status} from ${url}`);
   }
-  const {
-    posts,
-    next_page: nextPage,
-    previous_page: previousPage,
-  } = response.data;
-  return json({ categories, posts, nextPage, previousPage, page });
+  try {
+    const {
+      posts,
+      next_page: nextPage,
+      previous_page: previousPage,
+    } = v.parse(HomepageServerData, response.data);
+    return json({ categories, posts, nextPage, previousPage, page });
+  } catch (error) {
+    throw newValiError(error);
+  }
 }
 
 export const meta: MetaFunction<typeof loader> = ({ location }) => {
@@ -142,19 +141,27 @@ export function ErrorBoundary() {
     "Error boundary error was:",
     (error && error.toString()) || "no error",
   );
-  console.log({ pathname: location.pathname, search: location.search });
 
   if (typeof process === "object" && process.env.ROLLBAR_ACCESS_TOKEN) {
+    console.log("ErrorBoundary: Sending error to Rollbar");
     const rollbar = new Rollbar({
       accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     });
-
-    rollbar.error(error instanceof Error ? error : new Error("Unknown error"), {
-      context: {
-        pathname: location.pathname,
-        search: location.search,
+    const { uuid } = rollbar.error(
+      error instanceof Error ? error : new Error("Unknown error"),
+      {
+        context: {
+          pathname: location.pathname,
+          search: location.search,
+        },
       },
-    });
+    );
+    if (uuid)
+      console.log(
+        `ErrorBoundary: Sent Rollbar error https://rollbar.com/occurrence/uuid/?uuid=${uuid}`,
+      );
+  } else {
+    console.log("ErrorBoundary: Not sending error to Rollbar");
   }
 
   let errorMessage = "Unknown error";

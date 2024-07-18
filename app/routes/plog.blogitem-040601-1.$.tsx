@@ -1,42 +1,35 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import * as v from "valibot";
 
+import { LyricsSearch } from "~/components/lyrics-search";
 import { Lyricspost } from "~/components/lyricspost";
 import { get } from "~/lib/get-data";
-import lyricspost from "~/styles/lyricspost.css";
-import type { Comments, Post } from "~/types";
-import { absoluteURL } from "~/utils/utils";
+import global from "~/styles/build/global-lyricspost.css";
+import { absoluteURL, newValiError } from "~/utils/utils";
+import { ServerData, ServerSearchData } from "~/valibot-types";
 
-import { links as rootLinks } from "./_index";
 export { ErrorBoundary } from "./_index";
 
 export function links() {
-  return [
-    ...rootLinks().filter((x) => !x.extra),
-    { rel: "stylesheet", href: lyricspost },
-  ];
+  return [{ rel: "stylesheet", href: global }];
 }
 
-interface ServerData {
-  post: Post;
-  comments: Comments;
-}
-
-type LyricsResult = {
-  id: number;
-};
-type LyricsResults = LyricsResult[];
-interface ServerSearchData {
-  results: LyricsResults;
-  metadata: {
-    limit: number;
-    desperate: boolean;
-    total: number;
-    search: string;
-  };
-  // comments: Comments;
-}
+// type LyricsResult = {
+//   id: number;
+// };
+// type LyricsResults = LyricsResult[];
+// interface ServerSearchData {
+//   results: LyricsResults;
+//   metadata: {
+//     limit: number;
+//     desperate: boolean;
+//     total: number;
+//     search: string;
+//   };
+//   // comments: Comments;
+// }
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   // invariant(params.oid, `params.oid is required`);
@@ -87,7 +80,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     }
     sp.append("q", search);
     const fetchURL = `/api/v1/lyrics/search?${sp}`;
-    const response = await get<ServerSearchData>(fetchURL);
+    const response = await get(fetchURL);
     if (response.status === 404) {
       throw new Response("Not Found (oid not found)", { status: 404 });
     }
@@ -95,19 +88,23 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       console.warn(`UNEXPECTED STATUS (${response.status}) from ${fetchURL}`);
       throw new Error(`${response.status} from ${fetchURL}`);
     }
-    const { results, metadata } = response.data;
+    try {
+      const { results, metadata } = v.parse(ServerSearchData, response.data);
 
-    const cacheSeconds = 60 * 60 * 12;
+      const cacheSeconds = 60 * 60 * 12;
 
-    return json(
-      { results, metadata, page },
-      { headers: cacheHeaders(cacheSeconds) }
-    );
+      return json(
+        { results, metadata, page },
+        { headers: cacheHeaders(cacheSeconds) },
+      );
+    } catch (error) {
+      throw newValiError(error);
+    }
   }
 
   const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}?${sp}`;
 
-  const response = await get<ServerData>(fetchURL);
+  const response = await get(fetchURL);
   if (response.status === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
   }
@@ -115,14 +112,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     console.warn(`UNEXPECTED STATUS (${response.status}) from ${fetchURL}`);
     throw new Error(`${response.status} from ${fetchURL}`);
   }
-  const { post, comments } = response.data;
+  try {
+    const { post, comments } = v.parse(ServerData, response.data);
 
-  const cacheSeconds = 60 * 60 * 12;
+    const cacheSeconds = 60 * 60 * 12;
 
-  return json(
-    { post, comments, page },
-    { headers: cacheHeaders(cacheSeconds) }
-  );
+    return json(
+      { post, comments, page },
+      { headers: cacheHeaders(cacheSeconds) },
+    );
+  } catch (error) {
+    throw newValiError(error);
+  }
 }
 
 function cacheHeaders(seconds: number) {

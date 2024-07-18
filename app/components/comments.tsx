@@ -8,9 +8,9 @@ import type {
   Comment,
   Comments,
   OwnComment,
-  Post,
 } from "~/types";
 import { Message } from "~/utils/message";
+import type { Post } from "~/valibot-types";
 
 type Props = {
   post: Post;
