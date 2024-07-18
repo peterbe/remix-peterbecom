@@ -51,5 +51,5 @@ function SongLyricsSubheader({ page }: { page: number }) {
     13: "I don't know the song, but I know some lyrics.",
   };
   const title = titles[page] || "Look for a song by its lyrics.";
-  return <h3>{title}</h3>;
+  return <h2>{title}</h2>;
 }
