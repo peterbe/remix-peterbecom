@@ -4,13 +4,11 @@ import type { LyricsSearchMetadata, LyricsSearchResult } from "~/valibot-types";
 
 import { useSendPageview } from "../analytics";
 import { CarbonAd } from "./carbonad";
-// import { PostComments } from "./comments";
 import { ScrollToTop } from "./scroll-to-top";
 
 const PREFIX = "/plog/blogitem-040601-1";
 
 type Props = {
-  //   pageTitle: string;
   metadata: LyricsSearchMetadata;
   results: LyricsSearchResult[];
   page: number;
@@ -22,20 +20,21 @@ export function LyricsSearch({ metadata, results, page }: Props) {
 
   return (
     <div className="lyrics-search">
-      <CarbonAd />
-      <hgroup>
-        <h1>{pageTitle}</h1>
-        {/* <h2>"{metadata.search}"</h2> */}
-      </hgroup>
+      <div style={{ float: "right" }}>
+        <CarbonAd />
+      </div>
 
-      {/* <SongSearchAutocomplete /> */}
+      <div id="main-content">
+        <hgroup>
+          <h1>{pageTitle}</h1>
+        </hgroup>
 
-      <Results results={results} metadata={metadata} page={page} />
+        <Results results={results} metadata={metadata} />
 
-      {/* <PostComments post={post} comments={comments} page={page} /> */}
-      {metadata.total ? <Credit metadata={metadata} /> : null}
+        {metadata.total ? <Credit /> : null}
 
-      {results.length > 10 ? <ScrollToTop /> : null}
+        {results.length > 10 ? <ScrollToTop /> : null}
+      </div>
     </div>
   );
 }
@@ -43,33 +42,34 @@ export function LyricsSearch({ metadata, results, page }: Props) {
 function Results({
   results,
   metadata,
-  page,
 }: {
   results: LyricsSearchResult[];
   metadata: LyricsSearchMetadata;
-  page: number;
 }) {
+  function makeURL(url: string) {
+    if (metadata.search) {
+      url += `?${new URLSearchParams({ search: metadata.search })}`;
+    }
+    return `${PREFIX}${url}`;
+  }
   return (
     <div className="lyrics-search-results">
       <p>
         {metadata.total.toLocaleString()} songs found.{" "}
         {metadata.total > metadata.limit && (
           <span>Only showing the first {metadata.limit}.</span>
-        )}{" "}
+        )}
+      </p>
+      <p>
         <a href={PREFIX}>Go back to main blog post</a>
       </p>
       {results.map((result) => {
         return (
           <article key={result.id}>
             <header>
-              {/* <a href={PREFIX + result._url}>
-                <h2>
-                  <b>{result.name}</b> by <b>{result.artist.name}</b>
-                </h2>
-              </a> */}
               <hgroup>
                 <h2>
-                  <a href={PREFIX + result._url}>{result.name}</a>
+                  <a href={makeURL(result._url)}>{result.name}</a>
                 </h2>
                 <h3 style={{ fontSize: "1.2rem" }}>
                   By <b>{result.artist.name}</b>{" "}
@@ -87,8 +87,12 @@ function Results({
                 )}
               </hgroup>
             </header>
-            <a href={PREFIX + result._url} style={{ float: "right" }}>
-              <img src={result.image.thumbnail100} alt={result.image.name} />
+            <a href={makeURL(result._url)} style={{ float: "right" }}>
+              <img
+                src={result.image.thumbnail100 || result.image.url}
+                alt={result.image.name}
+                width={!result.image.thumbnail100 ? 100 : undefined}
+              />
             </a>
             {result.fragments.map((fragment, i) => (
               <p
@@ -98,7 +102,7 @@ function Results({
               ></p>
             ))}
             <footer>
-              <a href={result._url}>Go to song</a>
+              <a href={makeURL(result._url)}>Go to song</a>
             </footer>
           </article>
         );
@@ -107,9 +111,9 @@ function Results({
   );
 }
 
-function Credit({ metadata }: { metadata: LyricsSearchMetadata }) {
+function Credit() {
   return (
-    <p>
+    <p style={{ marginTop: 100 }}>
       <small>
         Showing search results from <a href="https://songsear.ch">SongSearch</a>
       </small>

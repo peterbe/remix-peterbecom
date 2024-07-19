@@ -69,15 +69,15 @@ export const ServerData = v.object({
   comments: Comments,
 });
 
-const LyricsSearchResultImage = v.object({
+const LyricsImage = v.object({
   name: v.string(),
-  thumbnail100: v.string(),
+  thumbnail100: v.nullable(v.string()),
   url: v.string(),
 });
-const LyricsSearchResultArtist = v.object({
+const LyricsArtist = v.object({
   name: v.string(),
 });
-const LyricsSearchResultAlbum = v.object({
+const LyricsAlbum = v.object({
   name: v.string(),
   year: v.optional(v.number()),
 });
@@ -86,10 +86,10 @@ export const LyricsSearchResult = v.object({
   name: v.string(),
   _url: v.string(),
   year: v.optional(v.number()),
-  image: LyricsSearchResultImage,
+  image: LyricsImage,
   fragments: v.array(v.string()),
-  artist: LyricsSearchResultArtist,
-  albums: v.array(LyricsSearchResultAlbum),
+  artist: LyricsArtist,
+  albums: v.array(LyricsAlbum),
 });
 
 export type LyricsSearchResult = v.InferInput<typeof LyricsSearchResult>;
@@ -106,6 +106,19 @@ export type LyricsSearchMetadata = v.InferInput<typeof LyricsSearchMetadata>;
 export const ServerSearchData = v.object({
   results: v.array(LyricsSearchResult),
   metadata: LyricsSearchMetadata,
+});
+
+const LyricsSong = v.object({
+  name: v.string(),
+  text_html: v.string(),
+  year: v.optional(v.number()),
+  artist: LyricsArtist,
+  albums: v.array(LyricsAlbum),
+  image: v.nullable(LyricsImage),
+});
+export type LyricsSong = v.InferInput<typeof LyricsSong>;
+export const ServerSongData = v.object({
+  song: LyricsSong,
 });
 
 export const Group = v.object({
