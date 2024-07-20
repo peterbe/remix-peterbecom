@@ -99,13 +99,15 @@ function Results({
                 )}
               </hgroup>
             </header>
-            <a href={makeURL(result._url)} style={{ float: "right" }}>
-              <img
-                src={result.image.thumbnail100 || result.image.url}
-                alt={result.image.name}
-                width={!result.image.thumbnail100 ? 100 : undefined}
-              />
-            </a>
+            {result.image && (result.image.thumbnail100 || result.image.url) ? (
+              <a href={makeURL(result._url)} style={{ float: "right" }}>
+                <img
+                  src={result.image.thumbnail100 || result.image.url}
+                  alt={result.image.name}
+                  width={!result.image.thumbnail100 ? 100 : undefined}
+                />
+              </a>
+            ) : null}
             {result.fragments.map((fragment, i) => (
               <p
                 className="fragment"

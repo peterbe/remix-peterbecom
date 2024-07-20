@@ -25,13 +25,19 @@ export function LyricsSong({ song }: Props) {
             <h2 style={{ fontSize: "1.2rem" }}>
               By <b>{song.artist.name}</b> {song.year && `(${song.year})`}
               <br />
-              On album{" "}
-              {song.albums.map((album, i, arr) => (
-                <Fragment key={album.name + i}>
-                  <b>{album.name}</b> {album.year && `(${album.year})`}
-                  {i === arr.length - 1 ? " " : ", "}
-                </Fragment>
-              ))}
+              {song.albums && song.albums.length ? (
+                <>
+                  On album{" "}
+                  {song.albums.map((album, i, arr) => (
+                    <Fragment key={album.name + i}>
+                      <b>{album.name}</b> {album.year && `(${album.year})`}
+                      {i === arr.length - 1 ? " " : ", "}
+                    </Fragment>
+                  ))}
+                </>
+              ) : (
+                <i>Album not known</i>
+              )}
             </h2>
             <Back />
           </hgroup>
@@ -82,7 +88,7 @@ function Back() {
         <p>
           Go back to your search{" "}
           <a
-            href={PREFIX + "/search/" + encodeURIComponent(search)}
+            href={PREFIX + "/q/" + encodeURIComponent(search)}
             style={{ fontStyle: "italic" }}
           >
             "{search}"

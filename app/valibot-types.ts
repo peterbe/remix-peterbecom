@@ -79,14 +79,14 @@ const LyricsArtist = v.object({
 });
 const LyricsAlbum = v.object({
   name: v.string(),
-  year: v.optional(v.number()),
+  year: v.nullable(v.number()),
 });
 export const LyricsSearchResult = v.object({
   id: v.number(),
   name: v.string(),
   _url: v.string(),
   year: v.optional(v.number()),
-  image: LyricsImage,
+  image: v.nullable(LyricsImage),
   fragments: v.array(v.string()),
   artist: LyricsArtist,
   albums: v.array(LyricsAlbum),
@@ -111,7 +111,7 @@ export const ServerSearchData = v.object({
 const LyricsSong = v.object({
   name: v.string(),
   text_html: v.string(),
-  year: v.optional(v.number()),
+  year: v.nullable(v.number()),
   artist: LyricsArtist,
   albums: v.array(LyricsAlbum),
   image: v.nullable(LyricsImage),

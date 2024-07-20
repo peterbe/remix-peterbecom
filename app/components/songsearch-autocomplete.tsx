@@ -1,3 +1,4 @@
+import { useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import { debounce, throttle } from "throttle-debounce";
 
@@ -58,9 +59,9 @@ declare global {
 }
 // var a = new window.Image();
 
-function absolutifyUrl(uri: string) {
+function absolutifyUrl(uri: string, server = SERVER) {
   if (uri.charAt(0) === "/" && uri.charAt(1) !== "/") {
-    return SERVER + uri;
+    return server + uri;
   }
   return uri;
 }
@@ -90,6 +91,32 @@ export default function SongSearchAutocomplete() {
     useState(false);
   const [redirectingSearch, setRedirectingSearch] = useState("");
   const [searchMaxLength, setSearchMaxLength] = useState<number | null>(null);
+
+  const [server, setServer] = useState(SERVER);
+  useEffect(() => {
+    try {
+      const before = sessionStorage.getItem("server");
+      if (typeof before === "string") {
+        setServer(before);
+      } else {
+        const newServer =
+          Math.random() > 0.9 ? "/plog/blogitem-040601-1" : SERVER;
+        sessionStorage.setItem("server", newServer);
+        setServer(newServer);
+      }
+    } catch (error) {
+      console.warn("Error reading from sessionStorage:", error);
+    }
+  }, []);
+
+  // Temporary
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    if (searchParams.get("server") === "local") {
+      sessionStorage.setItem("server", "/plog/blogitem-040601-1");
+      window.location.href = window.location.pathname;
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     let mounted = true;
@@ -122,7 +149,12 @@ export default function SongSearchAutocomplete() {
 
   function submit() {
     if (!q.trim()) return;
-    const gotoURL = `${SERVER}/q/${encodeURIComponent(q)}`;
+
+    const gotoURL =
+      server === SERVER
+        ? `${SERVER}/q/${encodeURIComponent(q)}`
+        : `${server}/q/${encodeURIComponent(q)}`;
+
     setRedirectingSearch(gotoURL);
     setAutocompleteSuggestions(null);
     setAutocompleteHighlight(-1);
@@ -134,7 +166,8 @@ export default function SongSearchAutocomplete() {
   }
 
   function onSelectSuggestion(song: Suggestion) {
-    const gotoURL = `${SERVER}${song._url}`;
+    const gotoURL = `${server}${song._url}`;
+
     setRedirectingSearch(gotoURL);
     setAutocompleteSuggestions(null);
     setAutocompleteHighlight(-1);
@@ -268,13 +301,9 @@ export default function SongSearchAutocomplete() {
         setAutocompleteHighlight(highlight - 1);
       } else if (key === "Enter") {
         if (highlight > -1) {
-          // const searchSuggestions = this.state.autocompleteSearchSuggestions;
-          // if (highlight === 0 && searchSuggestions && searchSuggestions.total) {
-          //   this._submit("search");
-          //   return;
-          // }
           highlight--;
           const gotoURL = autocompleteSuggestions[highlight]._url;
+
           if (gotoURL) {
             setRedirectingSearch(gotoURL);
             setAutocompleteSuggestions(null);
@@ -282,7 +311,7 @@ export default function SongSearchAutocomplete() {
 
             sendEvent({ type: "enter", gotoURL, q });
 
-            document.location.href = absolutifyUrl(gotoURL);
+            document.location.href = absolutifyUrl(gotoURL, server);
           }
           return true;
         }
@@ -338,10 +367,13 @@ export default function SongSearchAutocomplete() {
           />
         )}
       </div>
-      {redirectingSearch && (
+      {redirectingSearch && server === SERVER && (
         <p>
           Sending search to <a href={redirectingSearch}>SongSearch</a> now...
         </p>
+      )}
+      {redirectingSearch && server !== SERVER && (
+        <p>Redirecting to search now...</p>
       )}
     </form>
   );

@@ -62,7 +62,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       // [ '' ]
       continue;
     }
-    if (part === "search") {
+    if (part === "q") {
       isSearch = true;
       continue;
     }
