@@ -14,36 +14,39 @@ type Props = {
 export function LyricsSong({ song }: Props) {
   useSendPageview();
 
-  const pageTitle = `"${song.name}" by "${song.artist.name}"`;
+  const pageTitle = `${song.name}`;
 
   return (
-    <div className="lyrics-song">
-      <div style={{ float: "right" }}>
-        <CarbonAd />
+    <div className="lyrics-song" id="main-content">
+      <div className="head-grid-container">
+        <div>
+          <hgroup>
+            <h1>{pageTitle}</h1>
+            <h2 style={{ fontSize: "1.2rem" }}>
+              By <b>{song.artist.name}</b> {song.year && `(${song.year})`}
+              <br />
+              On album{" "}
+              {song.albums.map((album, i, arr) => (
+                <Fragment key={album.name + i}>
+                  <b>{album.name}</b> {album.year && `(${album.year})`}
+                  {i === arr.length - 1 ? " " : ", "}
+                </Fragment>
+              ))}
+            </h2>
+            <Back />
+          </hgroup>
+        </div>
+        <div>
+          <CarbonAd />
+        </div>
       </div>
-      <hgroup>
-        <h1>{pageTitle}</h1>
-        <h2 style={{ fontSize: "1.2rem" }}>
-          By <b>{song.artist.name}</b> {song.year && `(${song.year})`}
-        </h2>
-        <h3>
-          On album{" "}
-          {song.albums.map((album, i) => (
-            <Fragment key={album.name + i}>
-              <b>{album.name}</b> {album.year && `(${album.year})`}{" "}
-            </Fragment>
-          ))}
-        </h3>
-      </hgroup>
 
-      <div id="main-content">
-        <Back />
-
+      <div>
         {song.image && (
           <img
             src={song.image.url}
             alt={song.image.name}
-            style={{ float: "right" }}
+            className="song-text-image"
           />
         )}
         <div

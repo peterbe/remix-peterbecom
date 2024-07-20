@@ -16,25 +16,45 @@ type Props = {
 export function LyricsSearch({ metadata, results, page }: Props) {
   useSendPageview();
 
-  const pageTitle = `"${metadata.search}" - Finding songs by lyrics`;
+  const pageTitle = `"${metadata.search}"`;
 
   return (
-    <div className="lyrics-search">
-      <div style={{ float: "right" }}>
-        <CarbonAd />
+    <div className="lyrics-search" id="main-content">
+      <div className="head-grid-container">
+        <div>
+          <hgroup>
+            <h1>{pageTitle}</h1>
+            <h2>Finding songs by lyrics</h2>
+          </hgroup>
+
+          <AboutResults metadata={metadata} />
+        </div>
+        <div>
+          <CarbonAd />
+        </div>
       </div>
 
-      <div id="main-content">
-        <hgroup>
-          <h1>{pageTitle}</h1>
-        </hgroup>
+      <Results results={results} metadata={metadata} />
 
-        <Results results={results} metadata={metadata} />
+      {metadata.total ? <Credit /> : null}
 
-        {metadata.total ? <Credit /> : null}
+      {results.length > 10 ? <ScrollToTop /> : null}
+    </div>
+  );
+}
 
-        {results.length > 10 ? <ScrollToTop /> : null}
-      </div>
+function AboutResults({ metadata }: { metadata: LyricsSearchMetadata }) {
+  return (
+    <div>
+      <p>
+        {metadata.total.toLocaleString()} songs found.{" "}
+        {metadata.total > metadata.limit && (
+          <span>Only showing the first {metadata.limit}.</span>
+        )}
+      </p>
+      <p>
+        <a href={PREFIX}>Go back to main blog post</a>
+      </p>
     </div>
   );
 }
@@ -54,15 +74,6 @@ function Results({
   }
   return (
     <div className="lyrics-search-results">
-      <p>
-        {metadata.total.toLocaleString()} songs found.{" "}
-        {metadata.total > metadata.limit && (
-          <span>Only showing the first {metadata.limit}.</span>
-        )}
-      </p>
-      <p>
-        <a href={PREFIX}>Go back to main blog post</a>
-      </p>
       {results.map((result) => {
         return (
           <article key={result.id}>
@@ -78,9 +89,10 @@ function Results({
                 {result.albums.length > 0 && (
                   <p>
                     On album{" "}
-                    {result.albums.map((album, i) => (
+                    {result.albums.map((album, i, arr) => (
                       <Fragment key={album.name + i}>
-                        <b>{album.name}</b> {album.year && `(${album.year})`}{" "}
+                        <b>{album.name}</b> {album.year && `(${album.year})`}
+                        {i === arr.length - 1 ? " " : ", "}
                       </Fragment>
                     ))}
                   </p>
