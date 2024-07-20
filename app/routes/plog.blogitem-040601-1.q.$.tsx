@@ -3,14 +3,17 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import * as v from "valibot";
 
-import { Lyricspost } from "~/components/lyricspost";
+import { LyricsSearch } from "~/components/lyrics-search";
+import { LyricsSearchError } from "~/components/lyrics-search-error";
 import { get } from "~/lib/get-data";
 import global from "~/styles/build/global-lyricspost.css";
 import { absoluteURL, newValiError } from "~/utils/utils";
-import { ServerData } from "~/valibot-types";
+import { ServerSearchData } from "~/valibot-types";
 
 export { ErrorBoundary } from "./_index";
+export { headers } from "./plog.blogitem-040601-1.$";
 
+const OID = "/plog/blogitem-040601-1";
 export function links() {
   return [{ rel: "stylesheet", href: global }];
 }
@@ -23,16 +26,24 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   if (pathname.endsWith("/p1")) {
     return redirect(pathname.slice(0, -3));
   }
-
   const dynamicPage = params["*"] || "";
+  const parts = dynamicPage.split("/");
+  console.log({ parts });
+  if (parts.length > 1) {
+    return redirect(OID, 308);
+  }
 
   let page = 1;
-  let oid = "blogitem-040601-1";
-  for (const part of dynamicPage.split("/")) {
+
+  let search = "";
+  for (const part of parts) {
     if (!part) {
       // Because in JS,
       // > "".split('/')
       // [ '' ]
+      continue;
+    }
+    if (part === "q") {
       continue;
     }
     if (/^p\d+$/.test(part)) {
@@ -42,26 +53,38 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       }
       continue;
     }
+    search = part;
   }
 
   const sp = new URLSearchParams({ page: `${page}` });
-  const fetchURL = `/api/v1/plog/${encodeURIComponent(oid)}?${sp}`;
-
+  if (!search) {
+    return redirect(OID, 308);
+  }
+  sp.append("q", search);
+  const fetchURL = `/api/v1/lyrics/search?${sp}`;
   const response = await get(fetchURL);
   if (response.status === 404) {
     throw new Response("Not Found (oid not found)", { status: 404 });
+  }
+  if (response.status === 400) {
+    let error = "Backend search failed";
+    if ("error" in response.data) {
+      error = response.data.error;
+      if (typeof error === "object") {
+        error = JSON.stringify(error);
+      }
+    }
+    return json({ search, error }, { headers: cacheHeaders(60) });
   }
   if (response.status != 200) {
     console.warn(`UNEXPECTED STATUS (${response.status}) from ${fetchURL}`);
     throw new Error(`${response.status} from ${fetchURL}`);
   }
   try {
-    const { post, comments } = v.parse(ServerData, response.data);
-
+    const { results, metadata } = v.parse(ServerSearchData, response.data);
     const cacheSeconds = 60 * 60 * 12;
-
     return json(
-      { post, comments, page },
+      { results, metadata, page },
       { headers: cacheHeaders(cacheSeconds) },
     );
   } catch (error) {
@@ -74,15 +97,27 @@ function cacheHeaders(seconds: number) {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
-  const pageTitle = "Find song by lyrics";
+  if (data && "error" in data) {
+    return [{ title: "Search error" }];
+  }
+  let pageTitle = "Find song by lyrics";
   const page = data?.page || 1;
-
   // The contents of the `<title>` has to be a string
-  const title = `${pageTitle} ${
+  let title = `${pageTitle} ${
     page > 1 ? ` (Page ${page})` : " Looking for songs by the lyrics"
   }`;
+  let description = "Find songs by lyrics.";
+
+  const { pathname } = location;
+
+  if (pathname.includes("/search/") && data && "metadata" in data) {
+    const { metadata } = data;
+    title = `"${metadata.search}" ${page > 1 ? ` (page ${page}) ` : ""}- ${pageTitle}`;
+    description = `Searching for song lyrics by "${metadata.search}"`;
+  }
+
   return [
-    { title: title },
+    { title },
     {
       tagName: "link",
       rel: "canonical",
@@ -90,7 +125,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
     },
     {
       name: "description",
-      content: "Find songs by lyrics.",
+      content: description,
     },
     {
       property: "og:description",
@@ -101,10 +136,11 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
 };
 
 export default function View() {
-  const { post, comments, page } = useLoaderData<typeof loader>();
-  return <Lyricspost post={post} comments={comments} page={page} />;
-}
-
-export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
-  return { "cache-control": loaderHeaders.get("cache-control") || `max-age=0` };
+  const loaderData = useLoaderData<typeof loader>();
+  if ("error" in loaderData) {
+    const { error, search } = loaderData;
+    return <LyricsSearchError error={error} search={search} />;
+  }
+  const { results, metadata, page } = loaderData;
+  return <LyricsSearch results={results} metadata={metadata} page={page} />;
 }
