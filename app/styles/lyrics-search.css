@@ -1,0 +1,28 @@
+.lyrics-search-results p.fragment {
+  font-style: italic;
+}
+
+.lyrics-search-results footer {
+  text-align: center;
+  font-style: italic;
+}
+
+.lyrics-song img.song-text-image {
+  float: right;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+@media (max-width: 576px) {
+  .lyrics-song img.song-text-image {
+    max-width: 200px;
+  }
+}
+
+.head-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 151px;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  justify-items: stretch;
+  align-items: stretch;
+}

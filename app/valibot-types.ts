@@ -69,6 +69,58 @@ export const ServerData = v.object({
   comments: Comments,
 });
 
+const LyricsImage = v.object({
+  name: v.string(),
+  thumbnail100: v.nullable(v.string()),
+  url: v.string(),
+});
+const LyricsArtist = v.object({
+  name: v.string(),
+});
+const LyricsAlbum = v.object({
+  name: v.string(),
+  year: v.nullable(v.number()),
+});
+export const LyricsSearchResult = v.object({
+  id: v.number(),
+  name: v.string(),
+  _url: v.string(),
+  year: v.optional(v.number()),
+  image: v.nullable(LyricsImage),
+  fragments: v.array(v.string()),
+  artist: LyricsArtist,
+  albums: v.array(LyricsAlbum),
+});
+
+export type LyricsSearchResult = v.InferInput<typeof LyricsSearchResult>;
+
+export const LyricsSearchMetadata = v.object({
+  limit: v.number(),
+  desperate: v.boolean(),
+  total: v.number(),
+  search: v.string(),
+});
+
+export type LyricsSearchMetadata = v.InferInput<typeof LyricsSearchMetadata>;
+
+export const ServerSearchData = v.object({
+  results: v.array(LyricsSearchResult),
+  metadata: LyricsSearchMetadata,
+});
+
+const LyricsSong = v.object({
+  name: v.string(),
+  text_html: v.string(),
+  year: v.nullable(v.number()),
+  artist: LyricsArtist,
+  albums: v.array(LyricsAlbum),
+  image: v.nullable(LyricsImage),
+});
+export type LyricsSong = v.InferInput<typeof LyricsSong>;
+export const ServerSongData = v.object({
+  song: LyricsSong,
+});
+
 export const Group = v.object({
   date: v.string(),
   posts: v.array(
