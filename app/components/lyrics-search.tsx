@@ -55,6 +55,9 @@ function AboutResults({ metadata }: { metadata: LyricsSearchMetadata }) {
       <p>
         <a href={PREFIX}>Go back to main blog post</a>
       </p>
+      <p>
+        <a href={`${PREFIX}#commentsform`}>Post your own comment</a>
+      </p>
     </div>
   );
 }

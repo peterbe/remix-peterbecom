@@ -39,7 +39,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     return json({ error }, { headers: cacheHeaders(60) });
   }
   if (response.status === 400) {
-    console.log("response.data", response.data);
     let error = "Song lookup error";
     if ("error" in response.data) {
       error = response.data.error;

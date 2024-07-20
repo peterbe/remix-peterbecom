@@ -28,7 +28,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   }
   const dynamicPage = params["*"] || "";
   const parts = dynamicPage.split("/");
-  console.log({ parts });
   if (parts.length > 1) {
     return redirect(OID, 308);
   }
