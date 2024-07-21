@@ -96,10 +96,13 @@ export default function SongSearchAutocomplete() {
     fetch("/api/v1/lyrics/featureflag").then((r) => {
       if (r.ok) {
         r.json().then((data) => {
+          _sendEvent("lyrics-featureflag", { enabled: `${!!data.enabled}` });
           if (data.enabled) {
             setServer("/plog/blogitem-040601-1");
           }
         });
+      } else {
+        _sendEvent("lyrics-featureflag", { response_not_ok: "true" });
       }
     });
   }, []);
