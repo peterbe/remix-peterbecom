@@ -98,6 +98,10 @@ function Back() {
       <p>
         <a href={PREFIX}>Go back to main blog post</a>
       </p>
+      <p>
+        Not the right song?{" "}
+        <a href={`${PREFIX}#commentsform`}>Post your comment for help</a>
+      </p>
     </div>
   );
 }

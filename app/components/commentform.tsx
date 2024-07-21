@@ -1,3 +1,4 @@
+import { useLocation } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import * as v from "valibot";
 
@@ -60,6 +61,7 @@ export function CommentForm({
   setParent: (oid: string | null) => void;
   onSubmitted?: () => void;
 }) {
+  const { hash } = useLocation();
   const [comment, setComment] = useState(initialComment);
   const [name, setName] = useState(initialName);
   const [email, setEmail] = useState(initialEmail);
@@ -76,7 +78,7 @@ export function CommentForm({
   const textareaRef = useRef<null | HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (parent || editHash) {
+    if (parent || editHash || hash === "#commentsform") {
       const textarea = textareaRef.current;
       if (textarea) {
         textarea.focus();
@@ -88,7 +90,7 @@ export function CommentForm({
         }
       }
     }
-  }, [parent, editHash]);
+  }, [parent, editHash, hash]);
 
   const [csrfmiddlewaretoken, setCsrfmiddlewaretoken] = useState("");
   const [csrfmiddlewaretokenTimestamp, setCsrfmiddlewaretokenTimestamp] =
