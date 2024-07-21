@@ -57,7 +57,6 @@ declare global {
     };
   }
 }
-// var a = new window.Image();
 
 function absolutifyUrl(uri: string, server = SERVER) {
   if (uri.charAt(0) === "/" && uri.charAt(1) !== "/") {
@@ -94,27 +93,24 @@ export default function SongSearchAutocomplete() {
 
   const [server, setServer] = useState(SERVER);
   useEffect(() => {
-    try {
-      const before = sessionStorage.getItem("server");
-      if (typeof before === "string") {
-        setServer(before);
-      } else {
-        const newServer =
-          Math.random() > 0.9 ? "/plog/blogitem-040601-1" : SERVER;
-        sessionStorage.setItem("server", newServer);
-        setServer(newServer);
+    fetch("/api/v1/lyrics/featureflag").then((r) => {
+      if (r.ok) {
+        r.json().then((data) => {
+          if (data.enabled) {
+            setServer("/plog/blogitem-040601-1");
+          }
+        });
       }
-    } catch (error) {
-      console.warn("Error reading from sessionStorage:", error);
-    }
+    });
   }, []);
 
   // Temporary
   const [searchParams] = useSearchParams();
   useEffect(() => {
     if (searchParams.get("server") === "local") {
-      sessionStorage.setItem("server", "/plog/blogitem-040601-1");
-      window.location.href = window.location.pathname;
+      // XXX
+      // sessionStorage.setItem("server", "/plog/blogitem-040601-1");
+      // window.location.href = window.location.pathname;
     } else if (searchParams.get("server")) {
       console.error(
         `Don't know what to do with: ${searchParams.get("server")}`,
