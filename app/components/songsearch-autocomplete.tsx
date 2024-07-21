@@ -173,7 +173,10 @@ export default function SongSearchAutocomplete() {
   }
 
   function onSelectSuggestion(song: Suggestion) {
-    const gotoURL = `${server}${song._url}`;
+    let gotoURL = `${server}${song._url}`;
+    if (server !== SERVER && q.trim()) {
+      gotoURL += `?${new URLSearchParams({ search: q.trim() })}`;
+    }
 
     setRedirectingSearch(gotoURL);
     setAutocompleteSuggestions(null);
@@ -309,9 +312,13 @@ export default function SongSearchAutocomplete() {
       } else if (key === "Enter") {
         if (highlight > -1) {
           highlight--;
-          const gotoURL = autocompleteSuggestions[highlight]._url;
+          let gotoURL = autocompleteSuggestions[highlight]._url;
 
           if (gotoURL) {
+            if (server !== SERVER && q.trim()) {
+              gotoURL += `?${new URLSearchParams({ search: q.trim() })}`;
+            }
+
             setRedirectingSearch(gotoURL);
             setAutocompleteSuggestions(null);
             setAutocompleteHighlight(-1);
