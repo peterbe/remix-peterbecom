@@ -108,9 +108,7 @@ export default function SongSearchAutocomplete() {
   const [searchParams] = useSearchParams();
   useEffect(() => {
     if (searchParams.get("server") === "local") {
-      // XXX
-      // sessionStorage.setItem("server", "/plog/blogitem-040601-1");
-      // window.location.href = window.location.pathname;
+      setServer("/plog/blogitem-040601-1");
     } else if (searchParams.get("server")) {
       console.error(
         `Don't know what to do with: ${searchParams.get("server")}`,
