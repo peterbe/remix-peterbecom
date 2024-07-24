@@ -56,10 +56,10 @@ export function sendEvent(type: string, data: Data) {
   }
 }
 
-export function useSendPageview() {
+export function useSendPageview(extra: object = {}) {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    sendEvent("pageview", { pathname });
-  }, [pathname]);
+    sendEvent("pageview", Object.assign({}, { pathname }, extra));
+  }, [pathname, extra]);
 }

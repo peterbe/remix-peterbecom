@@ -44,11 +44,11 @@ interface ServerData {
 }
 
 export function Search() {
-  useSendPageview();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const debug = useQueryBoolean("debug");
+  useSendPageview({ search: q, debug });
 
   let pageTitle = "Search";
   if (q && q.trim()) {
