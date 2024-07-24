@@ -9,6 +9,7 @@ import {
 import Rollbar from "rollbar";
 import * as v from "valibot";
 
+import { useSendPageview } from "~/analytics";
 import { Homepage } from "~/components/homepage";
 import { get } from "~/lib/get-data";
 import global from "~/styles/build/global.css";
@@ -122,6 +123,10 @@ export default function View() {
 // if you get a routing error such as a 404.
 export function ErrorBoundary() {
   const error = useRouteError();
+  const errorDescription = isRouteErrorResponse(error)
+    ? `routing error ${error.status}`
+    : `internal server error (${(error as any).toString()})`;
+  useSendPageview({ error: errorDescription });
   const location = useLocation();
 
   if (isRouteErrorResponse(error)) {
