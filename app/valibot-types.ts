@@ -71,7 +71,7 @@ export const ServerData = v.object({
 
 const LyricsImage = v.object({
   name: v.string(),
-  thumbnail100: v.nullable(v.string()),
+  thumbnail100: v.optional(v.nullable(v.string())),
   url: v.string(),
 });
 const LyricsArtist = v.object({
