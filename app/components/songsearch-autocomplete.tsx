@@ -65,17 +65,18 @@ function absolutifyUrl(uri: string, server = SERVER) {
   return uri;
 }
 
-// https://coderwall.com/p/i817wa/one-line-function-to-detect-mobile-devices-with-javascript
-function isMobileDevice() {
-  return (
-    typeof window.orientation !== "undefined" ||
-    navigator.userAgent.indexOf("IEMobile") !== -1
-  );
-}
-
 const placeholderImage = "/songsearch-autocomplete-static/placeholder.png";
 const lazyloadThumbnailImage =
   "/songsearch-autocomplete-static/lazyload-thumbnail.png";
+
+let preloadedImages = false;
+function preloadImages() {
+  if (!preloadedImages) {
+    preloadedImages = true;
+    new window.Image().src = lazyloadThumbnailImage;
+    new window.Image().src = placeholderImage;
+  }
+}
 
 const fetchAutocompleteSuggestionsCache = new Map<string, Suggestion[]>();
 
@@ -133,21 +134,6 @@ export default function SongSearchAutocomplete() {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    // XXX maybe, if, using useRouter() or something, if the page started
-    // with a `?q=...` we could immediately trigger an autocomplete fetch
-    if (!isMobileDevice() && !document.location.hash) {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    new window.Image().src = lazyloadThumbnailImage;
-    new window.Image().src = placeholderImage;
-  }, []);
-
   function submit() {
     if (!q.trim()) return;
     if (q.trim().length < 3) {
@@ -196,6 +182,8 @@ export default function SongSearchAutocomplete() {
   }, [firstFocusSearch]);
 
   function onFocusSearch() {
+    preloadImages(); // this is memoized to only happen once
+
     if (!showAutocompleteSuggestions) {
       setShowAutocompleteSuggestions(true);
       setRedirectingSearch("");
