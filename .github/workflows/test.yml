@@ -6,8 +6,8 @@ on:
       - main
   pull_request:
 
-env:
-  GA_TRACKING_ID: G-1234ABC
+# env:
+#   GA_TRACKING_ID: G-1234ABC
 
 permissions:
   contents: read
