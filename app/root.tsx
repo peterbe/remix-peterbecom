@@ -15,28 +15,29 @@ import { Footer } from "~/components/footer";
 import { Screensaver } from "~/components/screensaver";
 import { SkipToNav } from "~/components/skip-to-nav";
 
-import { GoogleAnalytics } from "./utils/googleanalytics";
+// import { GoogleAnalytics } from "./utils/googleanalytics";
 
 export const loader = async () => {
   const screensaverLazyStartSeconds = process.env.SCREENSAVER_LAZY_START_SECONDS
     ? parseInt(process.env.SCREENSAVER_LAZY_START_SECONDS)
     : 60 * 10; // 10 minutes by default
   return json({
-    gaTrackingId: process.env.GA_TRACKING_ID,
+    // gaTrackingId: process.env.GA_TRACKING_ID,
     screensaverLazyStartSeconds,
   });
 };
 
 export default function App() {
-  const { gaTrackingId, screensaverLazyStartSeconds } =
-    useLoaderData<typeof loader>();
+  // const { gaTrackingId, screensaverLazyStartSeconds } =
+  //   useLoaderData<typeof loader>();
+  const { screensaverLazyStartSeconds } = useLoaderData<typeof loader>();
 
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <GoogleAnalytics gaTrackingId={gaTrackingId} />
+        {/* <GoogleAnalytics gaTrackingId={gaTrackingId} /> */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.manifest" />
