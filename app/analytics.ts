@@ -1,6 +1,8 @@
 import { useLocation } from "@remix-run/react";
 import { useEffect } from "react";
 
+import { parseUserAgent } from "./user-agent";
+
 function uuidv4(): string {
   try {
     return crypto.randomUUID();
@@ -18,6 +20,25 @@ function uuidv4(): string {
 }
 
 type Data = Record<string, string>;
+
+function round(value: number, decimals = 2) {
+  return Number(value.toFixed(decimals));
+}
+
+function getPerformance() {
+  const paint = performance
+    ?.getEntriesByType("paint")
+    ?.find(({ name }) => name === "first-contentful-paint");
+  const nav = performance?.getEntriesByType("navigation")?.[0] as
+    | PerformanceNavigationTiming
+    | undefined;
+  return {
+    firstContentfulPaint: paint ? round(paint.startTime) : undefined,
+    domInteractive: nav ? round(nav.domInteractive) : undefined,
+    domComplete: nav ? round(nav.domComplete) : undefined,
+    render: nav ? round(nav.responseEnd - nav.requestStart) : undefined,
+  };
+}
 
 export function sendEvent(type: string, data: Data) {
   try {
@@ -37,7 +58,10 @@ export function sendEvent(type: string, data: Data) {
       url: location.href,
       referrer: document.referrer === location.href ? "" : document.referrer,
       created: new Date().toISOString(),
+      performance: getPerformance(),
+      user_agent: parseUserAgent(),
     };
+
     const blob = new Blob(
       [
         JSON.stringify({
