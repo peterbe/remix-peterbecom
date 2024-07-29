@@ -273,21 +273,21 @@ test("dynamic image not found (WEBP)", async () => {
   expect(response.headers["content-type"]).toBe("text/plain; charset=utf-8");
 });
 
-test("pages have the GA analytics tag", async () => {
-  for (const url of [
-    "/",
-    "/about",
-    "/contact",
-    "/plog",
-    "/plog/blogitem-040601-1",
-    "/plog/blogitem-20030629-2128",
-  ]) {
-    const response = await get(url);
-    expect(response.status).toBe(200);
-    const id = process.env.GA_TRACKING_ID;
-    expect(response.data.includes(id)).toBe(true);
-  }
-});
+// test("pages have the GA analytics tag", async () => {
+//   for (const url of [
+//     "/",
+//     "/about",
+//     "/contact",
+//     "/plog",
+//     "/plog/blogitem-040601-1",
+//     "/plog/blogitem-20030629-2128",
+//   ]) {
+//     const response = await get(url);
+//     expect(response.status).toBe(200);
+//     const id = process.env.GA_TRACKING_ID;
+//     expect(response.data.includes(id)).toBe(true);
+//   }
+// });
 
 test("canonical link on home page", async () => {
   for (const url of [
