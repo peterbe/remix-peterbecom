@@ -8,7 +8,6 @@ import type { Comments, Post } from "~/valibot-types";
 import { CarbonAd } from "./carbonad";
 import { PostComments } from "./comments";
 import { Nav } from "./nav";
-import { Ping } from "./ping";
 import { useRememberVisit } from "./remember-visit";
 import { ScrollToTop } from "./scroll-to-top";
 
@@ -74,8 +73,6 @@ export function Blogpost({ post, comments, page }: Props) {
       <RelatedPosts post={post} />
 
       {comments.count >= 10 && <ScrollToTop />}
-
-      <Ping post={post} />
     </div>
   );
 }
