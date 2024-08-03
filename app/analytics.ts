@@ -44,8 +44,8 @@ let previousReferrer = "";
 function getReferrer(documentReferrer: string) {
   if (
     !documentReferrer &&
-    location.href !== previousReferrer &&
-    previousReferrer
+    previousReferrer &&
+    location.href !== previousReferrer
   ) {
     return previousReferrer;
   }
