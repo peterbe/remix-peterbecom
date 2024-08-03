@@ -75,7 +75,6 @@ export function sendEvent(type: string, data: Data) {
       user_agent: parseUserAgent(),
     };
     previousReferrer = location.href;
-    // console.log("meta.referrer", meta.referrer);
 
     const blob = new Blob(
       [
