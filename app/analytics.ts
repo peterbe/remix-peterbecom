@@ -40,6 +40,18 @@ function getPerformance() {
   };
 }
 
+let previousReferrer = "";
+function getReferrer(documentReferrer: string) {
+  if (
+    !documentReferrer &&
+    previousReferrer &&
+    location.href !== previousReferrer
+  ) {
+    return previousReferrer;
+  }
+  return documentReferrer === location.href ? "" : documentReferrer;
+}
+
 export function sendEvent(type: string, data: Data) {
   try {
     let uuid = localStorage.getItem("uuid");
@@ -52,15 +64,17 @@ export function sendEvent(type: string, data: Data) {
       sid = uuidv4();
       sessionStorage.setItem("sid", sid);
     }
+
     const meta = {
       uuid,
       sid,
       url: location.href,
-      referrer: document.referrer === location.href ? "" : document.referrer,
+      referrer: getReferrer(document.referrer),
       created: new Date().toISOString(),
       performance: getPerformance(),
       user_agent: parseUserAgent(),
     };
+    previousReferrer = location.href;
 
     const blob = new Blob(
       [
@@ -80,7 +94,7 @@ export function sendEvent(type: string, data: Data) {
   }
 }
 
-export function useSendPageview(extra: object = {}) {
+export function useSendPageview(extra: object | null = null) {
   const { pathname } = useLocation();
 
   useEffect(() => {
