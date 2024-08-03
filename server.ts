@@ -68,7 +68,7 @@ app.use("/avatar.png", backendProxy);
 // in the `Set-Cookie` which won't be acceptable on http://localhost:3000
 app.use("/api/", backendProxy);
 app.use("/cache/", backendProxy);
-app.use("*/ping", backendProxy);
+app.use("*/ping", backendProxy); // Legacy. Delete later in 2024
 
 app.use(legacyRedirects);
 app.use(junkBlock);
