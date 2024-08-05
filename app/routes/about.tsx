@@ -19,6 +19,11 @@ export const meta: MetaFunction = () => {
     {
       title: "About Peterbe.com",
     },
+    {
+      name: "description",
+      content:
+        "My name is Peter Bengtsson and I'm a web developer. This is my personal blog.",
+    },
   ];
 };
 

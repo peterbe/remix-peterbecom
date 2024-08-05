@@ -90,6 +90,11 @@ export const meta: MetaFunction<typeof loader> = ({ location }) => {
       title: "Peterbe.com - Stuff in Peter's head",
     },
     {
+      name: "description",
+      content:
+        "Peterbe.com is the personal website and blog of Peter Bengtsson.",
+    },
+    {
       tagName: "link",
       rel: "canonical",
       href: absoluteURL(location.pathname),

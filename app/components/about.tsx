@@ -22,7 +22,7 @@ export function About() {
       <div id="main-content">
         <p>
           My name is <strong>Peter Bengtsson</strong> and I&apos;m a web
-          developer. This is by personal blog.
+          developer. This is my personal blog.
         </p>
         <ul>
           <li>Born and raised in Sweden for two decades</li>
