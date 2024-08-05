@@ -37,7 +37,7 @@ async function get(
   uri: string,
   followRedirect = false,
   throwHttpErrors = false,
-  { timeout = TIMEOUT, decompress = true, method = "get" } = {}
+  { timeout = TIMEOUT, decompress = true, method = "get" } = {},
 ) {
   try {
     const response = await axios(SERVER_URL + uri, {
@@ -58,14 +58,14 @@ async function get(
         throwHttpErrors,
         timeout,
         decompress,
-      })})`
+      })})`,
     );
   }
 }
 async function post(
   uri: string,
   followRedirect = false,
-  throwHttpErrors = false
+  throwHttpErrors = false,
 ) {
   return get(uri, followRedirect, throwHttpErrors, { method: "post" });
 }
@@ -98,6 +98,21 @@ test("home page", async () => {
   expect(response.status).toBe(200);
   expect(isCached(response)).toBe(true);
   expect(response.headers["content-encoding"]).toBe("br");
+});
+
+test("meta description", async () => {
+  {
+    const response = await get("/");
+    expect(response.status).toBe(200);
+    const $ = cheerio.load(response.data);
+    expect($('meta[name="description"]').attr("content")).toBeTruthy();
+  }
+  {
+    const response = await get("/about");
+    expect(response.status).toBe(200);
+    const $ = cheerio.load(response.data);
+    expect($('meta[name="description"]').attr("content")).toBeTruthy();
+  }
 });
 
 test("home page favicons", async () => {
