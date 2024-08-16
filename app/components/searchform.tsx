@@ -38,10 +38,19 @@ export function SearchForm({ goTo, autofocus }: Props) {
     }
   }, [autofocus]);
 
+  const [query, setQuery] = useState("");
   const [searchParams] = useSearchParams();
-  const [query] = useState(searchParams.get("q") || "");
+  const q = searchParams.get("q");
 
   const [input, setInput] = useState(query);
+
+  useEffect(() => {
+    if (q) {
+      console.log("SETTING QUERY");
+      setInput(q);
+      setQuery(q);
+    }
+  }, [q]);
 
   const isLarge = useMediaQuery("(min-width: 768px)");
 
@@ -84,6 +93,8 @@ export function SearchForm({ goTo, autofocus }: Props) {
       faux: true,
     });
   }
+
+  console.log({ query });
 
   const {
     isOpen,

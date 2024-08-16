@@ -39,14 +39,23 @@ interface SearchResult {
   search_term_boosts: SearchTermBoosts;
 }
 
+interface SearchConfig {
+  in_title?: boolean;
+  no_fuzzy?: boolean;
+}
+
 interface ServerData {
   results: SearchResult;
+  config: SearchConfig;
 }
 
 export function Search() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get("q");
+
+  console.log({ Q: q });
+
   const debug = useQueryBoolean("debug");
   useSendPageview();
 
@@ -147,6 +156,56 @@ export function Search() {
       )}
 
       {isLoading && <LoadingSpace />}
+
+      {data && data.config && Object.values(data.config).some(Boolean) && (
+        <fieldset>
+          {data.config.in_title && (
+            <label>
+              <input
+                name="in_title"
+                type="checkbox"
+                role="switch"
+                defaultChecked
+              />
+              Only match in title
+            </label>
+          )}
+          {data.config.no_fuzzy && (
+            <label>
+              <input
+                name="no_fuzzy"
+                type="checkbox"
+                role="switch"
+                defaultChecked
+                onChange={(event) => {
+                  if (!event.target.checked && q) {
+                    let newQ = q.replace(/\bno:\s?fuzzy?\b/g, "").trim();
+                    console.log({ newQ });
+                    setSearchParams({ q: newQ });
+                    // const sp = new URLSearchParams(searchParams);
+                    // sp.set("q", newQ);
+
+                    // navigate({ search: sp.toString() });
+                  }
+
+                  // navigate(
+                  //   `/search?${new URLSearchParams({
+                  //     q: searchParams.get("q") || "",
+                  //     in_title: searchParams.get("in_title") === "true"
+                  //       ? "false"
+                  //       : "true",
+                  //     no_fuzzy: searchParams.get("no_fuzzy") === "true"
+                  //       ? "false"
+                  //       : "true",
+                  //   }).toString()}`,
+                  // );
+                }}
+              />
+              No fuzzy matching
+            </label>
+          )}
+        </fieldset>
+      )}
 
       {data && data.results && (
         <div id="main-content">
