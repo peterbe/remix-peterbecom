@@ -102,6 +102,8 @@ export function Search() {
   }
 
   const { rememberSearch } = useRememberSearch();
+  const { searches } = useRememberSearch();
+
   useEffect(() => {
     if (q && data) {
       rememberSearch({ term: q, found: data.results.count_documents });
@@ -126,6 +128,7 @@ export function Search() {
         goTo={(url: string) => {
           navigate(url);
         }}
+        recentSearches={searches}
         autofocus={!q}
       />
 

@@ -22,7 +22,11 @@ export default function AutocompleteSearch({ goTo }: Props) {
 
   return (
     <div style={{ minHeight: 600 }}>
-      <SearchForm goTo={goToCallback} autofocus={true} />
+      <SearchForm
+        goTo={goToCallback}
+        recentSearches={recentSearches}
+        autofocus={true}
+      />
 
       {visited.length > 0 && (
         <RecentVisits visited={visited} goTo={goToCallback} />
