@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useDebounceValue, useMediaQuery } from "usehooks-ts";
 
+import { type RememberedSearch } from "./remember-search";
+
 type SearchMeta = {
   found: number;
 };
@@ -22,9 +24,10 @@ type ServerData = {
 type Props = {
   goTo: (url: string) => void;
   autofocus?: boolean;
+  recentSearches: RememberedSearch[];
 };
 
-export function SearchForm({ goTo, autofocus }: Props) {
+export function SearchForm({ goTo, autofocus, recentSearches }: Props) {
   useEffect(() => {
     if (autofocus) {
       // Using a useRef didn't work. Perhaps the downshift library
@@ -70,7 +73,18 @@ export function SearchForm({ goTo, autofocus }: Props) {
   );
   const debouncedError = useDebounceValue<Error | undefined>(error, 500);
 
-  const items = (input.trim() && data?.results) || [];
+  const items: TypeaheadResult[] = [];
+  if (input.trim()) {
+    items.push(...recentSearchesToTypeaheadResults(input, recentSearches));
+  }
+  if (input.trim() && data?.results) {
+    items.push(
+      ...data.results.filter(
+        (result) => !items.find((item) => item.term === result.term),
+      ),
+    );
+  }
+
   const hasSearchResults = items.length > 0;
   if (
     input.trim() &&
@@ -93,9 +107,25 @@ export function SearchForm({ goTo, autofocus }: Props) {
     highlightedIndex,
     getItemProps,
   } = useCombobox({
+    onIsOpenChange: ({ type, isOpen, selectedItem, inputValue }) => {
+      // This happens when the user ignores any suggestions and simply
+      // pressed Enter after having typed something.
+      // Essentially this is as if the user had entirely ignored that
+      // there were any suggestions and just typed and Enter.
+      if (
+        type === useCombobox.stateChangeTypes.InputKeyDownEnter &&
+        !isOpen &&
+        !selectedItem &&
+        inputValue
+      ) {
+        goTo(`/search?${new URLSearchParams({ q: inputValue }).toString()}`);
+      }
+    },
     onInputValueChange({ inputValue }) {
       setInput(inputValue);
     },
+    inputValue: input,
+    initialInputValue: query,
     items,
     itemToString(item) {
       return item ? item.term : "";
@@ -107,7 +137,6 @@ export function SearchForm({ goTo, autofocus }: Props) {
         );
       }
     },
-    initialInputValue: query,
   });
 
   return (
@@ -184,4 +213,26 @@ export function SearchForm({ goTo, autofocus }: Props) {
       </article>
     </form>
   );
+}
+
+function escapeRegex(value: string) {
+  return value.replace(/[-[\]{}()*+?.,\\^$|#]/g, "\\$&");
+}
+
+function recentSearchesToTypeaheadResults(
+  input: string,
+  recentSearches: RememberedSearch[],
+) {
+  const results: TypeaheadResult[] = [];
+  const rex = new RegExp(`\\b(${escapeRegex(input)})`, "gi");
+  for (const recentSearch of recentSearches) {
+    if (rex.test(recentSearch.term)) {
+      results.push({
+        term: recentSearch.term,
+        highlights: [recentSearch.term.replace(rex, "<mark>$1</mark>")],
+      });
+    }
+  }
+
+  return results;
 }
