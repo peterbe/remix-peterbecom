@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
-import cheerio, { CheerioAPI } from "cheerio";
+import { type CheerioAPI } from "cheerio";
+import * as cheerio from "cheerio";
 import axios, { AxiosResponse } from "axios";
 import axiosRetry, { isNetworkOrIdempotentRequestError } from "axios-retry";
 import dotenv from "dotenv";
