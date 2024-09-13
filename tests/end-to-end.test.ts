@@ -429,3 +429,10 @@ test("skip-to-nav", async () => {
     expect(skipToNavWorks(response.data)).toBe(true);
   }
 });
+
+test("redirect to blog post song page", async () => {
+  const url = "/song/foo-bar/h3l_lo/123";
+  const response = await get(url);
+  expect(response.status).toBe(308);
+  expect(response.headers["location"]).toBe("/plog/blogitem-040601-1" + url);
+});
