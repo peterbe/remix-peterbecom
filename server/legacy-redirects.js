@@ -1,4 +1,12 @@
+const rootSong = /^\/song\/[-\w]+\/[-\w]+\/\d+/;
+
 export function legacyRedirects(req, res, next) {
+  console.log({ PATH: req.path, rootSong: rootSong.test(req.path) });
+
+  if (rootSong.test(req.path)) {
+    return res.redirect(308, `/plog/blogitem-040601-1${req.path}`);
+  }
+
   if (req.query.comments === "all") {
     // All these legacy `?comments=all`, redirect those
     return res.redirect(301, req.path);
