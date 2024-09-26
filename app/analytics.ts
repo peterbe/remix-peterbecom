@@ -101,3 +101,11 @@ export function useSendPageview(extra: object | null = null) {
     sendEvent("pageview", Object.assign({}, { pathname }, extra));
   }, [pathname, extra]);
 }
+
+export function useSendError(errorMessage: string) {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    sendEvent("error", Object.assign({}, { pathname }, { errorMessage }));
+  }, [pathname, errorMessage]);
+}
