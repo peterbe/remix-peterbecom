@@ -15,21 +15,18 @@ import { Footer } from "~/components/footer";
 import { Screensaver } from "~/components/screensaver";
 import { SkipToNav } from "~/components/skip-to-nav";
 
-// import { GoogleAnalytics } from "./utils/googleanalytics";
+import { useSendError } from "./analytics";
 
 export const loader = async () => {
   const screensaverLazyStartSeconds = process.env.SCREENSAVER_LAZY_START_SECONDS
     ? parseInt(process.env.SCREENSAVER_LAZY_START_SECONDS)
     : 60 * 30; // 30 minutes by default
   return json({
-    // gaTrackingId: process.env.GA_TRACKING_ID,
     screensaverLazyStartSeconds,
   });
 };
 
 export default function App() {
-  // const { gaTrackingId, screensaverLazyStartSeconds } =
-  //   useLoaderData<typeof loader>();
   const { screensaverLazyStartSeconds } = useLoaderData<typeof loader>();
 
   return (
@@ -37,7 +34,6 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        {/* <GoogleAnalytics gaTrackingId={gaTrackingId} /> */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.manifest" />
@@ -80,6 +76,8 @@ export function ErrorBoundary() {
     errorMessage = error.message;
   }
 
+  useSendError(errorMessage);
+
   return (
     <html>
       <body style={{ margin: 40, fontFamily: "sans-serif" }}>
@@ -87,6 +85,17 @@ export function ErrorBoundary() {
 
         <p>Something went wrong in root error boundary.</p>
         <pre>{errorMessage}</pre>
+
+        <p>
+          I'm sorry this happened. Hopefully the automated error reporting will
+          make this problem go away in the near future.
+        </p>
+        <p style={{ fontWeight: "bold" }}>
+          <a href="">Reload the page</a>
+        </p>
+        <p>
+          If it persists, consider <a href="/contact">emailing me</a>.
+        </p>
       </body>
     </html>
   );
