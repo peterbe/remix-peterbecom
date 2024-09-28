@@ -62,7 +62,12 @@ article.homepage-post header {
 
 article.homepage-post .post-body {
   max-height: 450px;
-  overflow: hidden;
+  overflow: scroll;
+}
+
+article.homepage-post .split-rest {
+  font-style: italic;
+  text-align: center;
 }
 
 .subtitle {
