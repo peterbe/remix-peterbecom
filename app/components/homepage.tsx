@@ -15,6 +15,15 @@ type Props = {
   page: number;
 };
 
+function chunks<T>(arr: T[], size: number): T[][] {
+  return arr.reduce((acc, _, i, arr) => {
+    if (i % size === 0) {
+      acc.push(arr.slice(i, i + size));
+    }
+    return acc;
+  }, [] as T[][]);
+}
+
 export function Homepage({
   posts,
   categories,
@@ -23,14 +32,28 @@ export function Homepage({
   previousPage,
 }: Props) {
   useSendPageview();
+
+  const showFilters = categories.length > 0 || page > 1;
+  const showSubtitle = page === 1 && !categories.length;
+
   return (
     <div>
       <Nav title="Peterbe.com" />
-      <AboutFilters categories={categories} page={page} />
+      {showFilters && <AboutFilters categories={categories} page={page} />}
 
       <div id="main-content">
-        {posts.map((post) => (
-          <Post key={post.oid} post={post} />
+        {showSubtitle && (
+          <hgroup className="subtitle">
+            <h2>Most recent blog posts</h2>
+            <p>Or you can click on the categories to filter by topic</p>
+          </hgroup>
+        )}
+        {chunks(posts, 2).map((chunkPosts, i) => (
+          <div className="grid" key={i}>
+            {chunkPosts.map((post) => (
+              <Post key={post.oid} post={post} />
+            ))}
+          </div>
         ))}
       </div>
 
@@ -50,8 +73,6 @@ function AboutFilters({
   page: number;
   categories: string[];
 }) {
-  if (!categories.length && page === 1) return null;
-
   if (categories.length || page > 0) {
     return (
       <article className="about-filters">
@@ -87,12 +108,12 @@ function Post({ post }: { post: HomepagePost }) {
     <article className="homepage-post">
       <header>
         <hgroup>
-          <h2>
+          <h3>
             <Link to={postURL(post.oid)} unstable_viewTransition>
               {post.title}
             </Link>
-          </h2>
-          <h3>
+          </h3>
+          <h4>
             <b>{formatDateBasic(post.pub_date)}</b>
             <br />
             <span>
@@ -102,11 +123,7 @@ function Post({ post }: { post: HomepagePost }) {
               {post.categories.map((category, i, arr) => {
                 return (
                   <Fragment key={category}>
-                    <Link
-                      to={categoryURL(category)}
-                      rel="nofollow"
-                      title={`Filter by the '${category}' category'`}
-                    >
+                    <Link to={categoryURL(category)} rel="nofollow">
                       {category}
                     </Link>
                     {i < arr.length - 1 ? ", " : ""}
@@ -114,15 +131,18 @@ function Post({ post }: { post: HomepagePost }) {
                 );
               })}
             </span>
-          </h3>
+          </h4>
         </hgroup>
       </header>
 
-      <div dangerouslySetInnerHTML={{ __html: post.html }} />
+      <div
+        className="post-body overflow-auto"
+        dangerouslySetInnerHTML={{ __html: post.html }}
+      />
       <footer>
         <p>
-          <Link to={`/plog/${post.oid}#commentform`} unstable_viewTransition>
-            Please post a comment if you have thoughts or questions
+          <Link to={`/plog/${post.oid}`} unstable_viewTransition>
+            Go to blog post
           </Link>
         </p>
       </footer>

@@ -1,5 +1,5 @@
 #nav {
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 #nav h1 {
@@ -8,20 +8,3 @@
 #nav form {
   margin: 0;
 }
-/* #nav input[type="search"] {
-  height: 35px;
-  background-image: none;
-  border-radius: 3rem;
-  padding-inline-start: 13px;
-}
-
-@media (min-width: 576px) {
-  #nav input[type="search"] {
-    padding-inline-start: calc(
-      var(--form-element-spacing-horizontal) + 1.75rem
-    );
-    background-image: var(--icon-search);
-    height: 45px;
-    border-radius: 5rem;
-  }
-} */

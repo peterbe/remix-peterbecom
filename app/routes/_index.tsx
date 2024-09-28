@@ -58,7 +58,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     }
     throw new Response(`Invalid splat part (${part})`, { status: 404 });
   }
-  const sp = new URLSearchParams({ page: `${page}` });
+  const sp = new URLSearchParams({ page: `${page}`, size: "10" });
   categories.forEach((category) => sp.append("oc", category));
   const url = `/api/v1/plog/homepage?${sp}`;
   const response = await get(url, { followRedirect: false });
@@ -112,6 +112,7 @@ export function headers() {
 export default function View() {
   const { page, posts, categories, nextPage, previousPage } =
     useLoaderData<typeof loader>();
+
   return (
     <Homepage
       posts={posts}
