@@ -1,4 +1,4 @@
-import shrinkRay from "shrink-ray-current";
+import shrinkRay from "@nitedani/shrink-ray-current";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import { dynamicImages } from "./server/dynamic-images.js";
 import { legacyRedirects } from "./server/legacy-redirects.js";
