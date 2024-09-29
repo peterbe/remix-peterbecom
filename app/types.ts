@@ -98,4 +98,5 @@ export interface HomepagePost {
   html: string;
   comments: number;
   categories: string[];
+  split: null | number;
 }
