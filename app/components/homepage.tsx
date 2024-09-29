@@ -139,6 +139,11 @@ function Post({ post }: { post: HomepagePost }) {
         className="post-body overflow-auto"
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
+      {post.split && (
+        <p className="split-rest">
+          Truncated! Read the rest by clicking the link below.
+        </p>
+      )}
       <footer>
         <p>
           <Link to={`/plog/${post.oid}`} unstable_viewTransition>

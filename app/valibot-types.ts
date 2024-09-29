@@ -145,6 +145,7 @@ export const HomepagePost = v.object({
   html: v.string(),
   comments: v.number(),
   categories: v.array(v.string()),
+  split: v.nullable(v.number()),
 });
 
 export type HomepagePost = v.InferInput<typeof HomepagePost>;

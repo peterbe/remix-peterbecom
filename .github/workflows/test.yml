@@ -6,9 +6,6 @@ on:
       - main
   pull_request:
 
-# env:
-#   GA_TRACKING_ID: G-1234ABC
-
 permissions:
   contents: read
 
@@ -22,7 +19,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Cache node_modules
