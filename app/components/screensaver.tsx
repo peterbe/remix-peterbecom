@@ -1,5 +1,6 @@
 import { useLocation } from "@remix-run/react";
 import { lazy, Suspense, useEffect, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 const ConfettiLazy = lazy(
   // @ts-ignore
@@ -52,7 +53,9 @@ function DelayedScreensaver({ lazyStartSeconds }: Props) {
     <div>
       {loadScreensaver && (
         <Suspense fallback={null}>
-          <ConfettiLazy />
+          <ErrorBoundary fallback={null}>
+            <ConfettiLazy />
+          </ErrorBoundary>
         </Suspense>
       )}
     </div>
