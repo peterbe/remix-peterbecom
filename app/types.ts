@@ -98,5 +98,5 @@ export interface HomepagePost {
   html: string;
   comments: number;
   categories: string[];
-  split?: null | number; // this is optional because it was added late
+  split: null | number;
 }
