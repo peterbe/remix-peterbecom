@@ -6,6 +6,7 @@ import { useSendPageview } from "~/analytics";
 import { useQueryBoolean } from "~/hooks/use-query-hook";
 import { categoryURL, formatDateBasic } from "~/utils/utils";
 
+import { LinkWithPrefetching } from "./link-with-prefetching";
 import { Nav } from "./nav";
 import { useRememberSearch } from "./remember-search";
 import { SearchForm } from "./searchform";
@@ -165,10 +166,11 @@ export function Search() {
               >
                 <p>
                   <b>
-                    <Link
-                      to={url}
-                      dangerouslySetInnerHTML={{ __html: result.title }}
-                    ></Link>
+                    <LinkWithPrefetching to={url}>
+                      <span
+                        dangerouslySetInnerHTML={{ __html: result.title }}
+                      />
+                    </LinkWithPrefetching>
                   </b>{" "}
                   {debug && !result.comment_oid && (
                     <DebugResult document={result} />
