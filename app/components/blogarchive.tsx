@@ -30,7 +30,7 @@ export function BlogArchive({ groups }: Props) {
                 }`;
                 return (
                   <dd key={post.oid}>
-                    <Link to={postURL(post.oid)} unstable_viewTransition>
+                    <Link to={postURL(post.oid)} viewTransition>
                       {post.title}
                     </Link>{" "}
                     {post.comments > 0 && <span>{count}</span>}{" "}

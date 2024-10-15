@@ -42,7 +42,6 @@ export function Nav({
   }, [navigate]);
 
   useEffect(() => {
-    // console.log("CURRENT HASH", { hash });
     if (hash === "#main-search") {
       setOpen(true);
     }
@@ -68,7 +67,7 @@ export function Nav({
                   return (
                     <li key={to}>
                       <Link
-                        unstable_viewTransition
+                        viewTransition
                         to={to}
                         className={pathname === to ? "secondary" : undefined}
                         title={

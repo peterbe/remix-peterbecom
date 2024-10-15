@@ -43,7 +43,7 @@ export function LinkWithPrefetching({
       {(preload || instant) && <PrefetchPageLinks page={to} />}
       <Link
         to={to}
-        unstable_viewTransition
+        viewTransition
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}
       >
