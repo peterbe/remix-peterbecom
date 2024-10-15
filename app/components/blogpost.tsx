@@ -49,7 +49,7 @@ export function Blogpost({ post, comments, page }: Props) {
                     <Link
                       to={categoryURL(category)}
                       rel="nofollow"
-                      unstable_viewTransition
+                      viewTransition
                     >
                       {category}
                     </Link>
@@ -168,7 +168,7 @@ function SubCategories({ categories }: { categories: string[] }) {
     <>
       {categories.map((category, i) => (
         <Fragment key={category}>
-          <Link to={categoryURL(category)} unstable_viewTransition>
+          <Link to={categoryURL(category)} viewTransition>
             <small>{category}</small>
           </Link>
           {i < categories.length - 1 && <small>, </small>}
