@@ -5,6 +5,7 @@ import { useSendPageview } from "~/analytics";
 import type { HomepagePost } from "~/types";
 import { categoryURL, formatDateBasic, postURL } from "~/utils/utils";
 
+import { LinkWithPrefetching } from "./link-with-prefetching";
 import { Nav } from "./nav";
 
 type Props = {
@@ -104,14 +105,13 @@ function AboutFilters({
 }
 
 function Post({ post }: { post: HomepagePost }) {
+  const url = postURL(post.oid);
   return (
     <article className="homepage-post">
       <header>
         <hgroup>
           <h3>
-            <Link to={postURL(post.oid)} unstable_viewTransition>
-              {post.title}
-            </Link>
+            <LinkWithPrefetching to={url}>{post.title}</LinkWithPrefetching>
           </h3>
           <h4>
             <b>{formatDateBasic(post.pub_date)}</b>
@@ -146,9 +146,7 @@ function Post({ post }: { post: HomepagePost }) {
       )}
       <footer>
         <p>
-          <Link to={`/plog/${post.oid}`} unstable_viewTransition>
-            Go to blog post
-          </Link>
+          <LinkWithPrefetching to={url}>Go to blog post</LinkWithPrefetching>
         </p>
       </footer>
     </article>
