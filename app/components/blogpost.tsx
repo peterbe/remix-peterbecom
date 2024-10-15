@@ -7,6 +7,7 @@ import type { Comments, Post } from "~/valibot-types";
 
 import { CarbonAd } from "./carbonad";
 import { PostComments } from "./comments";
+import { LinkWithPrefetching } from "./link-with-prefetching";
 import { Nav } from "./nav";
 import { useRememberVisit } from "./remember-visit";
 import { ScrollToTop } from "./scroll-to-top";
@@ -102,9 +103,9 @@ function RelatedPosts({ post }: { post: Post }) {
           <>
             <dt>Previous:</dt>
             <dd>
-              <Link to={postURL(previousPost.oid)} unstable_viewTransition>
+              <LinkWithPrefetching to={postURL(previousPost.oid)}>
                 {previousPost.title}
-              </Link>{" "}
+              </LinkWithPrefetching>{" "}
               <small>{formatDateBasic(previousPost.pub_date)}</small>{" "}
               <SubCategories categories={previousPost.categories || []} />
             </dd>
@@ -115,9 +116,9 @@ function RelatedPosts({ post }: { post: Post }) {
           <>
             <dt>Next:</dt>
             <dd>
-              <Link to={postURL(nextPost.oid)} unstable_viewTransition>
+              <LinkWithPrefetching to={postURL(nextPost.oid)}>
                 {nextPost.title}
-              </Link>{" "}
+              </LinkWithPrefetching>{" "}
               <small>{formatDateBasic(nextPost.pub_date)}</small>{" "}
               <SubCategories categories={nextPost.categories || []} />
             </dd>
@@ -131,9 +132,9 @@ function RelatedPosts({ post }: { post: Post }) {
             <dt>Related by category:</dt>
             {relatedByCategory.map((related) => (
               <dd key={related.oid}>
-                <Link to={postURL(related.oid)} unstable_viewTransition>
+                <LinkWithPrefetching to={postURL(related.oid)}>
                   {related.title}
-                </Link>{" "}
+                </LinkWithPrefetching>{" "}
                 <small>{formatDateBasic(related.pub_date)}</small>{" "}
                 <SubCategories categories={related.categories || []} />
               </dd>
@@ -148,9 +149,9 @@ function RelatedPosts({ post }: { post: Post }) {
             <dt>Related by keyword:</dt>
             {relatedByKeyword.map((related) => (
               <dd key={related.oid}>
-                <Link to={postURL(related.oid)} unstable_viewTransition>
+                <LinkWithPrefetching to={postURL(related.oid)}>
                   {related.title}
-                </Link>{" "}
+                </LinkWithPrefetching>{" "}
                 <small>{formatDateBasic(related.pub_date)}</small>{" "}
                 <SubCategories categories={related.categories || []} />
               </dd>
