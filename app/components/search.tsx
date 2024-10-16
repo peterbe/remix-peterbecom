@@ -154,7 +154,8 @@ export function Search() {
 
       {data && data.results && (
         <div id="main-content">
-          {data.results.documents.map((result) => {
+          {data.results.documents.map((result, i) => {
+            const first = !i;
             let url = `/plog/${result.oid}`;
             if (result.comment_oid) {
               url += `#${result.comment_oid}`;
@@ -166,7 +167,7 @@ export function Search() {
               >
                 <p>
                   <b>
-                    <LinkWithPrefetching to={url}>
+                    <LinkWithPrefetching to={url} instant={first}>
                       <span
                         dangerouslySetInnerHTML={{ __html: result.title }}
                       />

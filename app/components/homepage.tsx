@@ -51,8 +51,8 @@ export function Homepage({
         )}
         {chunks(posts, 2).map((chunkPosts, i) => (
           <div className="grid" key={i}>
-            {chunkPosts.map((post) => (
-              <Post key={post.oid} post={post} />
+            {chunkPosts.map((post, j) => (
+              <Post key={post.oid} post={post} index={i + j} />
             ))}
           </div>
         ))}
@@ -104,14 +104,17 @@ function AboutFilters({
   return null;
 }
 
-function Post({ post }: { post: HomepagePost }) {
+function Post({ post, index }: { post: HomepagePost; index: number }) {
   const url = postURL(post.oid);
+  const first = index < 1;
   return (
     <article className="homepage-post">
       <header>
         <hgroup>
           <h3>
-            <LinkWithPrefetching to={url}>{post.title}</LinkWithPrefetching>
+            <LinkWithPrefetching to={url} instant={first}>
+              {post.title}
+            </LinkWithPrefetching>
           </h3>
           <h4>
             <b>{formatDateBasic(post.pub_date)}</b>
