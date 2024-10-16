@@ -15,11 +15,15 @@ export function LinkWithPrefetching({
   const [preload, setPreload] = useState(false);
   const [soon, setSoon] = useState(false);
 
+  const prefetch = preload || instant;
+
   function onMouseOver() {
+    if (prefetch) return;
     setSoon(true);
   }
 
   function onMouseOut() {
+    if (prefetch) return;
     setSoon(false);
   }
 
@@ -40,7 +44,12 @@ export function LinkWithPrefetching({
 
   return (
     <>
-      {(preload || instant) && <PrefetchPageLinks page={to} />}
+      {/* When the user right-clicks to open in a new tab */}
+      {prefetch && <link rel="prefetch" href={to} />}
+
+      {/* When the user single-clicks on the link */}
+      {prefetch && <PrefetchPageLinks page={to} />}
+
       <Link
         to={to}
         viewTransition
