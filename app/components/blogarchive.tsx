@@ -5,6 +5,7 @@ import { useSendPageview } from "~/analytics";
 import type { Group } from "~/types";
 import { categoryURL, postURL } from "~/utils/utils";
 
+import { LinkWithPrefetching } from "./link-with-prefetching";
 import { Nav } from "./nav";
 
 type Props = {
@@ -30,9 +31,9 @@ export function BlogArchive({ groups }: Props) {
                 }`;
                 return (
                   <dd key={post.oid}>
-                    <Link to={postURL(post.oid)} viewTransition>
+                    <LinkWithPrefetching to={postURL(post.oid)}>
                       {post.title}
-                    </Link>{" "}
+                    </LinkWithPrefetching>{" "}
                     {post.comments > 0 && <span>{count}</span>}{" "}
                     <small>
                       {post.categories.map((name, i, arr) => (

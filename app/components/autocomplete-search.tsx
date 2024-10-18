@@ -3,6 +3,7 @@ import { useCallback } from "react";
 
 import { postURL } from "~/utils/utils";
 
+import { LinkWithPrefetching } from "./link-with-prefetching";
 import { type RememberedSearch, useRememberSearch } from "./remember-search";
 import { type RememberedPost, useRecentVisits } from "./remember-visit";
 import { SearchForm } from "./searchform";
@@ -69,14 +70,14 @@ function RecentVisits({
       {visited.map((doc) => {
         return (
           <p key={doc.oid} style={{ padding: 5, marginBottom: 10 }}>
-            <Link
+            <LinkWithPrefetching
               to={postURL(doc.oid)}
               onClick={() => {
                 goTo(postURL(doc.oid));
               }}
             >
               {doc.title}
-            </Link>{" "}
+            </LinkWithPrefetching>{" "}
             <small>{approximateVisited(doc.visited)}</small>
           </p>
         );

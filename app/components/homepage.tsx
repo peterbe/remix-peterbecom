@@ -180,14 +180,18 @@ function Pagination({
     <div className="grid next-previous">
       <div>
         {previousPage ? (
-          <Link to={makeURL(previousPage, categories)}>Previous page</Link>
+          <LinkWithPrefetching to={makeURL(previousPage, categories)}>
+            Previous page
+          </LinkWithPrefetching>
         ) : (
           <i>Previous page</i>
         )}
       </div>
       <div>
         {nextPage ? (
-          <Link to={makeURL(nextPage, categories)}>Next page</Link>
+          <LinkWithPrefetching to={makeURL(nextPage, categories)}>
+            Next page
+          </LinkWithPrefetching>
         ) : (
           <i>Next page</i>
         )}
