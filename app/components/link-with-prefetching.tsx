@@ -1,61 +1,26 @@
-import { Link, PrefetchPageLinks } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { Link } from "@remix-run/react";
+import type { RemixLinkProps } from "@remix-run/react/dist/components";
 
-const MOUSEOVER_DELAY = 200; //ms
-
-export function LinkWithPrefetching({
-  to,
-  children,
-  instant = false,
-}: {
-  to: string;
-  children: React.ReactNode;
+interface Props extends RemixLinkProps {
   instant?: boolean;
-}) {
-  const [preload, setPreload] = useState(false);
-  const [soon, setSoon] = useState(false);
+}
 
-  const prefetch = preload || instant;
-
-  function onMouseOver() {
-    if (prefetch) return;
-    setSoon(true);
-  }
-
-  function onMouseOut() {
-    if (prefetch) return;
-    setSoon(false);
-  }
-
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-
-    if (soon) {
-      timer = setTimeout(() => {
-        setPreload(true);
-      }, MOUSEOVER_DELAY);
-    }
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
-  }, [soon]);
+// The regular `Link` component from Remix has built in support for prefetching
+// with the `prefetch={"intent" | "render" | "none"}` prop.
+// Unfortunately, it assumes that you will do a regular click on the link.
+// A lot of people right-click and "Open in a new tab" and then they'll
+// never load the XHR fetches necessary.
+// However, in the case of the variable `instant` prop, we can at least
+// control it.
+export function LinkWithPrefetching({ to, children, instant = false }: Props) {
+  const href = to.toString();
 
   return (
     <>
       {/* When the user right-clicks to open in a new tab */}
-      {prefetch && <link rel="prefetch" href={to} />}
+      {instant && <link rel="prefetch" href={href} />}
 
-      {/* When the user single-clicks on the link */}
-      {prefetch && <PrefetchPageLinks page={to} />}
-
-      <Link
-        to={to}
-        viewTransition
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
-      >
+      <Link to={to} viewTransition prefetch={instant ? "render" : "intent"}>
         {children}
       </Link>
     </>

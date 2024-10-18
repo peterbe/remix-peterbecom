@@ -179,13 +179,13 @@ export function Search() {
                   &nbsp;
                   {formatDateBasic(result.date)}
                   <br />
-                  <Link
+                  <LinkWithPrefetching
                     to={url}
                     className="search-result-url"
                     style={{ marginRight: 10 }}
                   >
                     {url}
-                  </Link>{" "}
+                  </LinkWithPrefetching>{" "}
                   {(result.categories || []).map((category, i, arr) => {
                     return (
                       <Fragment key={category}>

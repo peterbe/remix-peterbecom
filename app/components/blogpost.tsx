@@ -46,13 +46,12 @@ export function Blogpost({ post, comments, page }: Props) {
               {post.categories.map((category, i, arr) => {
                 return (
                   <Fragment key={category}>
-                    <Link
+                    <LinkWithPrefetching
                       to={categoryURL(category)}
                       rel="nofollow"
-                      viewTransition
                     >
                       {category}
-                    </Link>
+                    </LinkWithPrefetching>
                     {i < arr.length - 1 ? ", " : ""}
                   </Fragment>
                 );
