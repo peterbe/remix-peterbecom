@@ -8,6 +8,7 @@ const STARTS_SECONDS = 130;
 
 export default function ConfettiScreensaver() {
   const [run, setRun] = useState(false);
+  const [stopForever, setStopForever] = useState(false);
   const [jsConfetti] = useState(new JSConfetti());
 
   useEffect(() => {
@@ -35,12 +36,14 @@ export default function ConfettiScreensaver() {
   // turned off.
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      setRun(true);
+      if (!stopForever) {
+        setRun(true);
+      }
     }, STARTS_SECONDS * 1000);
     return () => {
       window.clearTimeout(timer);
     };
-  }, [run]);
+  }, [run, stopForever]);
 
   useEffect(() => {
     function noticeScroll() {
@@ -70,14 +73,25 @@ export default function ConfettiScreensaver() {
 
   return (
     <div>
-      {run && <AboutScreensaver />}
+      {run && (
+        <AboutScreensaver
+          stopScreensaver={() => {
+            setRun(false);
+            setStopForever(true);
+          }}
+        />
+      )}
       {/* <AboutScreensaver /> */}
       {/* <Debug /> */}
       {/* <button onClick={() => setRun(!run)}>Toggle</button> */}
     </div>
   );
 }
-function AboutScreensaver() {
+function AboutScreensaver({
+  stopScreensaver,
+}: {
+  stopScreensaver: () => void;
+}) {
   const [opacity, setOpacity] = useState(0.0);
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -103,13 +117,11 @@ function AboutScreensaver() {
         left: "50%",
         textAlign: "center",
         top: window.scrollY,
-        // backgroundColor: "white",
-        // backdropFilter: "blur(10px)",
         borderRadius: 10,
         padding: 10,
       }}
     >
-      <strong style={{ fontSize: "220%" }}>
+      <strong style={{ fontSize: "180%" }}>
         {colors.map(([char, color]) => {
           return (
             <span key={char + color} style={{ color }}>
@@ -119,7 +131,12 @@ function AboutScreensaver() {
         })}
       </strong>
       <br />
-      <em>Don't hate!</em>
+      <button
+        style={{ padding: "5px 10px", fontSize: "80%", margin: 5 }}
+        onClick={() => stopScreensaver()}
+      >
+        Stop this silliness
+      </button>{" "}
     </div>
   );
 }

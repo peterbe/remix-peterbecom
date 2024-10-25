@@ -1,9 +1,15 @@
 import {
+  bubbleCursor,
+  characterCursor,
   type CursorEffectResult,
   emojiCursor,
   fairyDustCursor,
+  followingDotCursor,
+  ghostCursor,
   rainbowCursor,
+  snowflakeCursor,
   springyEmojiCursor,
+  trailingCursor,
 } from "cursor-effects";
 import { useEffect, useState } from "react";
 
@@ -35,7 +41,13 @@ const possibleCursors = {
       emoji: randomEmoji,
     }) as CursorEffectResult;
   },
-  fairyDust: () => new (fairyDustCursor as any)({}) as CursorEffectResult,
+  fairyDust: () => fairyDustCursor(),
+  bubbleCursor: () => bubbleCursor(),
+  characterCursor: () => characterCursor(),
+  snowflakeCursor: () => snowflakeCursor(),
+  ghostCursor: () => ghostCursor(),
+  trailingCursor: () => trailingCursor(),
+  followingDotCursor: () => followingDotCursor(),
 };
 
 function getRandomCursor(before: string = "") {
@@ -53,7 +65,9 @@ export default function ConfettiScreensaver() {
   const [cursor, setCursor] = useState<CursorEffectResult | null>(null);
 
   useEffect(() => {
-    setCursorName(getRandomCursor());
+    const nextCursorName = getRandomCursor();
+    console.log("Next cursor:", nextCursorName);
+    setCursorName(nextCursorName);
   }, []);
 
   useEffect(() => {
@@ -74,9 +88,7 @@ export default function ConfettiScreensaver() {
         <AboutScreensaver
           stopScreensaver={() => {
             setRun(false);
-            console.log("BEFORE", document.querySelectorAll("canvas"));
             if (cursor) cursor.destroy();
-            console.log("AFTER", document.querySelectorAll("canvas"));
           }}
           changeCursor={() => {
             if (cursor) cursor.destroy();
@@ -119,13 +131,11 @@ function AboutScreensaver({
         left: "50%",
         textAlign: "center",
         top: window.scrollY,
-        // backgroundColor: "white",
-        // backdropFilter: "blur(10px)",
         borderRadius: 10,
         padding: 10,
       }}
     >
-      <strong style={{ fontSize: "150%" }}>
+      <strong style={{ fontSize: "140%" }}>
         {colors.map(([char, color]) => {
           return (
             <span key={char + color} style={{ color }}>
@@ -136,13 +146,13 @@ function AboutScreensaver({
       </strong>
       <br />
       <button
-        style={{ padding: "5px 10px", fontSize: "90%" }}
+        style={{ padding: "5px 10px", fontSize: "80%", margin: 5 }}
         onClick={() => stopScreensaver()}
       >
         Stop this silliness
       </button>{" "}
       <button
-        style={{ padding: "5px 10px", fontSize: "90%" }}
+        style={{ padding: "5px 10px", fontSize: "80%", margin: 5 }}
         onClick={() => changeCursor()}
       >
         Change cursor
