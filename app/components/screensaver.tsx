@@ -6,6 +6,10 @@ const ConfettiLazy = lazy(
   // @ts-ignore
   () => import("~/components/confetti-screensaver"),
 );
+const CursorsLazy = lazy(
+  // @ts-ignore
+  () => import("~/components/cursors-screensaver"),
+);
 
 type Props = {
   lazyStartSeconds: number;
@@ -20,6 +24,12 @@ export function Screensaver({ lazyStartSeconds }: Props) {
 
 function DelayedScreensaver({ lazyStartSeconds }: Props) {
   const [loadScreensaver, setLoadScreensaver] = useState(false);
+
+  const [smallScreen, setSmallScreen] = useState(false);
+  useEffect(() => {
+    setSmallScreen(window.matchMedia("(max-width: 600px)").matches);
+  }, []);
+
   useEffect(() => {
     const startWaiting = () => {
       return window.setTimeout(() => {
@@ -54,7 +64,7 @@ function DelayedScreensaver({ lazyStartSeconds }: Props) {
       {loadScreensaver && (
         <Suspense fallback={null}>
           <ErrorBoundary fallback={null}>
-            <ConfettiLazy />
+            {smallScreen ? <ConfettiLazy /> : <CursorsLazy />}
           </ErrorBoundary>
         </Suspense>
       )}

@@ -31,6 +31,7 @@
     "axios-retry": "4.5.0",
     "compression": "1.7.4",
     "cross-env": "7.0.3",
+    "cursor-effects": "^1.0.15",
     "downshift": "9.0.8",
     "esrun": "3.2.26",
     "express": "4.21.1",

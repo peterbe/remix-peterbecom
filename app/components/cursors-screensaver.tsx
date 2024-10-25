@@ -1,75 +1,86 @@
-import JSConfetti from "js-confetti";
+import {
+  bubbleCursor,
+  characterCursor,
+  type CursorEffectResult,
+  emojiCursor,
+  fairyDustCursor,
+  followingDotCursor,
+  ghostCursor,
+  rainbowCursor,
+  snowflakeCursor,
+  springyEmojiCursor,
+  trailingCursor,
+} from "cursor-effects";
 import { useEffect, useState } from "react";
 
 import { EMOJIS } from "./emojis";
 
-// Determines how long to wait after
-const STARTS_SECONDS = 130;
+const shorterEmojis: string[][] = [];
+for (const array of EMOJIS) {
+  const copy = structuredClone(array);
+  copy.sort(() => Math.random() - 0.5);
+  shorterEmojis.push(copy.slice(0, 10));
+}
+
+type Keys = keyof typeof possibleCursors;
+const possibleCursors = {
+  emoji: () => {
+    const emoji =
+      shorterEmojis[Math.floor(Math.random() * shorterEmojis.length)];
+    return new (emojiCursor as any)({ emoji }) as CursorEffectResult;
+  },
+  rainbow: () => {
+    return new (rainbowCursor as any)({}) as CursorEffectResult;
+  },
+  springy: () => {
+    const emojis =
+      shorterEmojis[Math.floor(Math.random() * shorterEmojis.length)];
+    emojis.sort(() => Math.random() - 0.5);
+    const randomEmoji = emojis[0];
+    return new (springyEmojiCursor as any)({
+      emoji: randomEmoji,
+    }) as CursorEffectResult;
+  },
+  fairyDust: () => fairyDustCursor(),
+  bubbleCursor: () => bubbleCursor(),
+  characterCursor: () => characterCursor(),
+  snowflakeCursor: () => snowflakeCursor(),
+  ghostCursor: () => ghostCursor(),
+  trailingCursor: () => trailingCursor(),
+  followingDotCursor: () => followingDotCursor(),
+};
+
+function getRandomCursor(before: string = "") {
+  const keys = Object.keys(possibleCursors) as Keys[];
+  let randomKey = keys[Math.floor(Math.random() * keys.length)];
+  while (randomKey === before) {
+    randomKey = keys[Math.floor(Math.random() * keys.length)];
+  }
+  return randomKey;
+}
 
 export default function ConfettiScreensaver() {
   const [run, setRun] = useState(false);
-  const [stopForever, setStopForever] = useState(false);
-  const [jsConfetti] = useState(new JSConfetti());
+  const [cursorName, setCursorName] = useState<Keys | null>(null);
+  const [cursor, setCursor] = useState<CursorEffectResult | null>(null);
 
   useEffect(() => {
-    let i = Math.floor(Math.random() * EMOJIS.length);
-    const interval = window.setInterval(() => {
-      if (run) {
-        const emojis = Array.from(EMOJIS[i++ % EMOJIS.length]).sort(
-          () => Math.random() - 0.5,
-        );
-
-        jsConfetti.addConfetti({
-          // emojiSize: 60, // Default is 80
-          confettiNumber: 60, // Default is 40
-          emojis,
-        });
-      }
-    }, 3000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [run]);
-
-  // This starts and re-starts the animation.
-  // I.e. the very first time and then, after the screensaver has been
-  // turned off.
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      if (!stopForever) {
-        setRun(true);
-      }
-    }, STARTS_SECONDS * 1000);
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [run, stopForever]);
+    const nextCursorName = getRandomCursor();
+    console.log("Next cursor:", nextCursorName);
+    setCursorName(nextCursorName);
+  }, []);
 
   useEffect(() => {
-    function noticeScroll() {
-      setRun(false);
+    if (cursorName) {
+      setCursor(possibleCursors[cursorName]());
     }
-    function noticeAnyClick() {
-      setRun(false);
-    }
-    function noticeMouseOver() {
-      setRun(false);
-    }
-    function noticeAnyEvent() {
-      setRun(false);
-    }
-    window.addEventListener("scroll", noticeScroll);
-    window.addEventListener("click", noticeAnyClick);
-    window.addEventListener("mouseover", noticeMouseOver);
-    window.addEventListener("input", noticeAnyEvent);
+  }, [cursorName]);
 
-    return () => {
-      window.removeEventListener("scroll", noticeScroll);
-      window.removeEventListener("click", noticeAnyClick);
-      window.removeEventListener("mouseover", noticeMouseOver);
-      window.removeEventListener("input", noticeAnyEvent);
-    };
-  }, [run]);
+  useEffect(() => {
+    if (cursor) {
+      setRun(true);
+    }
+  }, [cursor]);
 
   return (
     <div>
@@ -77,20 +88,23 @@ export default function ConfettiScreensaver() {
         <AboutScreensaver
           stopScreensaver={() => {
             setRun(false);
-            setStopForever(true);
+            if (cursor) cursor.destroy();
+          }}
+          changeCursor={() => {
+            if (cursor) cursor.destroy();
+            setCursorName(getRandomCursor(cursorName ? cursorName : ""));
           }}
         />
       )}
-      {/* <AboutScreensaver /> */}
-      {/* <Debug /> */}
-      {/* <button onClick={() => setRun(!run)}>Toggle</button> */}
     </div>
   );
 }
 function AboutScreensaver({
   stopScreensaver,
+  changeCursor,
 }: {
   stopScreensaver: () => void;
+  changeCursor: () => void;
 }) {
   const [opacity, setOpacity] = useState(0.0);
   useEffect(() => {
@@ -106,7 +120,7 @@ function AboutScreensaver({
     };
   }, []);
 
-  const [colors] = useState(getLetterRandomColors("Screensaver Activated"));
+  const [colors] = useState(getLetterRandomColors("Cursor activated!"));
 
   return (
     <div
@@ -121,7 +135,7 @@ function AboutScreensaver({
         padding: 10,
       }}
     >
-      <strong style={{ fontSize: "180%" }}>
+      <strong style={{ fontSize: "140%" }}>
         {colors.map(([char, color]) => {
           return (
             <span key={char + color} style={{ color }}>
@@ -137,6 +151,12 @@ function AboutScreensaver({
       >
         Stop this silliness
       </button>{" "}
+      <button
+        style={{ padding: "5px 10px", fontSize: "80%", margin: 5 }}
+        onClick={() => changeCursor()}
+      >
+        Change cursor
+      </button>
     </div>
   );
 }
