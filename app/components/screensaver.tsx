@@ -2,9 +2,13 @@ import { useLocation } from "@remix-run/react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-const ConfettiLazy = lazy(
+// const ConfettiLazy = lazy(
+//   // @ts-ignore
+//   () => import("~/components/confetti-screensaver"),
+// );
+const CursorsLazy = lazy(
   // @ts-ignore
-  () => import("~/components/confetti-screensaver"),
+  () => import("~/components/cursors-screensaver"),
 );
 
 type Props = {
@@ -54,7 +58,8 @@ function DelayedScreensaver({ lazyStartSeconds }: Props) {
       {loadScreensaver && (
         <Suspense fallback={null}>
           <ErrorBoundary fallback={null}>
-            <ConfettiLazy />
+            {/* <ConfettiLazy /> */}
+            <CursorsLazy />
           </ErrorBoundary>
         </Suspense>
       )}

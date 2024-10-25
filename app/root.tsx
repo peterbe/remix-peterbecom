@@ -20,7 +20,7 @@ import { useSendError } from "./analytics";
 export const loader = async () => {
   const screensaverLazyStartSeconds = process.env.SCREENSAVER_LAZY_START_SECONDS
     ? parseInt(process.env.SCREENSAVER_LAZY_START_SECONDS)
-    : 60 * 30; // 30 minutes by default
+    : 5; //60 * 30; // 30 minutes by default
   return json({
     screensaverLazyStartSeconds,
   });
