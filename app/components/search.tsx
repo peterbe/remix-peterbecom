@@ -1,9 +1,8 @@
-import { Link, useNavigate, useSearchParams } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
 
 import { useSendPageview } from "~/analytics";
-import { useQueryBoolean } from "~/hooks/use-query-hook";
 import { categoryURL, formatDateBasic } from "~/utils/utils";
 
 import { LinkWithPrefetching } from "./link-with-prefetching";
@@ -44,11 +43,14 @@ interface ServerData {
   results: SearchResult;
 }
 
-export function Search() {
+interface Props {
+  q: string | null;
+  debug: boolean;
+}
+
+export function Search({ q, debug }: Props) {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const q = searchParams.get("q");
-  const debug = useQueryBoolean("debug");
+
   useSendPageview();
 
   let pageTitle = "Search";
