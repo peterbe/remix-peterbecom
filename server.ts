@@ -4,6 +4,7 @@ import { dynamicImages } from "./server/dynamic-images.js";
 import { legacyRedirects } from "./server/legacy-redirects.js";
 import { junkBlock } from "./server/junk-block.js";
 import { ip } from "./server/ip.js";
+import compression from "compression";
 
 import asyncHandler from "express-async-handler";
 import path from "path";
@@ -16,10 +17,15 @@ dotenv.config();
 
 const BACKEND_BASE_URL = process.env.API_BASE || "http://127.0.0.1:8000";
 const BUILD_DIR = path.resolve("build");
+const USE_COMPRESSION = Boolean(
+  JSON.parse(process.env.USE_COMPRESSION || "false"),
+);
 
 export const app = express();
 
-// app.use(compression());
+if (USE_COMPRESSION) {
+  app.use(compression());
+}
 
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable("x-powered-by");
