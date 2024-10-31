@@ -24,7 +24,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
   return [
     {
-      title: q ? `Searching "${q}"` : "Searching on Peterbe.com",
+      title: q ? `Searching for "${q}"` : "Searching on Peterbe.com",
     },
   ];
 };
