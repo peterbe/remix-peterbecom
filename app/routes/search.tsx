@@ -1,4 +1,9 @@
-import type { MetaFunction } from "@remix-run/node";
+import {
+  json,
+  type LoaderFunctionArgs,
+  type MetaFunction,
+} from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
 import { Search } from "~/components/search";
 import search from "~/styles/search.css";
@@ -14,13 +19,27 @@ export function links() {
   ];
 }
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const q = data?.q || null;
+
   return [
     {
-      title: "Searching on Peterbe.com",
+      title: q ? `Searching for "${q}"` : "Searching on Peterbe.com",
     },
   ];
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { search } = new URL(request.url);
+  const sp = new URLSearchParams(search);
+  const q = sp.get("q");
+  const debug = sp.get("debug") === "true" || sp.get("debug") === "1";
+
+  return json({
+    q,
+    debug,
+  });
+}
 
 export function headers() {
   const seconds = 60 * 60;
@@ -30,5 +49,7 @@ export function headers() {
 }
 
 export default function View() {
-  return <Search />;
+  const data = useLoaderData<typeof loader>();
+
+  return <Search {...data} />;
 }

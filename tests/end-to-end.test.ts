@@ -289,22 +289,6 @@ test("dynamic image not found (WEBP)", async () => {
   expect(response.headers["content-type"]).toBe("text/plain; charset=utf-8");
 });
 
-// test("pages have the GA analytics tag", async () => {
-//   for (const url of [
-//     "/",
-//     "/about",
-//     "/contact",
-//     "/plog",
-//     "/plog/blogitem-040601-1",
-//     "/plog/blogitem-20030629-2128",
-//   ]) {
-//     const response = await get(url);
-//     expect(response.status).toBe(200);
-//     const id = process.env.GA_TRACKING_ID;
-//     expect(response.data.includes(id)).toBe(true);
-//   }
-// });
-
 test("canonical link on home page", async () => {
   for (const url of [
     "/",
@@ -390,13 +374,31 @@ test("redirect from urls with & before the ?", async () => {
   expect(response.headers["location"]).toBe("/");
 });
 
-test("search skeleton page", async () => {
+test("search compression", async () => {
   const response = await get("/search?q=stuff", false, false, {
     decompress: false,
   });
   expect(response.status).toBe(200);
   expect(isCached(response)).toBe(true);
   expect(response.headers["content-encoding"]).toBe("br");
+});
+
+test("search skeleton page (with q)", async () => {
+  const response = await get("/search?q=stuff");
+  expect(response.status).toBe(200);
+  expect(isCached(response)).toBe(true);
+  const $ = cheerio.load(response.data);
+  expect($("title").text()).toBe('Searching for "stuff"');
+  expect($("h1").text()).toBe('Searching for "stuff"');
+});
+
+test("search skeleton page (without q)", async () => {
+  const response = await get("/search");
+  expect(response.status).toBe(200);
+  expect(isCached(response)).toBe(true);
+  const $ = cheerio.load(response.data);
+  expect($("title").text()).toBe("Searching on Peterbe.com");
+  expect($("h1").text()).toBe("Search");
 });
 
 test("POST request to pages should 405", async () => {
