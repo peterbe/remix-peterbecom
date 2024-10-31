@@ -1,9 +1,13 @@
-import { Link, useNavigate, useSearchParams } from "@remix-run/react";
+import { Link, useNavigate, useNavigation } from "@remix-run/react";
 import { Fragment, useEffect, useState } from "react";
-import useSWR from "swr";
 
 import { useSendPageview } from "~/analytics";
-import { useQueryBoolean } from "~/hooks/use-query-hook";
+import type {
+  Document,
+  SearchTerm,
+  SearchTermBoosts,
+  ServerData,
+} from "~/search-types";
 import { categoryURL, formatDateBasic } from "~/utils/utils";
 
 import { LinkWithPrefetching } from "./link-with-prefetching";
@@ -11,44 +15,17 @@ import { Nav } from "./nav";
 import { useRememberSearch } from "./remember-search";
 import { SearchForm } from "./searchform";
 
-interface Document {
-  oid: string;
-  title: string;
-  date: string;
-  comment_oid: string | null;
-  summary: string;
-  categories?: string[];
-
-  score: number;
-  score_boosted?: number;
-  popularity?: number;
-  popularity_ranking?: number;
+interface Props {
+  q: string | null;
+  debug: boolean;
+  searchResults: ServerData | null;
+  searchError: Error | null;
 }
 
-type SearchTerm = [number, string];
-
-type SearchTermBoosts = {
-  [key: string]: [number, number];
-};
-
-interface SearchResult {
-  count_documents: number;
-  count_documents_shown: number;
-  documents: Document[];
-  search_time: number;
-  search_terms: SearchTerm[];
-  search_term_boosts: SearchTermBoosts;
-}
-
-interface ServerData {
-  results: SearchResult;
-}
-
-export function Search() {
+export function Search({ q, debug, searchResults, searchError }: Props) {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const q = searchParams.get("q");
-  const debug = useQueryBoolean("debug");
+  const navigation = useNavigation();
+
   useSendPageview();
 
   let pageTitle = "Search";
@@ -61,32 +38,11 @@ export function Search() {
   }
   let extraHead = null;
 
-  const apiURL =
-    q && q.trim()
-      ? `/api/v1/search?${new URLSearchParams({
-          q: q.trim(),
-          debug: JSON.stringify(debug),
-        }).toString()}`
-      : null;
+  const isLoading = navigation.state === "loading";
 
-  const { data, error, isLoading } = useSWR<ServerData, Error>(
-    apiURL,
-    async (url) => {
-      const r = await fetch(url);
-      if (!r.ok) {
-        throw new Error(`${r.status} on ${url}`);
-      }
-      return r.json();
-    },
-    {
-      revalidateOnFocus: false,
-      // keepPreviousData: true,
-    },
-  );
-
-  if (data && data.results) {
-    const found = data.results.count_documents;
-    const shown = data.results.count_documents_shown;
+  if (searchResults) {
+    const found = searchResults.results.count_documents;
+    const shown = searchResults.results.count_documents_shown;
     if (found === 1) {
       extraHead = "1 thing found";
     } else if (found > 1) {
@@ -106,20 +62,20 @@ export function Search() {
   const { searches } = useRememberSearch();
 
   useEffect(() => {
-    if (q && data) {
-      rememberSearch({ term: q, found: data.results.count_documents });
+    if (q && searchResults) {
+      rememberSearch({ term: q, found: searchResults.results.count_documents });
     }
-  }, [q, data]);
+  }, [q, searchResults]);
 
   useEffect(() => {
     if (q) {
-      if (data) {
-        document.title = `Found ${data.results.count_documents.toLocaleString()} for "${q}"`;
-      } else {
-        document.title = `Searching for "${q}"`;
+      let title = `Searching for "${q}"`;
+      if (searchResults) {
+        title += ` (Found ${searchResults.results.count_documents.toLocaleString()})`;
       }
+      document.title = title;
     }
-  }, [q, data]);
+  }, [q, searchResults]);
 
   return (
     <div>
@@ -139,22 +95,22 @@ export function Search() {
         </p>
       )}
 
-      {error && (
+      {searchError && (
         <div>
           <h4 style={{ color: "red", marginBottom: 5 }}>Search error</h4>
           <p>
             An error occurred with the server for that search:
             <br />
-            <code>{error.toString()}</code>
+            <code>{searchError.toString()}</code>
           </p>
         </div>
       )}
 
       {isLoading && <LoadingSpace />}
 
-      {data && data.results && (
+      {searchResults && (
         <div id="main-content">
-          {data.results.documents.map((result, i) => {
+          {searchResults.results.documents.map((result, i) => {
             const first = !i;
             let url = `/plog/${result.oid}`;
             if (result.comment_oid) {
@@ -208,17 +164,17 @@ export function Search() {
         </div>
       )}
 
-      {data && data.results && !error && (
+      {searchResults && !searchError && (
         <SearchMetaDetails
-          found={data.results.count_documents}
-          seconds={data.results.search_time}
+          found={searchResults.results.count_documents}
+          seconds={searchResults.results.search_time}
         />
       )}
 
-      {debug && data && data.results && data.results.search_terms && (
+      {debug && searchResults && searchResults.results.search_terms && (
         <SearchTermDebugging
-          searchTerms={data.results.search_terms}
-          boosts={data.results?.search_term_boosts}
+          searchTerms={searchResults.results.search_terms}
+          boosts={searchResults.results?.search_term_boosts}
         />
       )}
     </div>
