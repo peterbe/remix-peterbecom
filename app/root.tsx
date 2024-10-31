@@ -10,12 +10,15 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { Footer } from "~/components/footer";
 import { Screensaver } from "~/components/screensaver";
 import { SkipToNav } from "~/components/skip-to-nav";
 
 import { useSendError } from "./analytics";
+
+const queryClient = new QueryClient();
 
 export const loader = async () => {
   const screensaverLazyStartSeconds = process.env.SCREENSAVER_LAZY_START_SECONDS
@@ -43,7 +46,9 @@ export default function App() {
       <body>
         <SkipToNav />
         <main className="container">
-          <Outlet />
+          <QueryClientProvider client={queryClient}>
+            <Outlet />
+          </QueryClientProvider>
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
