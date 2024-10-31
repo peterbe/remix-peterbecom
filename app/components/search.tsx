@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@remix-run/react";
+import { useQuery } from "@tanstack/react-query";
 import { Fragment, useEffect, useState } from "react";
-import useSWR from "swr";
 
 import { useSendPageview } from "~/analytics";
 import { categoryURL, formatDateBasic } from "~/utils/utils";
@@ -71,20 +71,18 @@ export function Search({ q, debug }: Props) {
         }).toString()}`
       : null;
 
-  const { data, error, isLoading } = useSWR<ServerData, Error>(
-    apiURL,
-    async (url) => {
-      const r = await fetch(url);
+  const { data, error, isPending } = useQuery<ServerData>({
+    queryKey: ["search", apiURL],
+    queryFn: async () => {
+      if (!apiURL) return null;
+      const r = await fetch(apiURL);
       if (!r.ok) {
-        throw new Error(`${r.status} on ${url}`);
+        throw new Error(`${r.status} on ${r.url}`);
       }
       return r.json();
     },
-    {
-      revalidateOnFocus: false,
-      // keepPreviousData: true,
-    },
-  );
+    refetchOnWindowFocus: false, //process.env.NODE_ENV === "development",
+  });
 
   if (data && data.results) {
     const found = data.results.count_documents;
@@ -100,7 +98,7 @@ export function Search({ q, debug }: Props) {
     } else {
       extraHead = "Nothing found";
     }
-  } else if (isLoading) {
+  } else if (isPending) {
     extraHead = "Hmmmmmm...";
   }
 
@@ -152,7 +150,7 @@ export function Search({ q, debug }: Props) {
         </div>
       )}
 
-      {isLoading && <LoadingSpace />}
+      {isPending && <LoadingSpace />}
 
       {data && data.results && (
         <div id="main-content">

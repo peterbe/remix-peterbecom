@@ -1,7 +1,7 @@
 import { useSearchParams } from "@remix-run/react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useCombobox } from "downshift";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
 import { useDebounceValue, useMediaQuery } from "usehooks-ts";
 
 import { type RememberedSearch } from "./remember-search";
@@ -57,21 +57,20 @@ export function SearchForm({ goTo, autofocus, recentSearches }: Props) {
       }).toString()}`
     : null;
 
-  const { data, error } = useSWR<ServerData, Error>(
-    apiURL,
-    async (url) => {
-      const r = await fetch(url);
+  const { data, error } = useQuery<ServerData>({
+    queryKey: ["typeahead", apiURL],
+    queryFn: async () => {
+      if (!apiURL) return null;
+      const r = await fetch(apiURL);
       if (!r.ok) {
-        throw new Error(`${r.status} on ${url}`);
+        throw new Error(`${r.status} on ${r.url}`);
       }
       return r.json();
     },
-    {
-      revalidateOnFocus: false,
-      keepPreviousData: true,
-    },
-  );
-  const debouncedError = useDebounceValue<Error | undefined>(error, 500);
+    refetchOnWindowFocus: false,
+    placeholderData: keepPreviousData,
+  });
+  const debouncedError = useDebounceValue<Error | null>(error, 500);
 
   const items: TypeaheadResult[] = [];
   if (input.trim()) {
