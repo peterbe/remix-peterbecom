@@ -6,6 +6,7 @@
     "build:remix": "remix build",
     "build:witholdbuildpreserved": "rm -fr /tmp/_old_build && node scripts/backup-old-build.mjs && npm run parcel:build && remix build && node scripts/restore-old-build.mjs",
     "parcel:build": "parcel build --dist-dir app/styles/build app/*.{css,scss}",
+    "build:compress": "node scripts/compress-build.mjs",
     "dev": "npm-run-all build --parallel \"dev:*\"",
     "dev:node": "cross-env NODE_ENV=development esrun --watch ./start-server.ts",
     "dev:remix": "remix watch",
