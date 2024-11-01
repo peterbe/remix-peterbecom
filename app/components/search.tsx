@@ -18,8 +18,8 @@ import { SearchForm } from "./searchform";
 interface Props {
   q: string | null;
   debug: boolean;
-  searchResults: ServerData | null;
-  searchError: Error | null;
+  searchResults?: ServerData | null;
+  searchError?: Error | null;
 }
 
 export function Search({ q, debug, searchResults, searchError }: Props) {

@@ -30,11 +30,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-type LoaderData = {
-  q: string | null;
-  debug: boolean;
-};
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const { search } = new URL(request.url);
   const sp = new URLSearchParams(search);
@@ -50,7 +45,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export const clientLoader = async ({
   serverLoader,
 }: ClientLoaderFunctionArgs) => {
-  const data = await serverLoader<LoaderData>();
+  const data = await serverLoader<typeof loader>();
 
   const { q, debug } = data;
 
