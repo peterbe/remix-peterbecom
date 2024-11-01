@@ -3,45 +3,18 @@ import { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
 
 import { useSendPageview } from "~/analytics";
+import type {
+  Document,
+  SearchTerm,
+  SearchTermBoosts,
+  ServerData,
+} from "~/search-types";
 import { categoryURL, formatDateBasic } from "~/utils/utils";
 
 import { LinkWithPrefetching } from "./link-with-prefetching";
 import { Nav } from "./nav";
 import { useRememberSearch } from "./remember-search";
 import { SearchForm } from "./searchform";
-
-interface Document {
-  oid: string;
-  title: string;
-  date: string;
-  comment_oid: string | null;
-  summary: string;
-  categories?: string[];
-
-  score: number;
-  score_boosted?: number;
-  popularity?: number;
-  popularity_ranking?: number;
-}
-
-type SearchTerm = [number, string];
-
-type SearchTermBoosts = {
-  [key: string]: [number, number];
-};
-
-interface SearchResult {
-  count_documents: number;
-  count_documents_shown: number;
-  documents: Document[];
-  search_time: number;
-  search_terms: SearchTerm[];
-  search_term_boosts: SearchTermBoosts;
-}
-
-interface ServerData {
-  results: SearchResult;
-}
 
 interface Props {
   q: string | null;
