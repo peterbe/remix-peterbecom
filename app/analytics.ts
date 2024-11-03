@@ -21,24 +21,24 @@ function uuidv4(): string {
 
 type Data = Record<string, string>;
 
-function round(value: number, decimals = 2) {
-  return Number(value.toFixed(decimals));
-}
+// function round(value: number, decimals = 2) {
+//   return Number(value.toFixed(decimals));
+// }
 
-function getPerformance() {
-  const paint = performance
-    ?.getEntriesByType("paint")
-    ?.find(({ name }) => name === "first-contentful-paint");
-  const nav = performance?.getEntriesByType("navigation")?.[0] as
-    | PerformanceNavigationTiming
-    | undefined;
-  return {
-    firstContentfulPaint: paint ? round(paint.startTime) : undefined,
-    domInteractive: nav ? round(nav.domInteractive) : undefined,
-    domComplete: nav ? round(nav.domComplete) : undefined,
-    render: nav ? round(nav.responseEnd - nav.requestStart) : undefined,
-  };
-}
+// function getPerformance() {
+//   const paint = performance
+//     ?.getEntriesByType("paint")
+//     ?.find(({ name }) => name === "first-contentful-paint");
+//   const nav = performance?.getEntriesByType("navigation")?.[0] as
+//     | PerformanceNavigationTiming
+//     | undefined;
+//   return {
+//     firstContentfulPaint: paint ? round(paint.startTime) : undefined,
+//     domInteractive: nav ? round(nav.domInteractive) : undefined,
+//     domComplete: nav ? round(nav.domComplete) : undefined,
+//     render: nav ? round(nav.responseEnd - nav.requestStart) : undefined,
+//   };
+// }
 
 let previousReferrer = "";
 function getReferrer(documentReferrer: string) {
@@ -71,7 +71,7 @@ export function sendEvent(type: string, data: Data) {
       url: location.href,
       referrer: getReferrer(document.referrer),
       created: new Date().toISOString(),
-      performance: getPerformance(),
+      // performance: getPerformance(),
       user_agent: parseUserAgent(),
     };
     previousReferrer = location.href;
