@@ -5,19 +5,12 @@ import { debounce, throttle } from "throttle-debounce";
 import { sendEvent as _sendEvent } from "../analytics";
 
 type SendEventData = {
-  type: "autocomplete" | "submit" | "select" | "enter";
+  type: "submit" | "select" | "enter";
   q?: string;
   gotoURL?: string;
 };
 
-let lastAutocompleteQ = "";
 function sendEvent(d: SendEventData) {
-  if (d.type && d.type === "autocomplete") {
-    if (lastAutocompleteQ && d.q && d.q.startsWith(lastAutocompleteQ)) {
-      return;
-    }
-    lastAutocompleteQ = d.q || "";
-  }
   _sendEvent("songsearch-autocomplete", d);
 }
 
@@ -279,8 +272,6 @@ export default function SongSearchAutocomplete() {
       .catch((ex) => {
         console.warn(`Catch fetching ${url} ('${q}'): ${ex.toString()}`);
       });
-
-    sendEvent({ type: "autocomplete", q });
   }
 
   function onKeyDownSearch(key: string): boolean {
