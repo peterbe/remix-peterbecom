@@ -10,7 +10,7 @@ type SideProject = {
     height: number;
   };
 
-  url: string;
+  url?: string;
   nofollow?: boolean;
   body: ReactNode | string;
 };
@@ -368,7 +368,6 @@ sideProjects.push({
     height: 87,
   },
   nofollow: true,
-  url: "https://autocompeter.com",
   body: (
     <p>
       It started when I was optimizing a website whose HTML files were massive.
@@ -718,7 +717,6 @@ sideProjects.push({
     height: 85,
   },
   nofollow: true,
-  url: "http://crosstips.org",
   body: (
     <p>
       Crosstips first started as an experiment to do localization in Django.
@@ -746,7 +744,6 @@ sideProjects.push({
     height: 79,
   },
   nofollow: true,
-  url: "http://crosstips.org",
   body: (
     <p>
       Using the recently published{" "}
