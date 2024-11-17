@@ -210,7 +210,6 @@ sideProjects.push({
     height: 178,
   },
   nofollow: true,
-  url: "https://podcasttime.io",
   body: (
     <p>
       This started as me trying to figure out how much content
