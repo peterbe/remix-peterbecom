@@ -16,7 +16,7 @@ export function postURL(oid: string) {
 }
 
 export function categoryURL(name: string) {
-  return `/oc-${name.replace(" ", "+")}`;
+  return `/oc-${name.replaceAll(" ", "+")}`;
 }
 
 export function absoluteURL(uri: string) {
