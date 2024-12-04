@@ -80,6 +80,7 @@ export function Nav({
                             setOpen(true);
                           }
                         }}
+                        prefetch="intent"
                       >
                         {text}
                       </Link>
