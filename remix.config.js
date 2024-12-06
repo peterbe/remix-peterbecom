@@ -1,25 +1,17 @@
 /** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
   ignoredRouteFiles: ["**/.*"],
-  // appDirectory: "app",
-  // assetsBuildDirectory: "public/build",
-  // serverBuildPath: "build/index.js",
-  // publicPath: "/build/",
 
   // I think this is needed because of the way server.ts compiles
   // to cjs and not esm.
   serverModuleFormat: "cjs",
 
   future: {
-    // v2_routeConvention: true,
-    // https://remix.run/docs/en/1.14.3/route/meta#metav2
-    // v2_meta: true,
-    // https://remix.run/docs/en/1.15.0/pages/v2#catchboundary-and-errorboundary
-    // v2_errorBoundary: true,
-    // https://remix.run/docs/en/1.15.0/pages/v2#formmethod
-    // v2_normalizeFormMethod: true,
-    // https://remix.run/docs/en/1.17.0/pages/v2#route-headers
-    // v2_headers: true,
+    v3_fetcherPersist: true,
+    v3_relativeSplatPath: true,
+    v3_singleFetch: true,
+    v3_lazyRouteDiscovery: true,
+    v3_throwAbortReason: true,
   },
 
   // https://github.com/remix-run/remix/issues/2958#issuecomment-1744836495
