@@ -24,7 +24,7 @@ interface Props {
 export function Search({ q, debug }: Props) {
   const navigate = useNavigate();
 
-  useSendPageview();
+  useSendPageview({ q });
 
   let pageTitle = "Search";
   if (q && q.trim()) {
