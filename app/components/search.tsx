@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@remix-run/react";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
 import { useSendPageview } from "~/analytics";
@@ -24,7 +24,8 @@ interface Props {
 export function Search({ q, debug }: Props) {
   const navigate = useNavigate();
 
-  useSendPageview({ q });
+  const extra = useMemo(() => ({ q }), [q]);
+  useSendPageview(extra);
 
   let pageTitle = "Search";
   if (q && q.trim()) {
