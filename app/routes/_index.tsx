@@ -6,6 +6,7 @@ import {
   useLocation,
   useRouteError,
 } from "@remix-run/react";
+import { useMemo } from "react";
 import Rollbar from "rollbar";
 import * as v from "valibot";
 
@@ -132,7 +133,13 @@ export function ErrorBoundary() {
   const errorDescription = isRouteErrorResponse(error)
     ? `routing error ${error.status}`
     : `internal server error (${(error as any).toString()})`;
-  useSendPageview({ error: errorDescription });
+
+  const extra = useMemo(
+    () => ({ error: errorDescription }),
+    [errorDescription],
+  );
+  useSendPageview(extra);
+
   const location = useLocation();
 
   if (isRouteErrorResponse(error)) {
