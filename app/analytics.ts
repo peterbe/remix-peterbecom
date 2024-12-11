@@ -19,7 +19,7 @@ function uuidv4(): string {
   }
 }
 
-type Data = Record<string, string>;
+type Data = Record<string, string | number>;
 
 // function round(value: number, decimals = 2) {
 //   return Number(value.toFixed(decimals));
@@ -100,6 +100,20 @@ export function useSendPageview(extra: object | null = null) {
   useEffect(() => {
     sendEvent("pageview", Object.assign({}, { pathname }, extra));
   }, [pathname, extra]);
+}
+
+export function useSearchResults({
+  q,
+  count,
+}: {
+  q: string | null;
+  count: number | null;
+}) {
+  useEffect(() => {
+    if (q && count !== null) {
+      sendEvent("search", { q, count });
+    }
+  }, [q, count]);
 }
 
 export function useSendError(errorMessage: string) {

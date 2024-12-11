@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@remix-run/react";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
-import { useSendPageview } from "~/analytics";
+import { useSearchResults, useSendPageview } from "~/analytics";
 import type {
   Document,
   SearchTerm,
@@ -59,6 +59,12 @@ export function Search({ q, debug }: Props) {
       // keepPreviousData: true,
     },
   );
+
+  const resultsMemoized = useMemo(
+    () => ({ q, count: data?.results.count_documents ?? null }),
+    [q, data],
+  );
+  useSearchResults(resultsMemoized);
 
   if (data && data.results) {
     const found = data.results.count_documents;
