@@ -640,7 +640,9 @@ sideProjects.push({
     <p>
       This is a full HTML5 calendar. It&apos;s fast and simple and has a
       practical <a href="http://donecal.com/help/API">API</a>.<br />
-      I&apos;ve <Link to="/plog/donecal.com">blogged about it here</Link> and{" "}
+      I&apos;ve <Link to="/plog/donecal.com">
+        blogged about it here
+      </Link> and{" "}
       <a href="https://github.com/peterbe/worklog">source code is here</a>.
     </p>
   ),
@@ -722,9 +724,8 @@ sideProjects.push({
       Not long after, I prepared the English (American and British) version and
       a friend helped me translate the French version too.
       <br />
-      <a href="https://github.com/peterbe/kl">
-        Source code available here
-      </a> and I&apos;ve{" "}
+      <a href="https://github.com/peterbe/kl">Source code available here</a> and
+      I&apos;ve{" "}
       <Link to="/search?q=keywords%3Acrosstips">
         blogged about various aspects of it here
       </Link>
