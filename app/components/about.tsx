@@ -31,9 +31,9 @@ export function About() {
         </ul>
         <p>
           I work at <a href="https://github.com">GitHub</a> on the{" "}
-          <b>Web Systems</b> team (handling React in GitHub among other things).
-          Prior to that, to that <a href="https://www.mozilla.org">Mozilla</a>{" "}
-          and <a href="https://developer.mozilla.org">MDN Web Docs</a>.
+          <b>React Platform</b> team. Prior to that, to that{" "}
+          <a href="https://www.mozilla.org">Mozilla</a> and{" "}
+          <a href="https://developer.mozilla.org">MDN Web Docs</a>.
         </p>
         <p>
           The{" "}
