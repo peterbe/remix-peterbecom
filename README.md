@@ -1,3 +1,10 @@
+**UPDATE**
+
+**The front-end for <https://www.peterbe.com> is now made with <https://github.com/peterbe/react-router-peterbecom>.**
+
+**This repo is now archived.**
+
+
 # remix-peterbecom
 
 Front-end for <https://www.peterbe.com> in Remix
